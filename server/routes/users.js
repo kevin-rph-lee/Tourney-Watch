@@ -29,8 +29,6 @@ module.exports = (knex, bcrypt, cookieSession) => {
     });
   });
 
-
-
   //logs a user in
   router.post("/login", (req, res) => {
     const email = req.body.email;
