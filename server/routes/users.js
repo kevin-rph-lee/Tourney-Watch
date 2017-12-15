@@ -5,7 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex, bcrypt, cookieSession) => {
 
-
+  //user registers
   router.post("/new", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -35,7 +35,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
   router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    //Checking if user already exists, if user exists, DO NOT create it
+    //Checking if user already exists, if user does not exist, throw back a 404
     knex
       .select("email", "password")
       .from("users")
@@ -55,7 +55,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
   });
 
 
-
+  //user logs out
   router.post("/logout", (req, res) => {
       console.log('Logging out')
       req.session.email = null;
