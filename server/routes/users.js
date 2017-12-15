@@ -3,20 +3,63 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex) => {
+module.exports = (knex, bcrypt, cookieSession) => {
+
 
   router.post("/new", (req, res) => {
-    console.log('Getting post request...', req.body.email);
+    const email = req.body.email;
+    const password = req.body.password;
+    //Checking if user already exists, if user exists, DO NOT create it
     knex
-      .insert({email: req.body.email, password: bcrypt.hashSync(req.body.password, 10), battlenet_id: req.body.battlenet_id})
-      .into("users")
-      .then(() => {
-        console.log('inserted user successfully');
-        res.sendStatus(200);
-      })
-      .catch(error => {
-        res.status(500).json({ message: error.message });
-      });
+      .select("email")
+      .from("users")
+      .where({email:email})
+      .then((results) => {
+        console.log(results);
+        if(results.length === 0){
+          knex
+          .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: req.body.battlenet_id})
+          .into('users')
+          .then(()=>{});
+          req.session.email = email;
+          res.sendStatus(200);
+        } else{
+          res.sendStatus(400);
+        }
+    });
+  });
+
+
+
+  //logs a user in
+  router.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    //Checking if user already exists, if user exists, DO NOT create it
+    knex
+      .select("email", "password")
+      .from("users")
+      .where({email:email})
+      .then((results) => {
+        console.log(results);
+        console.log(password);
+        if(results.length === 0){
+          res.sendStatus(404);
+        } else if (bcrypt.compareSync(password, results[0].password)){
+          req.session.email = email;
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(403);
+        }
+    });
+  });
+
+
+
+  router.post("/logout", (req, res) => {
+      console.log('Logging out')
+      req.session.email = null;
+      res.sendStatus(200);
   });
 
   return router;

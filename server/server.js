@@ -14,6 +14,7 @@ const morgan = require('morgan');
 const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
+const bcrypt = require('bcrypt');
 
 
 // // Seperated Routes for each Resource
@@ -50,7 +51,7 @@ app.use('/styles', sass({
 app.use(express.static('public'));
 
 // Mount all resource routes
-app.use('/users', usersRoutes(knex));
+app.use('/users', usersRoutes(knex, bcrypt));
 // app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex));
 // app.use('/tournaments', tournamentsRoutes(knex));
 // app.use('/games', gamesRoutes(knex));
