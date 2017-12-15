@@ -20,7 +20,7 @@ const bcrypt = require('bcrypt');
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
 // const tournamentEnrollmentsRoutes = require('./routes/tournament_enrollments');
-// const tournamentsRoutes = require('./routes/tournaments');
+const tournamentsRoutes = require('./routes/tournaments');
 // const gamesRoutes = require('./routes/games');
 // const teamsRoutes = require('./routes/teams');
 
@@ -53,7 +53,7 @@ app.use(express.static('public'));
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt));
 // app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex));
-// app.use('/tournaments', tournamentsRoutes(knex));
+app.use('/tournaments', tournamentsRoutes(knex));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 
