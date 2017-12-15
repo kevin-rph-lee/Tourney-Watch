@@ -5,7 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  //user registers
+  //Add new tournament
   router.post("/new", (req, res) => {
     knex
     .insert({no_of_teams: req.body.no_of_teams, description: req.body.description})
