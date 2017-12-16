@@ -7,11 +7,10 @@ module.exports = (knex, bcrypt, cookieSession) => {
 
   //user registers
   router.post("/new", (req, res) => {
+
     const email = req.body.email;
     const password = req.body.password;
     const battlenetID = req.body.battlenet_id;
-
-    console.log(email + ' ' + password + ' ' + battlenetID)
     //error checking
     if(!email || !password || !battlenetID){
       console.log('empty param!');
