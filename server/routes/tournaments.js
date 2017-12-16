@@ -24,7 +24,7 @@ module.exports = (knex) => {
         console.log('Results ',results);
         if(results.length === 0){
           knex
-          .insert({name: name, no_of_teams: noOfTeams, description: description})
+          .insert({name: name, no_of_teams: noOfTeams, description: description, isReady: false})
           .into('tournaments')
           .then(()=>{});
           res.sendStatus(200);
