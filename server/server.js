@@ -14,12 +14,18 @@ const morgan = require('morgan');
 const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
+const bcrypt = require('bcrypt');
 
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
+<<<<<<< HEAD
 // const tournamentEnrollmentsRoutes = require('./routes/tournament_enrollments');
 // const tournamentsRoutes = require('./routes/tournaments');
+=======
+const tournamentEnrollmentsRoutes = require('./routes/tournament_enrollments');
+const tournamentsRoutes = require('./routes/tournaments');
+>>>>>>> dc703be5f5ec478ad470c2fdeeb4a283a2d16f40
 // const gamesRoutes = require('./routes/games');
 // const teamsRoutes = require('./routes/teams');
 
@@ -50,9 +56,9 @@ app.use('/styles', sass({
 app.use(express.static('public'));
 
 // Mount all resource routes
-app.use('/users', usersRoutes(knex, cookieSession));
-// app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex));
-// app.use('/tournaments', tournamentsRoutes(knex));
+app.use('/users', usersRoutes(knex, bcrypt));
+app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex));
+app.use('/tournaments', tournamentsRoutes(knex));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 
