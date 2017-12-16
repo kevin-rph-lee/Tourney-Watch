@@ -5,26 +5,38 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
+  /**
+   * Checks the # of players enrolled in a tournament. Returns true if it's full, false if there is still room
+   *
+   * @param  string no_of_teams  the # of teams in this tournament
+   * @return boolean             true if the tournament
+   */
+  function checkUserCount(noOfTeams, tournamentID){
+     knex
+      .select("id")
+      .from("tournament_enrollments")
+      .where({id : tournamentID})
+      .then((result) => {
+        if((noOfTeams * 6) === result.length){
+          return true;
+        } else {
+          return false;
+        }
+    });
+  }
+
   //creates new tournament
   router.post("/new", (req, res) => {
-    const name = req.body.name;
-    const noOfTeams = req.body.no_of_teams;
-    const description = req.body.description;
-
-    if(!name){
-      res.sendStatus(400);
-      return;
-    }
     //Checking if tournament already exists, if user exists, DO NOT create it
     knex
       .select("name")
       .from("tournaments")
-      .where({name : name})
+      .where({name : req.body.name})
       .then((results) => {
         console.log('Results ',results);
         if(results.length === 0){
           knex
-          .insert({name: name, no_of_teams: noOfTeams, description: description, isReady: false})
+          .insert({name: req.body.name, no_of_teams: req.body.no_of_teams, description: req.body.description})
           .into('tournaments')
           .then(()=>{});
           res.sendStatus(200);
@@ -34,25 +46,20 @@ module.exports = (knex) => {
     });
   });
 
- //starts a tournament
-  router.post("/start", (req, res) => {
-    const name = req.body.name;
-     if(!name){
-      res.sendStatus(400);
-      return;
-    }
-    //Checking if tournament already exists, if user exists, DO NOT create it
+    //creates new tournament
+  router.post("/:id", (req, res) => {
+    //Checking if tournament already exists, it doens't, send 404
+    //TO DO: check with front end to see what data they send down
     knex
-      .select("name")
+      .select("name", "no_of_teams")
       .from("tournaments")
-      .where({name : name})
+      .where({id : req.params.id})
       .then((results) => {
         console.log('Results ',results);
         if(results.length === 0){
-          res.sendStatus(404);
+          res.sendStatus(400);
         } else{
-          //run sorting algorithm there
-          res.sendStatus(200);
+
         }
     });
   });
