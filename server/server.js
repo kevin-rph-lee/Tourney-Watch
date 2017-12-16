@@ -17,7 +17,7 @@ const owjs = require('overwatch-js');
 
 
 // // Seperated Routes for each Resource
-// const usersRoutes = require('./routes/users');
+const usersRoutes = require('./routes/users');
 // const tournamentEnrollmentsRoutes = require('./routes/tournament_enrollments');
 // const tournamentsRoutes = require('./routes/tournaments');
 // const gamesRoutes = require('./routes/games');
@@ -50,7 +50,7 @@ app.use('/styles', sass({
 app.use(express.static('public'));
 
 // Mount all resource routes
-// app.use('/users', usersRoutes(knex, cookieSession));
+app.use('/users', usersRoutes(knex, cookieSession));
 // app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex));
 // app.use('/tournaments', tournamentsRoutes(knex));
 // app.use('/games', gamesRoutes(knex));
