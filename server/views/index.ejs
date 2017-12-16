@@ -1,24 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Home Page</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <% include partials/header %>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" integrity="sha384-3ziFidFTgxJXHMDttyPJKDuTlmxJlwbSkojudK/CkRqKDOmeSbN6KLrGdrBQnT2n" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/scripts/app.js"></script>
 
-    <body>
+    <!-- Bootstrap Style Sheets -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
-        <% include partials/navbar %>
+    <!-- Custom CSS -->
+    <link href="/styles/custom.css" rel="stylesheet" type="text/css">
 
-        <section name="jumbotron"  >
-            <div class="jumbotron text-center">
-                <h1>We're All Coders Now...</h1>
-                <p>I've had too much coffeeeeee</p>
-            </div>
-        </section>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Oswald:500" rel="stylesheet">
+  </head>
 
+    <!-- Nav Bar -->
+    <nav id="nav-bar">
+        <img src="/images/ow-navimg.png">
+        <button class="dropdown"><i class="fa fa-align-justify" aria-hidden="true"></i></button>
+        <button class="user"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
+    </nav>
 
-        <% include partials/footer %>
+  <body>
+  
+    <main>
 
-        <% include partials/scripts %>
+      <h1>We're All Tournament Runners Now</h1>        
 
-    </body>
+      <div class='container'>
+        <img src="/images/ow-banner.jpg">
+      </div>
 
+      <div class='container'> 
+        <p>Spicy jalapeno bacon ipsum dolor amet chicken buffalo porchetta shank burgdoggen pork loin short ribs beef frankfurter picanha capicola kevin shoulder ball tip. Pork belly doner cupim flank rump spare ribs, chicken alcatra turducken prosciutto sirloin ribeye. Porchetta pig jowl pork chop, meatloaf ribeye beef turkey ball tip short ribs leberkas doner cupim. Cupim burgdoggen tail flank shoulder, prosciutto short ribs short loin swine fatback pork loin tenderloin. Andouille bacon pig pork meatloaf, leberkas jerky tail frankfurter ham hock spare ribs alcatra short loin beef ribs. Doner buffalo bacon pig jowl pork chop shankle meatball pastrami rump.
+            Ham drumstick cow, ham hock brisket ground round flank pork belly. Sausage buffalo brisket sirloin ball tip. Pig boudin ball tip pork belly buffalo cupim. Kevin pork beef ribs pancetta, filet mignon chicken prosciutto buffalo leberkas ham hock rump short loin sirloin meatball. Spare ribs shoulder pork, cow hamburger ball tip picanha pork loin flank short ribs. Strip steak jowl beef ribs sirloin bacon landjaeger boudin salami kielbasa corned beef doner pork chop brisket. Tenderloin biltong pork frankfurter swine leberkas pancetta shankle.
+            Turducken rump landjaeger, boudin short loin pork belly kielbasa doner fatback. Rump fatback boudin landjaeger. Ham hock tail spare ribs venison kevin fatback. Pastrami tenderloin shankle doner tongue ham tail chicken. Drumstick hamburger kielbasa, brisket meatball beef ribs chicken ham salami.
+            Tri-tip tongue spare ribs andouille brisket ham. Cow rump biltong, ground round chuck drumstick leberkas sausage sirloin. T-bone ball tip boudin capicola tail ham turducken. Sirloin swine chicken, shoulder flank drumstick tail cupim bacon. Drumstick ham hock hamburger spare ribs shank burgdoggen. Bacon beef ham hock short loin kevin shankle corned beef tail brisket porchetta pastrami venison. Pastrami ribeye porchetta leberkas venison.
+            Boudin brisket pork belly, filet mignon tail porchetta frankfurter swine short loin leberkas pig t-bone. Shank short ribs cupim swine pig. Fatback kielbasa pastrami meatloaf, spare ribs corned beef boudin ham hock ham. Cow pork belly spare ribs jowl short ribs pork ribeye. Tail leberkas ground round chuck meatball turducken.
+        </p>
+
+        <button class="start">Get Started!</button>
+        <button class="how-it-works">How does this Work?</button>
+
+      </div>
+
+    </main>
+
+  </body>
 </html>
