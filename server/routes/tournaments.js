@@ -22,7 +22,7 @@ module.exports = (knex) => {
         } else {
           return false;
         }
-    });
+      });
   }
 
   /**
@@ -40,10 +40,24 @@ module.exports = (knex) => {
           //TO DO, SEED THE ALYERS TO THIS TEAM
         });
     }
+    createGames(tournamentID, noOfTeams);
+
   }
 
   function sortPlayers(players){
-    //TO DO: sort the players
+
+  }
+
+  function createGames(tournamentID, noOfTeams){
+    knex
+      .select("id")
+      .from("teams")
+      .where({tournament_id : tournamentID})
+      .then((result) => {
+        for(let i = 0; i < noOfTeams/2; i ++){
+          //TO DO, insert teams TALK TO MENTOR ABOUIT THIS
+        }
+      });
   }
 
 
