@@ -10,33 +10,30 @@ module.exports = (knex, owjs) => {
   const tankHeroes = ['d.va', 'orisa', 'reinhardt', 'roadhog', 'winston', 'zarya'];
   const supportHeroes = ['ana', 'lúcio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
 
-  function roleTimes(data, heroNames) {
-    let totalTime = 0;
-    Object.keys(data.quickplay.heroes).reduce((sum, key) => {
+  function roleTimePlayed(data, heroNames) {
+    return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       const arrayOfTimes = [];
       for (const i in heroNames) {
         if (data.quickplay.heroes[`${heroNames[i]}`]) {
           arrayOfTimes.push(data.quickplay.heroes[`${heroNames[i]}`].time_played);
         }
       }
-      return totalTime = arrayOfTimes.reduce((a, b) => a + b);
+      return arrayOfTimes.reduce((a, b) => a + b);
     }, 0);
-    return totalTime;
   };
 
-  function sortTime(data) {
+  function sortTimePlayed(data) {
     let sorted = '';
     const playerTimeStats = [
-      {role: 'offense', time : roleTimes(data, offenseHeroes)},
-      {role: 'defense', time : roleTimes(data, defenseHeroes)},
-      {role: 'tank', time : roleTimes(data, tankHeroes)},
-      {role: 'support', time : roleTimes(data, supportHeroes)}
+      {role: 'offense', time : roleTimePlayed(data, offenseHeroes)},
+      {role: 'defense', time : roleTimePlayed(data, defenseHeroes)},
+      {role: 'tank', time : roleTimePlayed(data, tankHeroes)},
+      {role: 'support', time : roleTimePlayed(data, supportHeroes)}
     ];
    return playerTimeStats.sort((a, b) => { return b.time - a.time });
   }
 
-  // double check this function !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  function totalHealsDone(data) {
+  function totalTimeHealing(data) {
     return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       if (data.quickplay.heroes[key].healing_done) {
         return sum + data.quickplay.heroes[key].time_played;
@@ -46,14 +43,13 @@ module.exports = (knex, owjs) => {
   }
 
   function healsPerSecond(data) {
-    return data.quickplay.global.healing_done / totalHealTime * 100;
+    return data.quickplay.global.healing_done / totalTimeHealing * 100;
   }
 
   function dmgPerSecond(data) {
-    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalHealTime);
+    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
-  
   //user registers
   router.post("/new", (req, res) => {
     // overwatch api insists on all lowercase
@@ -69,17 +65,8 @@ module.exports = (knex, owjs) => {
         } else{
           res.send(owjs.getAll('pc', 'us', results[0].battlenet_id)
               .then((data) => {
-                // prints the amount of seconds a person spends as healer
-                const totalHealTime = Object.keys(data.quickplay.heroes).reduce((sum, key) => {
-                  if (data.quickplay.heroes[key].healing_done) {
-                    return sum + data.quickplay.heroes[key].time_played;
-                  }
-                  return sum;
-                }, 0);
+                const roleRanks = sortTimePlayed(data);
 
-                const roleRanks = sortTime(data);
-
-                console.log(totalHealsDone(data));
                 // knex('tournament_enrollments').insert({
                   // 'id': params,
                   // 'user_id': params,
