@@ -53,8 +53,6 @@ module.exports = (knex, owjs) => {
     return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalHealTime);
   }
 
-
-
   
   //user registers
   router.post("/new", (req, res) => {
@@ -80,7 +78,6 @@ module.exports = (knex, owjs) => {
                 }, 0);
 
                 const roleRanks = sortTime(data);
-                const playerLevel = data.profile.level;
 
                 
                 // may not be accurate as healers can also damage...could add up all dmg done by 
@@ -97,14 +94,21 @@ module.exports = (knex, owjs) => {
                 //     };
                 //   })
                 // knex('tournament_enrollments').insert({
-                //   'id': params,`
-                //   'user_id': params,
-                //   'team_id': params,
-                //   'tournament_id': params,
-                //   'first_role': roleRanks[0].role,
-                //   'first_role_rank': null,
-                //   'second_role': roleRanks[1].role,
-                //   'second_role_rank': null
+                  'id': params,
+                  'user_id': params,
+                  'team_id': params,
+                  'tournament_id': params,
+                  'level': data.profile.level,                 
+                  'first_role': roleRanks[0].role,
+                  'first_role_time_played':
+                  'second_role': roleRanks[1].role,
+                  'second_role_time_played':
+                  'medal_gold':
+                  'medal_silver':
+                  'medal_bronze':
+                  'games_won':
+
+
                 // })
               })
           )
