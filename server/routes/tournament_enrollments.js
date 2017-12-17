@@ -37,12 +37,12 @@ module.exports = (knex, owjs) => {
 
   // double check this function !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   function totalHealsDone(data) {
-    Object.keys(data.quickplay.heroes).reduce((sum, key) => {
+    return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       if (data.quickplay.heroes[key].healing_done) {
         return sum + data.quickplay.heroes[key].time_played;
       }
-    }, 0);
     return sum
+    }, 0);
   }
 
   function healsPerSecond(data) {
@@ -79,36 +79,21 @@ module.exports = (knex, owjs) => {
 
                 const roleRanks = sortTime(data);
 
-                
-                // may not be accurate as healers can also damage...could add up all dmg done by 
-                // those heros that did not have the healing_done stat ??
-
-               
-                // prints array of all player's hero information listed
-                // let playerHeroStats = Object.keys(data.quickplay.heroes).map((key) => {
-                //     return {
-                //       'hero' : key,
-                //       'tot_dmg': data.quickplay.heroes[key].all_damage_done,
-                //       'tot_heals': data.quickplay.heroes[key].healing_done || 0,
-                //       'tot_time': data.quickplay.heroes[key].time_played
-                //     };
-                //   })
+                console.log(totalHealsDone(data));
                 // knex('tournament_enrollments').insert({
-                  'id': params,
-                  'user_id': params,
-                  'team_id': params,
-                  'tournament_id': params,
-                  'level': data.profile.level,                 
-                  'first_role': roleRanks[0].role,
-                  'first_role_time_played':
-                  'second_role': roleRanks[1].role,
-                  'second_role_time_played':
-                  'medal_gold':
-                  'medal_silver':
-                  'medal_bronze':
-                  'games_won':
-
-
+                  // 'id': params,
+                  // 'user_id': params,
+                  // 'team_id': params,
+                  // 'tournament_id': params,
+                  // 'level': data.profile.level,                 
+                  // 'first_role': roleRanks[0].role,
+                  // 'first_role_time_played': roleRanks[0].time
+                  // 'second_role': roleRanks[1].role,
+                  // 'second_role_time_played': roleRanks[1].time,
+                  // 'medal_gold': data.quickplay.global.medals_gold,
+                  // 'medal_silver': data.quickplay.global.medals_silver,
+                  // 'medal_bronze': data.quickplay.global.medals_bronze,
+                  // 'games_won': data.quickplay.global.games_won
                 // })
               })
           )
