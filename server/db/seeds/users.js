@@ -46,7 +46,18 @@ exports.seed = function(knex, Promise) {
         {email:'owznbpt@67v2w4q.com',password:'password',battlenet_id:'Maricruz#364'},
         {email:'pcxv1hp@cw5b2s.com',password:'password',battlenet_id:'Basilia#3139'},
         {email:'8_xhaa1@68jvsbb5ep81.com',password:'password',battlenet_id:'Heide#988'},
-        {email:'0ozth2j1chub53b@3p7yyrf1sz.com',password:'password',battlenet_id:'Luna#14851'}
+        {email:'duncand@yahoo.ca',password:'password',battlenet_id:'Luna#14851'},
+        {email:'pakaste@att.net',password:'password',battlenet_id:'Shayla#1243'},
+        {email:'dwsauder@me.com',password:'password',battlenet_id:'Susan#1255'},
+        {email:'johnh@msn.com',password:'password',battlenet_id:'Reena#1513'},
+        {email:'valdez@verizon.net',password:'password',battlenet_id:'Parthenia#645'},
+        {email:'bachmann@att.net',password:'password',battlenet_id:'Ocie#124'},
+        {email:'jimmichie@mac.com',password:'password',battlenet_id:'Maria#35234'},
+        {email:'amaranth@hotmail.com',password:'password',battlenet_id:'Fatimah#1241'},
+        {email:'mthurn@icloud.com',password:'password',battlenet_id:'Kelsie#241'},
+        {email:'report@gmail.com',password:'password',battlenet_id:'Belia#4444'},
+        {email:'pplinux@hotmail.com',password:'password',battlenet_id:'Lakia#2124'},
+        {email:'seemant@mac.com',password:'password',battlenet_id:'Alva#1244'}
       ]);
     });
 };

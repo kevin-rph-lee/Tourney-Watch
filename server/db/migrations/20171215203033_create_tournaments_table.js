@@ -5,7 +5,6 @@ exports.up = function(knex, Promise) {
     table.string('description');
     table.integer('no_of_teams');
     table.string('name');
-    table.boolean('is_ready');
   });
 };
 
