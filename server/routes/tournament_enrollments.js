@@ -35,6 +35,26 @@ module.exports = (knex, owjs) => {
    return playerTimeStats.sort((a, b) => { return b.time - a.time });
   }
 
+  // double check this function !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  function totalHealsDone(data) {
+    Object.keys(data.quickplay.heroes).reduce((sum, key) => {
+      if (data.quickplay.heroes[key].healing_done) {
+        return sum + data.quickplay.heroes[key].time_played;
+      }
+    }, 0);
+    return sum
+  }
+
+  function healsPerSecond(data) {
+    return data.quickplay.global.healing_done / totalHealTime * 100;
+  }
+
+  function dmgPerSecond(data) {
+    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalHealTime);
+  }
+
+
+
   
   //user registers
   router.post("/new", (req, res) => {
@@ -60,18 +80,13 @@ module.exports = (knex, owjs) => {
                 }, 0);
 
                 const roleRanks = sortTime(data);
+                const playerLevel = data.profile.level;
 
-                console.log(roleRanks[0].role)
-                console.log(roleRanks[1].role)
-
-
-
-                const healsPerSecond = data.quickplay.global.healing_done / totalHealTime * 100;
+                
                 // may not be accurate as healers can also damage...could add up all dmg done by 
                 // those heros that did not have the healing_done stat ??
-                const dmgPerSecond = data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalHealTime);
 
-                const playerLevel = data.profile.level;
+               
                 // prints array of all player's hero information listed
                 // let playerHeroStats = Object.keys(data.quickplay.heroes).map((key) => {
                 //     return {
@@ -82,7 +97,7 @@ module.exports = (knex, owjs) => {
                 //     };
                 //   })
                 // knex('tournament_enrollments').insert({
-                //   'id': params,
+                //   'id': params,`
                 //   'user_id': params,
                 //   'team_id': params,
                 //   'tournament_id': params,
