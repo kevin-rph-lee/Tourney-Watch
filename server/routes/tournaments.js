@@ -60,6 +60,11 @@ module.exports = (knex) => {
         if(results.length === 0){
           res.sendStatus(404);
         } else {
+          if (checkUserCount(results[0].no_of_teams, req.params.id)){
+            //render the page somehow with big red button
+          } else {
+            //render it without the big red button
+          }
           //TO DO: render front end dashboard
         }
     });
@@ -84,29 +89,22 @@ module.exports = (knex) => {
         } else{
           res.sendStatus(400);
         }
-    });
+      });
   });
 
 
-  //Starts tournament
+  //Starts tournament - hit the big red button
   router.post("/:id/start", (req, res) => {
     //Checking if tournament already exists, it doens't, send 404
     //TO DO: check with front end to see what data they send down
+    //
+    //TO DO: create another knex sleect statment to get no of teams
     knex
-      .select("id")
-      .from("tournaments")
-      .where({id : req.params.id})
+      .select("*")
+      .from("tournament_enrollments")
+      .where({tournament_id : req.params.id})
       .then((results) => {
-        if(results.length === 0){
-          res.sendStatus(404);
-        } else {
-
-          //TO DO: start tournament
-          //knex state to get the players
-          //of those players, run seedPlayers(players)
-
-
-        }
+        seedPlayers(req.param.id, results, results.length/6);
       });
   });
 
