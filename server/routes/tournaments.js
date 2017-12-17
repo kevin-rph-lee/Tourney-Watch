@@ -4,6 +4,10 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex) => {
+  //Goes to new tournaments page
+  router.get('/new', (req, res) => {
+    res.render('create_tournament');
+  });
 
   //creates new tournament
   router.post("/new", (req, res) => {
