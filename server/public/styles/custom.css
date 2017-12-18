@@ -37,9 +37,9 @@ main {
     padding-bottom: 20px;
   }
 
-  div button.start{
+  a.btn.btn-default{
     float: left;
-    margin-left: 20%;
+    margin-left: 25%;
     background-color: #474D57;
     color:white;
     border-color: #C0C1C2;
@@ -71,28 +71,3 @@ main {
     height:50px;
     margin: auto;
   }
-
-  #nav-bar img{
-    height:50px;
-  }
-
-  #nav-bar button.dropdown {
-    border: 2px solid #F7931D;
-    background-color: #F7931D;
-    height: 100%;
-    width: 50px;
-    text-align: center;
-    float: right;
-    color: #ffffff;
-  }
-
-  #nav-bar button.user {
-    background-color: #191E21;
-    border: 2px solid #191E21;
-    padding-left: 20px;
-    height: 100%;
-    width: 50px;
-    text-align: center;
-    float: left;
-    color: #F7931D;
-  } 
