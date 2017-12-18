@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include partials/header %>
+
+
+</head>
+<% include partials/navbar %>
+
+    <body>
+
+        <main>
+
+            <h2> Login</h2>
+            <form id="login form" action="/users/login" method="POST" style="margin:150px;">
+
+                <div class="form-row">
+                    <div class="form-label">
+                        <label>Email</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-email" type="email" name="email" placeholder="Email Address" style="width: 300px" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Password</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-password" type="password" name="password" placeholder="Password" style="width: 300px" required>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label></label>
+                    </div>
+                    <div class="form-box">
+                        <button class="submit butt0n" type="submit" value="Submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            </div>
+
+
+        </main>
+
+    </body>
+
+</html>
