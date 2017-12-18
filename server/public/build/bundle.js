@@ -21996,7 +21996,7 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'h1',
         null,
-        'Hello React'
+        'Hello React, you\'re awesome'
       );
     }
   }]);
