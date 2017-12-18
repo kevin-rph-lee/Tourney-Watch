@@ -8,6 +8,9 @@ module.exports = (knex) => {
   router.get('/new', (req, res) => {
     res.render('create_tournament');
   });
+  router.get('/test', (req, res) => {
+    res.render('tournament_view');
+  });
 
   //creates new tournament
   router.post("/new", (req, res) => {
