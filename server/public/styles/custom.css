@@ -11,6 +11,7 @@ main {
   font-family: 'Oswald', sans-serif;
   color: white;
   width: 1050px;
+  height: -webkit-fill-available;
   margin: auto;
   padding-right:20px;
   padding-left:20px;
