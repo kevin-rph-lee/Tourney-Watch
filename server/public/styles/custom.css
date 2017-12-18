@@ -97,7 +97,7 @@ main {
   margin-right:30px
 }
 
-.submit.butt0n{
+.submit.butt0n {
   color: #fff;
   background-color: #F7931D;
   border: 1px solid #dee4e7;
@@ -105,11 +105,16 @@ main {
   border-radius: .25em;
   font-family: Helvetica,sans-serif;
   font-size: 1em;
-
+  width:80px;
+  height:30px;
+}
+.submit.butt0n:hover { 
+  background-color: #191E21;
+  color: #F7931D;
+  cursor: pointer;
 
 }
-
-.form-dropdown{
+.form-dropdown {
  
   margin:13px 0 10px 0;
   color: #384245;
@@ -117,7 +122,7 @@ main {
   font-family: Helvetica,Arial,sans-serif;
 }
 
-#entry{
+input {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -129,4 +134,14 @@ main {
   border: 1px solid #dee4e7;
   outline: 0;
   border-radius: .25em;
+}
+
+main h2 {
+  margin-top:70px;
+  margin-left: 50px
+}
+
+form {
+padding: 10px 0 0 0;
+margin-top: 70px !important;
 }

@@ -2,71 +2,55 @@
 <html lang="en">
 
 <head>
-    <title>Home Page</title>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <% include partials/header %>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" integrity="sha384-3ziFidFTgxJXHMDttyPJKDuTlmxJlwbSkojudK/CkRqKDOmeSbN6KLrGdrBQnT2n"
-        crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
 
-    <!-- Bootstrap Style Sheets -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-        crossorigin="anonymous">
-
-    <!-- Custom CSS -->
-    <link href="/styles/custom.css" rel="stylesheet" type="text/css">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Oswald:500" rel="stylesheet">
 </head>
 <% include partials/navbar %>
-
 
     <body>
 
         <main>
 
-            <div>
-                <form action="/users/new" method="POST" style="margin:150px;">
-                    <div class="form-row">
-                        <div class="form-label">
-                            <label> Email</label>
-                        </div>
-                        <div class="form-box">
-                            <input id="entry" type="email" name="email" placeholder="Email Address" style="width: 300px">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">
-                            <label> Battle.net ID</label>
-                        </div>
-                        <div class="form-box">
-                            <input id="entry" type="text" name="battlenet" placeholder="Battle.net ID" style="width: 300px">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">
-                            <label> Password</label>
-                        </div>
-                        <div class="form-box">
-                            <input id="entry" type="password" name="password" placeholder="Password" style="width: 300px">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-row">
-                        <div class="form-label">
-                            <label></label>
-                        </div>
-                        <div class="form-box">
-                            <input class="submit butt0n" type="submit" value="Submit">
-                        </div>
-                    </div>
+            <h2> Register</h2>
 
-                </form>
-            </div>
+
+            <form id="registration-form" action="/users/new" method="POST" style="margin:150px;">
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Email</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry" type="email" name="email" placeholder="Email Address" style="width: 300px">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Battle.net ID</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry " type="text" name="battlenet" placeholder="Battle.net ID" style="width: 300px">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Password</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry password" type="password" name="password" placeholder="Password" style="width: 300px">
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label></label>
+                    </div>
+                    <div class="form-box">
+                        <button class="submit butt0n" type="submit" value="Submit">Submit</button>
+                    </div>
+                </div>
+
+            </form>
 
 
         </main>
