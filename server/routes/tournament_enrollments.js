@@ -4,59 +4,55 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex, owjs) => {
-
+  // overwatch api insists on all lowercase
   const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
   const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
   const tankHeroes = ['d.va', 'orisa', 'reinhardt', 'roadhog', 'winston', 'zarya'];
   const supportHeroes = ['ana', 'lúcio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
 
-  function roleTimes(data, heroNames) {
-    let totalTime = 0;
-    Object.keys(data.quickplay.heroes).reduce((sum, key) => {
+  function roleTimePlayed(data, heroNames) {
+    return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       const arrayOfTimes = [];
       for (const i in heroNames) {
         if (data.quickplay.heroes[`${heroNames[i]}`]) {
           arrayOfTimes.push(data.quickplay.heroes[`${heroNames[i]}`].time_played);
         }
       }
-      return totalTime = arrayOfTimes.reduce((a, b) => a + b);
+      return arrayOfTimes.reduce((a, b) => a + b);
     }, 0);
-    return totalTime;
   };
 
-  function sortTime(data) {
+  function sortTimePlayed(data) {
     let sorted = '';
     const playerTimeStats = [
-      {role: 'offense', time : roleTimes(data, offenseHeroes)},
-      {role: 'defense', time : roleTimes(data, defenseHeroes)},
-      {role: 'tank', time : roleTimes(data, tankHeroes)},
-      {role: 'support', time : roleTimes(data, supportHeroes)}
+      {role: 'offense', time : roleTimePlayed(data, offenseHeroes)},
+      {role: 'defense', time : roleTimePlayed(data, defenseHeroes)},
+      {role: 'tank', time : roleTimePlayed(data, tankHeroes)},
+      {role: 'support', time : roleTimePlayed(data, supportHeroes)}
     ];
    return playerTimeStats.sort((a, b) => { return b.time - a.time });
   }
 
-  // double check this function !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  function totalHealsDone(data) {
-    Object.keys(data.quickplay.heroes).reduce((sum, key) => {
+  function totalTimeHealing(data) {
+    return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       if (data.quickplay.heroes[key].healing_done) {
         return sum + data.quickplay.heroes[key].time_played;
       }
-    }, 0);
     return sum
+    }, 0);
   }
 
   function healsPerSecond(data) {
-    return data.quickplay.global.healing_done / totalHealTime * 100;
+    return data.quickplay.global.healing_done / totalTimeHealing * 100;
   }
 
   function dmgPerSecond(data) {
-    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalHealTime);
+    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
-  
-  //user registers
+  // new enrollment to tournament
   router.post("/new", (req, res) => {
-    // overwatch api insists on all lowercase
+
     //TO DO!!!!!!!!!!!!!!! get params properly
     //Checking if user already exists, if user exists, DO NOT create it
     knex
@@ -69,47 +65,25 @@ module.exports = (knex, owjs) => {
         } else{
           res.send(owjs.getAll('pc', 'us', results[0].battlenet_id)
               .then((data) => {
-                // prints the amount of seconds a person spends as healer
-                const totalHealTime = Object.keys(data.quickplay.heroes).reduce((sum, key) => {
-                  if (data.quickplay.heroes[key].healing_done) {
-                    return sum + data.quickplay.heroes[key].time_played;
-                  }
-                  return sum;
-                }, 0);
+                const roleRanks = sortTimePlayed(data);
 
-                const roleRanks = sortTime(data);
-
-                
-                // may not be accurate as healers can also damage...could add up all dmg done by 
-                // those heros that did not have the healing_done stat ??
-
-               
-                // prints array of all player's hero information listed
-                // let playerHeroStats = Object.keys(data.quickplay.heroes).map((key) => {
-                //     return {
-                //       'hero' : key,
-                //       'tot_dmg': data.quickplay.heroes[key].all_damage_done,
-                //       'tot_heals': data.quickplay.heroes[key].healing_done || 0,
-                //       'tot_time': data.quickplay.heroes[key].time_played
-                //     };
-                //   })
-                // knex('tournament_enrollments').insert({
-                  'id': params,
-                  'user_id': params,
-                  'team_id': params,
-                  'tournament_id': params,
-                  'level': data.profile.level,                 
+                console.log('inserting into database');
+                //to do, when form si up, remove return
+                return knex('tournament_enrollments').insert({
+                  'id': req.body.id,
+                  'user_id': req.body.userID,
+                  'team_id': null,
+                  'tournament_id': req.body.tournID,
+                  'level': data.profile.level,
                   'first_role': roleRanks[0].role,
-                  'first_role_time_played':
+                  'first_role_time_played': roleRanks[0].time,
                   'second_role': roleRanks[1].role,
-                  'second_role_time_played':
-                  'medal_gold':
-                  'medal_silver':
-                  'medal_bronze':
-                  'games_won':
-
-
-                // })
+                  'second_role_time_played': roleRanks[1].time,
+                  'medal_gold': data.quickplay.global.medals_gold,
+                  'medal_silver': data.quickplay.global.medals_silver,
+                  'medal_bronze': data.quickplay.global.medals_bronze,
+                  'games_won': data.quickplay.global.games_won
+                })
               })
           )
         }
