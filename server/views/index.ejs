@@ -1,46 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Home Page</title>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" integrity="sha384-3ziFidFTgxJXHMDttyPJKDuTlmxJlwbSkojudK/CkRqKDOmeSbN6KLrGdrBQnT2n" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
+<head>
+  <% include partials/header %>
 
-    <!-- Bootstrap Style Sheets -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
-    <!-- Custom CSS -->
-    <link href="/styles/custom.css" rel="stylesheet" type="text/css">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Oswald:500" rel="stylesheet">
-  </head>
+</head>
+<% include partials/navbar %>
 
     <!-- Nav Bar -->
     <% include partials/navbar %>
 
   <body>
-  
+
     <main>
 
-      <h1>We're All Tournament Runners Now</h1>        
+      <h1>We're All Tournament Runners Now</h1>
 
       <div class='container'>
         <img src="/images/ow-banner.jpg">
       </div>
 
       <div class='container'> 
+      
         <p>TourneyWatch is a web application used to seed and run tournaments in a local setting, 
           using information gathered through the Overwatch API and our application, you can run local Overwatch 
           tournaments without having to stress over how fair or unfair the teams are! Taking the Blizzard ID's 
           of the participants we calculate the teams based on player statistics that are recorded from previous 
           gameplay, bringing the tournament the most balanced and therefore most enjoyable gameplay viewing and 
           playing experience.
-        </p>
 
         <a href="register" class="btn btn-default">Get Started</a>
         <a href="how-to" class="btn btn-default">How Does this Work?</a>
@@ -50,4 +38,5 @@
     </main>
 
   </body>
+
 </html>
