@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex) => {
+module.exports = (knex, _) => {
 
   /**
    * This assigns each player to a team based off their skill level
@@ -153,5 +153,29 @@ module.exports = (knex) => {
         }
       });
   });
+
+  router.get("/:id", (req, res) => {
+    const tournamentID = req.params.id;
+    
+    if(!tournamentID) {
+      // STRETCH: Show 'This tournament does not exist' error page
+      res.sendStatus(400);
+      return;
+    } 
+
+    // Gets all player stats for each team in a specific tournament
+    knex
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+      .from("tournament_enrollments")
+      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+      .where({tournament_id: tournamentID})
+      .orderBy("team_id", "ascd")
+      .then((playerStats) => {
+        console.log(playerStats)
+        // const teamRoster = 
+        res.sendStatus(200);
+      })
+  })
   return router;
 };
