@@ -22,11 +22,11 @@ module.exports = (knex, _) => {
     for (let p = 0; p < maxPlayerOffset; p += teamCount) {
       if(ascending) {
         for (let t = 0; t < teamCount; t++) {
-          teamAssignments.push({ 'id': playersArray[p + t].id, 'team_id': (t+1) });
+          teamAssignments.push({ 'id': playersArray[p + t].id, 'team_id': (t + 1) });
         }
       } else {
         for (let t = teamCount - 1; t >= 0; t--) {
-          teamAssignments.push({'id': playersArray[p - (t - (teamCount - 1))].id, 'team_id': (t+1)});
+          teamAssignments.push({'id': playersArray[p - (t - (teamCount - 1))].id, 'team_id': (t + 1)});
         }
       }
       ascending = !ascending;
@@ -35,7 +35,7 @@ module.exports = (knex, _) => {
   }
 
   /**
-   *
+   * Counts how many support type players
    *
    * @param {array} data result of overwatch api
    * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
@@ -82,6 +82,7 @@ module.exports = (knex, _) => {
     const description = req.body.description;
 
     if(!name){
+      // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
       return;
     }
@@ -148,7 +149,7 @@ module.exports = (knex, _) => {
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
                   res.sendStatus(200);
-              });
+                });
             });
         }
       });
@@ -171,9 +172,9 @@ module.exports = (knex, _) => {
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
-        const teamRoster = _.groupBy(playerStats, "team_id")
+        const teamRoster = _.groupBy(playerStats, "team_id");
         res.render("/:id", {'teamRoster': teamRoster});
-      })
-  })
+      });
+  });
   return router;
 };
