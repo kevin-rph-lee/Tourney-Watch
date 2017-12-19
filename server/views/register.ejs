@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include partials/header %>
+
+
+</head>
+<% include partials/navbar %>
+
+    <body>
+
+        <main>
+
+            <h2> Register</h2>
+
+
+            <form id="registration-form" action="/users/new" method="POST" style="margin:150px;">
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Email</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-email" type="email" name="email" placeholder="Email Address" style="width: 300px">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Battle.net ID</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-battlenet" type="text" name="battlenet" placeholder="Battle.net ID" style="width: 300px">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Password</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-password" type="password" name="password" placeholder="Password" style="width: 300px">
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label></label>
+                    </div>
+                    <div class="form-box">
+                        <button class="submit butt0n" type="submit" value="Submit">Submit</button>
+                    </div>
+                </div>
+
+            </form>
+
+
+        </main>
+
+    </body>
+
+</html>
