@@ -54,6 +54,8 @@ main {
     border-color: #C0C1C2;
   }
 
+  /* Nav Bar Buttons */
+
   #nav-bar {
     background: #191E21;
     color: #F7931D;
@@ -72,3 +74,8 @@ main {
     height:50px;
     margin: auto;
   }
+
+  /* nav button.logout{
+    background-image: url(/styles/logo.png)
+    height: 50px;
+  } */

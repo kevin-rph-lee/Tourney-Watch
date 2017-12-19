@@ -69,7 +69,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
           res.sendStatus(404);
         } else if (bcrypt.compareSync(password, results[0].password)){
           req.session.email = email;
-          res.sendStatus(200);
+          res.redirect("/");
         } else {
           res.sendStatus(403);
         }
@@ -81,7 +81,10 @@ module.exports = (knex, bcrypt, cookieSession) => {
   router.post("/logout", (req, res) => {
       console.log('Logging out')
       req.session.email = null;
-      res.sendStatus(200);
+      req.session = null;
+      res.send({result:true});
+      //res.sendStatus(200);
+      //res.redirect("/")
   });
 
   return router;

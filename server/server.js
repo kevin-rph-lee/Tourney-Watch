@@ -45,7 +45,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt));
-app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex, owjs, _));
+app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex, owjs));
 app.use('/tournaments', tournamentsRoutes(knex));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
@@ -53,8 +53,18 @@ app.use('/tournaments', tournamentsRoutes(knex));
 
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', (req, res) => {
+  
   res.render('index');
 });
+
+// Method to test the cookie has been deleted
+// app.get('/test',(req,res) => {
+//   if(req.session.email){
+//     console.log("you are logged in")
+//   } else {
+//     console.log("you are not logged in");
+//   }
+// });
 
 
 
