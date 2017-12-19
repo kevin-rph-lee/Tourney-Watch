@@ -10,6 +10,11 @@ module.exports = (knex, _) => {
     res.render('create_tournament',{email: req.session.email});
   });
 
+//tournament bracket and teams page
+  router.get('/test', (req, res) => {
+    res.render('brackets',{email: req.session.email});
+  });
+
   /**
    * This assigns each player to a team based off their skill level
    *
@@ -71,13 +76,7 @@ module.exports = (knex, _) => {
   }
 
 
-  router.get('/test', (req, res) => {
-    res.render('brackets');
-  });
 
-  router.get('/new', (req, res) => {
-    res.render('create_tournament');
-  });
 
   // Creates new tournament
   router.post("/new", (req, res) => {

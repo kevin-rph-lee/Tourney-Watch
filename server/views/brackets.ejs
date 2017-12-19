@@ -4,9 +4,8 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/styles/jquery.bracket.min.css" />
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <!-- <script type="text/javascript" src="jquery-1.6.2.min.js"></script> -->
     <script type="text/javascript" src="/scripts/jquery.bracket.min.js"></script>
-    <!-- <script type="text/javascript" src="/scripts/app.js"></script> -->
+    <script type="text/javascript" src="/scripts/app.js"></script>
     <script type="text/javascript">
         $(function () {
             var demos = ['save', ]
@@ -155,19 +154,19 @@
     </script>
  
 </head>
-<% include partials/navbar %>
 
 <body>
+        <% include partials/navbar %>
 
-    <div id="main">
+    <main>
         <div id="save" style="display: inline-block;">
 
         </div>
+        <button class="submit butt0n" id="target">Save</button>
 
-    </div>
+    </main>
 
    
-<button class="submit butt0n" id="target">Save</button>
 
 </body>
 
