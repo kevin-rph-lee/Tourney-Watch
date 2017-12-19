@@ -15,8 +15,6 @@ const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
 const bcrypt = require('bcrypt');
-var _ = require('lodash');
-
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
