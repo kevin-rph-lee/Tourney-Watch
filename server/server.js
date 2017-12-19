@@ -18,7 +18,6 @@ const bcrypt = require('bcrypt');
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
-const tournamentEnrollmentsRoutes = require('./routes/tournament_enrollments');
 const tournamentsRoutes = require('./routes/tournaments');
 // const gamesRoutes = require('./routes/games');
 // const teamsRoutes = require('./routes/teams');
@@ -55,7 +54,9 @@ app.get('/', (req, res) => {
 });
 
 
-
+app.get('/json', (req, res) => {
+  res.json(['Joel', 'Mel']);
+})
 
 app.use(express.static(__dirname + '/public'));
 
