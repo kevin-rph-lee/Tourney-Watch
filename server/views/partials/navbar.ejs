@@ -27,7 +27,6 @@
 </head>
 
 <nav class="navbar navbar-dark" style="background-color: #191E21;">
-
     <img src="/images/ow-navimg.png">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -43,9 +42,13 @@
             User Options
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/users/new">Register</a>
+            <% if (email !== undefined) { %> 
+              <a class="dropdown-item">Logged in as: <%= email %></a>
+              <a class="dropdown-item logout" href="javascript:void(0)" id="test">Log Out</a>
+            <% } else { %>
+              <a class="dropdown-item" href="/users/new">Register</a>
             <a class="dropdown-item" href="/users/login">Log In</a>
-            <a class="dropdown-item logout" href="javascript:void(0)" id="test">Log Out</a>
+            <% } %>
           </div>
         </li>
         <li class="nav-item">

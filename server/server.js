@@ -54,7 +54,7 @@ app.use('/tournaments', tournamentsRoutes(knex));
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', (req, res) => {
   
-  res.render('index');
+  res.render('index', {email: req.session.email});
 });
 
 // Method to test the cookie has been deleted

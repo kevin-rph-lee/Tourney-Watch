@@ -6,10 +6,10 @@ const router  = express.Router();
 module.exports = (knex) => {
   //Goes to new tournaments page
   router.get('/new', (req, res) => {
-    res.render('create_tournament');
+    res.render('create_tournament',{email: req.session.email});
   });
   router.get('/test', (req, res) => {
-    res.render('tournament_view');
+    res.render('tournament_view',{email: req.session.email});
   });
 
   //creates new tournament

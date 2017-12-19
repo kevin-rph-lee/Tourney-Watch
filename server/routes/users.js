@@ -7,11 +7,11 @@ module.exports = (knex, bcrypt, cookieSession) => {
 
    //Goes to registration page
    router.get('/new', (req, res) => {
-    res.render('register');
+    res.render('register', {email: req.session.email});
   });
   //Goes to login page
   router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login',{email: req.session.email});
   });
 
   //user registers
