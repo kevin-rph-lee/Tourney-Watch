@@ -4,6 +4,12 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex) => {
+  
+  //Goes to new tournaments page
+  router.get('/new', (req, res) => {
+    res.render('create_tournament',{email: req.session.email});
+  });
+
 
   /**
    * This assigns each player to a team based off their skill level
@@ -67,7 +73,7 @@ module.exports = (knex) => {
 
 
   router.get('/test', (req, res) => {
-    res.render('tournament_view');
+    res.render('tournament_view',{email: req.session.email});
   });
 
   router.get('/new', (req, res) => {
