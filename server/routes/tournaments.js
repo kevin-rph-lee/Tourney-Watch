@@ -161,9 +161,8 @@ module.exports = (knex, _) => {
       // STRETCH: Show 'This tournament does not exist' error page
       res.sendStatus(400);
       return;
-    } 
-
-    // Gets all player stats for each team in a specific tournament
+    }
+    // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
@@ -173,8 +172,7 @@ module.exports = (knex, _) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id")
-        console.log(teamRoster);
-        res.sendStatus(200);
+        res.render("/:id", {'teamRoster': teamRoster});
       })
   })
   return router;
