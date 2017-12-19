@@ -172,8 +172,8 @@ module.exports = (knex, _) => {
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
-        console.log(playerStats)
-        // const teamRoster = 
+        const teamRoster = _.groupBy(playerStats, "team_id")
+        console.log(teamRoster);
         res.sendStatus(200);
       })
   })
