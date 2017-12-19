@@ -3,21 +3,23 @@
 
 <head>
     <% include partials/header %>
-
-
-
-
 </head>
-<% include partials/navbar %>
-
     <body>
-
+        <% include partials/navbar %>
         <main>
-                <div id="react-root"></div>
-                <script src="/bundle.js"></script>
-               
-        </main>
+            <h1>Tournament Name Here</h1>
 
+            <!-- BRACKET CODE WILL GO HERE -->
+
+            <!-- Bootsrtap Cards will go Here -->
+            <div class="card mb-3" style="max-width: 20rem;">
+                    <div class="card-header"><%= teamRoster %></div>
+                    <div class="card-body">
+                      <h4 class="card-title">Light card title</h4>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+            </div>
+        </main>
     </body>
 
 </html>
