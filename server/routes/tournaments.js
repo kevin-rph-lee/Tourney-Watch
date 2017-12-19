@@ -67,7 +67,7 @@ module.exports = (knex) => {
 
 
   router.get('/test', (req, res) => {
-    res.render('tournament_view');
+    res.render('brackets');
   });
 
   router.get('/new', (req, res) => {
