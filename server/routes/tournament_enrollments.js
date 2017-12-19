@@ -75,7 +75,7 @@ module.exports = (knex, owjs) => {
   router.post("/new", (req, res) => {
     // GET PARAMS CORRECTLY
     knex
-      .select("battlenet_id")
+      .select("id", "battlenet_id")
       .from("users")
       .where({email: req.body.email})
       .then((results) => {
@@ -83,12 +83,13 @@ module.exports = (knex, owjs) => {
           // STRETCH: Show 'Invalid Battlenet ID' error page
           res.sendStatus(404);
         } else{
+          console.log(results)
           res.send(owjs.getAll('pc', 'us', results[0].battlenet_id)
             .then((data) => {
+              console.log(results);
               const roleRanks = sortTimePlayed(data);
               return knex('tournament_enrollments').insert({
-                'id': req.body.id,
-                'user_id': req.body.userID,
+                'user_id': results[0].id,
                 'team_id': null,
                 'tournament_id': req.body.tournID,
                 'level': data.profile.level,
