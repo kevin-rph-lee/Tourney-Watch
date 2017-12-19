@@ -89,7 +89,7 @@ module.exports = (knex, _) => {
         .orderBy("team_id", "ascd")
         .then((playerStats) => {
           const teamRoster = _.groupBy(playerStats, "team_id");
-          console.log(teamRoster);
+          console.log(teamRoster)
           res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
         });
     });

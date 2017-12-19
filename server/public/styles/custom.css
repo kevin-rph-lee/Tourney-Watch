@@ -68,6 +68,7 @@ main {
   nav.navbar.navbar-dark{
     position: fixed;
     width:100%;
+    z-index: 1;
   }
 
   nav.navbar.navbar-dark img{
