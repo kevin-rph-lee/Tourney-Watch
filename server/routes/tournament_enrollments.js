@@ -83,10 +83,8 @@ module.exports = (knex, owjs) => {
           // STRETCH: Show 'Invalid Battlenet ID' error page
           res.sendStatus(404);
         } else{
-          console.log(results)
           res.send(owjs.getAll('pc', 'us', results[0].battlenet_id)
             .then((data) => {
-              console.log(results);
               const roleRanks = sortTimePlayed(data);
               return knex('tournament_enrollments').insert({
                 'user_id': results[0].id,
