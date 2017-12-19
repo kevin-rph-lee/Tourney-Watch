@@ -7,11 +7,11 @@ module.exports = (knex, bcrypt, cookieSession) => {
 
    //Goes to registration page
    router.get('/new', (req, res) => {
-    res.render('register');
+    res.render('register', {email: req.session.email});
   });
   //Goes to login page
   router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login',{email: req.session.email});
   });
 
   //user registers
@@ -69,7 +69,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
           res.sendStatus(404);
         } else if (bcrypt.compareSync(password, results[0].password)){
           req.session.email = email;
-          res.sendStatus(200);
+          res.redirect("/");
         } else {
           res.sendStatus(403);
         }
@@ -81,7 +81,10 @@ module.exports = (knex, bcrypt, cookieSession) => {
   router.post("/logout", (req, res) => {
       console.log('Logging out')
       req.session.email = null;
-      res.sendStatus(200);
+      req.session = null;
+      res.send({result:true});
+      //res.sendStatus(200);
+      //res.redirect("/")
   });
 
   return router;

@@ -52,8 +52,18 @@ app.use('/tournaments', tournamentsRoutes(knex, _));
 
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', (req, res) => {
-  res.render('index');
+  
+  res.render('index', {email: req.session.email});
 });
+
+// Method to test the cookie has been deleted
+// app.get('/test',(req,res) => {
+//   if(req.session.email){
+//     console.log("you are logged in")
+//   } else {
+//     console.log("you are not logged in");
+//   }
+// });
 
 
 
