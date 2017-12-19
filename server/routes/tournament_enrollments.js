@@ -10,6 +10,13 @@ module.exports = (knex, owjs) => {
   const tankHeroes = ['d.va', 'orisa', 'reinhardt', 'roadhog', 'winston', 'zarya'];
   const supportHeroes = ['ana', 'lúcio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
 
+  /**
+   * Provides a sorted array of each player's most played hero (by time)
+   * from most to least
+   * @param {array} data result of overwatch api
+   * @param {array} heroNames const variables of hero names by role type
+   * @returns {array}
+   */
   function roleTimePlayed(data, heroNames) {
     return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       const arrayOfTimes = [];
@@ -22,8 +29,13 @@ module.exports = (knex, owjs) => {
     }, 0);
   };
 
+  /**
+   * Provides a sorted array of each player's most played (by time) role class
+   * from most to least
+   * @param {array} data result of overwatch api
+   * @returns {array}
+   */
   function sortTimePlayed(data) {
-    let sorted = '';
     const playerTimeStats = [
       {role: 'offense', time : roleTimePlayed(data, offenseHeroes)},
       {role: 'defense', time : roleTimePlayed(data, defenseHeroes)},
@@ -33,6 +45,12 @@ module.exports = (knex, owjs) => {
    return playerTimeStats.sort((a, b) => { return b.time - a.time });
   }
 
+  /**
+   * Total time played as a character with the key 'healing_done'
+   * 
+   * @param {array} data result of overwatch api
+   * @returns {integer}
+   */
   function totalTimeHealing(data) {
     return Object.keys(data.quickplay.heroes).reduce((sum, key) => {
       if (data.quickplay.heroes[key].healing_done) {
@@ -50,25 +68,22 @@ module.exports = (knex, owjs) => {
     return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
-  // new enrollment to tournament
+  // Adds a new line in to enrollments for each new player 
+  // given that their battlenet ID exists 
   router.post("/new", (req, res) => {
-    
-    //TO DO!!!!!!!!!!!!!!! get params properly
-    //Checking if user already exists, if user exists, DO NOT create it
+    // GET PARAMS CORRECTLY
     knex
       .select("battlenet_id")
       .from("users")
       .where({email : req.body.email})
       .then((results) => {
         if(results.length === 0){
+          // STRETCH: Show 'Invalid Battlenet ID' error page
           res.sendStatus(404);
         } else{
           res.send(owjs.getAll('pc', 'us', results[0].battlenet_id)
               .then((data) => {
                 const roleRanks = sortTimePlayed(data);
-
-                console.log('inserting into database');
-
                 return knex('tournament_enrollments').insert({
                   'id': req.body.id,
                   'user_id': req.body.userID,
@@ -89,7 +104,5 @@ module.exports = (knex, owjs) => {
         }
     });
   });
-
-
   return router;
 }

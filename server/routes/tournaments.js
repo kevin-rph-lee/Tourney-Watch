@@ -34,11 +34,17 @@ module.exports = (knex) => {
     return teamAssignments;
   }
 
-  // FIGURE OUT BETTER WORD FOR roleChoiceNo
-  function countSupport(data, roleChoiceNo) {
+  /**
+   * 
+   * 
+   * @param {array} data result of overwatch api
+   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @returns 
+   */
+  function countSupport(data, roleChoice) {
     let count = 0;
     data.forEach((key) => {
-      if (key[roleChoiceNo] === 'support') {
+      if (key[roleChoice] === 'support') {
         return count ++;
       } 
     })
@@ -55,14 +61,13 @@ module.exports = (knex) => {
      knex("tournament_enrollments")
      .where({"id" : p.id})
      .update({"team_id" : p.team_id})
-     .then(() => {
-       console.log('stuff inserted');
-     })
+     .then(() => {})
    })
   }
 
   // Creates new tournament
   router.post("/new", (req, res) => {
+    // GET PARAMS CORRECTLY
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
@@ -100,6 +105,7 @@ module.exports = (knex) => {
 
   // Starts seeding the registered players in to balanced teams
   router.post("/start", (req, res) => {
+    // GET PARAMS CORRECTLY
     const tournamentID = req.body.tournID;
     const name = req.body.name;
 
