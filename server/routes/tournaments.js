@@ -4,65 +4,160 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex) => {
+  
   //Goes to new tournaments page
+  router.get('/new', (req, res) => {
+    res.render('create_tournament',{email: req.session.email});
+  });
+
+
+  /**
+   * This assigns each player to a team based off their skill level
+   *
+   * @param {array} playersArray
+   * @param {array} teamArray
+   * @returns {array}
+   */
+  function assignPlayersToTeams(playersArray, teamArray) {
+    const teamAssignments = [];
+    const playerCount = playersArray.length;
+    const teamCount = teamArray.length;
+    const maxPlayerOffset = playerCount - (playerCount % teamCount);
+    let ascending = true;
+  
+    for (let p = 0; p < maxPlayerOffset; p += teamCount) {
+      if(ascending) {
+        for (let t = 0; t < teamCount; t++) {
+          teamAssignments.push({ 'id': playersArray[p + t].id, 'team_id': (t+1) });
+        }
+      } else {
+        for (let t = teamCount - 1; t >= 0; t--) {
+          teamAssignments.push({'id': playersArray[p - (t - (teamCount - 1))].id, 'team_id': (t+1)});
+        }
+      }
+      ascending = !ascending;
+    }
+    return teamAssignments;
+  }
+
+  /**
+   *
+   *
+   * @param {array} data result of overwatch api
+   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @returns
+   */
+  function countSupport(data, roleChoice) {
+    let count = 0;
+    data.forEach((key) => {
+      if (key[roleChoice] === 'support') {
+        return count ++;
+      }
+    });
+    return count;
+  }
+  
+  /**
+   * This updates database to show team assignments
+   *
+   * @param {array} teamAssigned
+   */
+  function assignToTeams(teamAssigned) {
+    teamAssigned.forEach((p) => {
+      knex("tournament_enrollments")
+        .where({"id": p.id})
+        .update({"team_id": p.team_id})
+        .then(() => {});
+    });
+  }
+
+
+  router.get('/test', (req, res) => {
+    res.render('tournament_view',{email: req.session.email});
+  });
+
   router.get('/new', (req, res) => {
     res.render('create_tournament');
   });
-  router.get('/test', (req, res) => {
-    res.render('tournament_view');
-  });
 
-  //creates new tournament
+  // Creates new tournament
   router.post("/new", (req, res) => {
+    // GET PARAMS CORRECTLY
     const name = req.body.name;
-    const noOfTeams = req.body.no_of_teams;
+    const teamCount = req.body.no_of_teams;
     const description = req.body.description;
 
     if(!name){
       res.sendStatus(400);
       return;
     }
-    //Checking if tournament already exists, if user exists, DO NOT create it
     knex
       .select("name")
       .from("tournaments")
-      .where({name : name})
+      .where({name: name})
       .then((results) => {
-        console.log('Results ',results);
-        if(results.length === 0){
+        // If the tournament name does not exist, create new line in tournaments
+        // and creates new lines in teams (based on # of teams needed)
+        if(results.length === 0) {
           knex
-          .insert({name: name, no_of_teams: noOfTeams, description: description, isReady: false})
-          .into('tournaments')
-          .then(()=>{});
-          res.sendStatus(200);
-        } else{
+            .insert({name: name, no_of_teams: teamCount, description: description})
+            .into('tournaments')
+            .returning('id')
+            .then((tournamentID)=> {
+              for (let i = 0; i < teamCount; i++) {
+                knex("teams")
+                  .insert({"tournament_id": tournamentID[0]})
+                  .then(() => {});
+              }
+              res.sendStatus(200);
+            });
+        } else {
+          // STRETCH: Show 'Tournament name taken' error page
           res.sendStatus(400);
         }
-    });
+      });
   });
 
- //starts a tournament
+  // Starts seeding the registered players in to balanced teams
   router.post("/start", (req, res) => {
+    // GET PARAMS CORRECTLY
     const name = req.body.name;
-     if(!name){
+
+    if(!name){
+      // STRETCH: Show 'You did not enter a tournament name' error page
       res.sendStatus(400);
       return;
     }
-    //Checking if tournament already exists, if user exists, DO NOT create it
+    // Lists players from highest level to lowest, then assigns a team ID #
+    // to each player via an array
     knex
-      .select("name")
+      .select("id", "name")
       .from("tournaments")
-      .where({name : name})
+      .where({name: name})
       .then((results) => {
-        console.log('Results ',results);
-        if(results.length === 0){
+        const tournamentID = results[0].id;
+        if(results.length === 0) {
+          // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
-        } else{
-          //run sorting algorithm there
-          res.sendStatus(200);
+        } else {
+          knex
+            .select("id", "level")
+            .from("tournament_enrollments")
+            .where({tournament_id: tournamentID})
+            .orderBy("level", "desc")
+            .then((playersArray) => {
+              knex
+                .select("id")
+                .from("teams")
+                .where({tournament_id: tournamentID})
+                .then((teamArray) => {
+                  const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
+                  assignToTeams(teamAssigned);
+                  res.sendStatus(200);
+              });
+            });
         }
-    });
+      });
   });
-
   return router;
-}
+};
