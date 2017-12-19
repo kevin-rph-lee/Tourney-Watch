@@ -4,12 +4,35 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex) => {
-
-  function sortPlayersDesc(data, key) {
-    return data.sort((a, b) => {
-      return b[key] - a[key]
-    })
-  };
+/**
+ * This assigns each player to a team based off their skill level
+ * 
+ * @param {array} playersArray 
+ * @param {array} teamArray 
+ * @returns {array}
+ */
+  function assignPlayersToTeams(playersArray, teamArray) {
+    const teamAssignments = [];
+    const playerCount = playersArray.length;
+    const teamCount = teamArray.length;
+    const maxPlayerOffset = playerCount - (playerCount % teamCount);
+    let ascending = true;
+  
+    for (let p = 0; p < maxPlayerOffset; p += teamCount) {
+      if(ascending) {
+        for (let t = 0; t < teamCount; t++) {
+         teamAssignments.push({ 'id': playersArray[p + t].id, 'team_id' : t })
+  
+        }
+      } else {
+        for (let t = teamCount - 1; t >= 0; t--) {
+          teamAssignments.push({'id' : playersArray[p - (t - (teamCount - 1))].id, 'team_id' : t})
+        }
+      }
+      ascending = !ascending  
+    }
+    return teamAssignments;
+  }
 
   // FIGURE OUT BETTER WORD FOR roleChoiceNo
   function countSupport(data, roleChoiceNo) {
@@ -20,104 +43,100 @@ module.exports = (knex) => {
       } 
     })
     return count;
-  };
-
-  // FOR IF WE HARD CODE THE SORTING #s
-  function teamCreator(data, teamNo) {
-
+  }
+  
+/**
+ * This updates database to show team assignments
+ * 
+ * @param {array} teamAssigned 
+ */
+  function assignToTeams(teamAssigned) {
+   teamAssigned.forEach((p) => {
+     knex("tournament_enrollments")
+     .where({"id" : p.id})
+     .update({"team_id" : p.team_id})
+     .then(() => {
+       console.log('stuff inserted');
+     })
+   })
   }
 
-
-  // creates new tournament
+  // Creates new tournament
   router.post("/new", (req, res) => {
     const name = req.body.name;
-    const noOfTeams = req.body.no_of_teams;
+    const teamCount = req.body.no_of_teams;
     const description = req.body.description;
 
     if(!name){
       res.sendStatus(400);
       return;
     }
-    // Checking if tournament already exists, if user exists, DO NOT create it
     knex
       .select("name")
       .from("tournaments")
       .where({name : name})
       .then((results) => {
-        console.log('Results ',results);
-        if(results.length === 0){
+        // If the tournament name does not exist, create new line in tournaments
+        // and creates new lines in teams (based on # of teams needed)
+        if(results.length === 0) {
           knex
-          .insert({name: name, no_of_teams: noOfTeams, description: description, isReady: false})
+          .insert({name: name, no_of_teams: teamCount, description: description})
           .into('tournaments')
-          .then(()=>{});
-          res.sendStatus(200);
-        } else{
-          res.sendStatus(400);
-        }
-    });
-  });
-
- // starts a tournament
-  // router.post("/start", (req, res) => {
-  //   const name = req.body.name;
-  //    if(!name){
-  //     res.sendStatus(400);
-  //     return;
-  //   }
-  //   //Checking if tournament already exists, if user exists, DO NOT create it
-  //   knex
-  //     .select("name")
-  //     .from("tournaments")
-  //     .where({name : name})
-  //     .then((results) => {
-  //       console.log('Results ',results);
-  //       if(results.length === 0){
-  //         res.sendStatus(404);
-  //       } else{
-  //         //run sorting algorithm there
-  //         res.sendStatus(200);
-  //       }
-  //   });
-  // });
-
-    router.post("/start", (req, res) => {
-      knex
-        .select("id", "first_role", "first_role_time_played", 
-        "second_role", "second_role_time_played")
-        .from("tournament_enrollments")
-        .where({tournament_id : req.body.tournID})
-        .then((results) => {  
-          const sorted = sortPlayersDesc(results, 'first_role_time_played')
-          if(countSupport(results, 'first_role') > (results.length/6)) {
-            if((results.length/6) === 2) {
-              res.send(console.log( { 
-              'Team_1': [sorted[0].id, sorted[3].id, sorted[4].id, sorted[7].id, sorted[8].id, sorted[11].id],
-              'Team_2': [sorted[1].id, sorted[2].id, sorted[5].id, sorted[6].id, sorted[9].id, sorted[10].id],
-              'Team_3': [sorted[14] || null ],
-              'Team_4': [sorted[14] || null ],
-              'Team_5': [sorted[14] || null ],
-              'Team_6': [sorted[14] || null ],
-              'Team_7': [sorted[14] || null ],
-              'Team_8': [sorted[14] || null ],
-              'Team_9': [sorted[14] || null ],
-              'Team_10': [sorted[14] || null ],
-              'Team_11': [sorted[14] || null ],
-              'Team_12': [sorted[14] || null ],
-              'Team_13': [sorted[14] || null ],
-              'Team_14': [sorted[14] || null ],
-              'Team_15': [sorted[14] || null ],
-              'Team_16': [sorted[14] || null ]
-              }
-            ))
+          .returning('id')
+          .then((tournamentID)=> {
+            for (let i = 0; i < teamCount; i++) {
+              knex("teams")
+                .insert({"tournament_id" : tournamentID[0]})
+                .then(() => {})
             }
+            res.sendStatus(200);
+          })
+        } else {
+          // STRETCH: Show 'Tournament name taken' error page
+          res.sendStatus(400);
+        };
+      });
+  })
 
-            
-          } else {
-            res.send('fix algo');
-          }
-            
-        })
-    })
+  // Starts seeding the registered players in to balanced teams
+  router.post("/start", (req, res) => {
+    const tournamentID = req.body.tournID;
+    const name = req.body.name;
 
+    if(!name){
+      // STRETCH: Show 'You did not enter a tournament name' error page
+      res.sendStatus(400);
+      return;
+    }
+    // Lists players from highest level to lowest, then assigns a team ID # 
+    // to each player via an array
+    knex
+      .select("name")
+      .from("tournaments")
+      .where({name : name})
+      .then((results) => {
+        if(results.length === 0) {
+          // STRETCH: Show 'No tournament of that name found' error page
+          res.sendStatus(404);
+        } else {
+          knex
+            .select("id", "level")
+            .from("tournament_enrollments")
+            .where({tournament_id : tournamentID})
+            .orderBy("level", "desc")
+            .then((playersArray) => {
+              knex
+                .select("id")
+                .from("teams")
+                .where({tournament_id : tournamentID})
+                .then((teamArray) => {
+                  const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
+                  assignToTeams(teamAssigned)
+                  res.sendStatus(200);
+                })  
+            })
+        }
+      })
+  });
   return router;
 }
