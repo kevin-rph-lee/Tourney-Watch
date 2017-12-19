@@ -22,11 +22,11 @@ module.exports = (knex) => {
     for (let p = 0; p < maxPlayerOffset; p += teamCount) {
       if(ascending) {
         for (let t = 0; t < teamCount; t++) {
-          teamAssignments.push({ 'id': playersArray[p + t].id, 'team_id': t });
+          teamAssignments.push({ 'id': playersArray[p + t].id, 'team_id': (t+1) });
         }
       } else {
         for (let t = teamCount - 1; t >= 0; t--) {
-          teamAssignments.push({'id': playersArray[p - (t - (teamCount - 1))].id, 'team_id': t});
+          teamAssignments.push({'id': playersArray[p - (t - (teamCount - 1))].id, 'team_id': (t+1)});
         }
       }
       ascending = !ascending;
@@ -115,7 +115,6 @@ module.exports = (knex) => {
   // Starts seeding the registered players in to balanced teams
   router.post("/start", (req, res) => {
     // GET PARAMS CORRECTLY
-    const tournamentID = req.body.tournID;
     const name = req.body.name;
 
     if(!name){
@@ -126,10 +125,11 @@ module.exports = (knex) => {
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
     knex
-      .select("name")
+      .select("id", "name")
       .from("tournaments")
       .where({name: name})
       .then((results) => {
+        const tournamentID = results[0].id;
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
@@ -148,7 +148,7 @@ module.exports = (knex) => {
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
                   res.sendStatus(200);
-                });
+              });
             });
         }
       });
