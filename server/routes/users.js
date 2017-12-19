@@ -5,6 +5,15 @@ const router  = express.Router();
 
 module.exports = (knex, bcrypt, cookieSession) => {
 
+   //Goes to registration page
+   router.get('/new', (req, res) => {
+    res.render('register');
+  });
+  //Goes to login page
+  router.get('/login', (req, res) => {
+    res.render('login');
+  });
+
   //user registers
   router.post("/new", (req, res) => {
 
