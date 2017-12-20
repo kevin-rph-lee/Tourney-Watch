@@ -260,5 +260,17 @@ module.exports = (knex, _) => {
         res.render("/:id", {'teamRoster': teamRoster});
       });
   });
+
+
+  //Updates bracket data in the DB
+  router.post("update/", (req, res) => {
+    knex("tournaments")
+        .where({"id": req.params.id})
+        .update({"brackets": req.params.bracketData})
+        .then(() => {console.log('Bracket data updated')});
+  });
+
+
+
   return router;
 };
