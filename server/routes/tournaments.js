@@ -87,7 +87,7 @@ module.exports = (knex, _) => {
           res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
         });
     });
-    
+
   // router.get('/test', (req, res) => {
   //   res.render('tournament_view');
   // });
@@ -203,7 +203,7 @@ module.exports = (knex, _) => {
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: 11})
+      .where({tournament_id: 1})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
