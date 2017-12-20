@@ -8,32 +8,7 @@ exports.seed = function(knex, Promise) {
         {
           name: 'Test Tournament',
           description: 'My tournament for testing',
-          no_of_teams: 8,
-          brackets:
-          `{
-            "teams": [
-                [
-                    { name: "1", flag: "in" },
-                    { name: "2", flag: "in" },
-                ],
-                [
-                    { name: "3", flag: "in" },
-                    { name: "4", flag: "in" },
-                ],
-                [
-                    { name: "5", flag: "in" },
-                    { name: "6", flag: "in" }
-                ],
-                [
-                    { name: "7", flag: "in" },
-                    { name: "8", flag: "in" },
-                ],
-
-
-            ],
-
-            results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
-          }`
+          no_of_teams: 8
         }
       ]);
     });

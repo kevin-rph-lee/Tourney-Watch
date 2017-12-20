@@ -4,7 +4,7 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex, _) => {
-  
+
   //Goes to new tournaments page
   router.get('/new', (req, res) => {
     res.render('create_tournament',{email: req.session.email});
@@ -23,7 +23,7 @@ module.exports = (knex, _) => {
     const teamCount = teamArray.length;
     const maxPlayerOffset = playerCount - (playerCount % teamCount);
     let ascending = true;
-  
+
     for (let p = 0; p < maxPlayerOffset; p += teamCount) {
       if(ascending) {
         for (let t = 0; t < teamCount; t++) {
@@ -55,7 +55,7 @@ module.exports = (knex, _) => {
     });
     return count;
   }
-  
+
   /**
    * This updates database to show team assignments
    *
@@ -70,14 +70,92 @@ module.exports = (knex, _) => {
     });
   }
 
+  /**
+   * Intializes the brackets json object based on the no of teams and updates the tournaments table
+   * @param  {array} teamArray    Array of team ID objects
+   * @param  {int} no_of_teams  No of teams in the tournament
+   * @param  {int} tournamentID Tournament ID
+   */
+  function initializeBrackets(teamArray, no_of_teams, tournamentID){
+    let brackets = '';
+    if(no_of_teams === 8){
+      brackets =
+      `{
+        "teams": [
+            [
+                { name: ${teamArray[0].id}, flag: "in" },
+                { name: ${teamArray[1].id}, flag: "in" },
+            ],
+            [
+                { name: ${teamArray[2].id}, flag: "in" },
+                { name: ${teamArray[3].id}, flag: "in" },
+            ],
+            [
+                { name: ${teamArray[4].id}, flag: "in" },
+                { name: ${teamArray[5].id}, flag: "in" }
+            ],
+            [
+                { name: ${teamArray[6].id}, flag: "in" },
+                { name: ${teamArray[7].id}, flag: "in" },
+            ],
+
+
+        ],
+
+        results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
+      }`
+    } else {
+      brakets =
+      `{"teams": [
+                [
+                    { name: ${teamArray[0].id}, flag: 'in' },
+                    { name: ${teamArray[1].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[2].id}, flag: 'in' },
+                    { name: ${teamArray[3].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[4].id}, flag: 'in' },
+                    { name: ${teamArray[5].id}, flag: 'in' }
+                ],
+                [
+                    { name: ${teamArray[6].id}, flag: 'in' },
+                    { name: ${teamArray[7].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[8].id}, flag: 'in' },
+                    { name: ${teamArray[9].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[10].id}, flag: 'in' },
+                    { name: ${teamArray[11].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[12].id}, flag: 'in' },
+                    { name: ${teamArray[13].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[14].id}, flag: 'in' },
+                    { name: ${teamArray[15].id}, flag: 'in' },
+                ],
+
+            ],
+
+            results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
+        }`
+    }
+    knex("tournaments")
+      .where({"id": tournamentID})
+      .update({"brackets": JSON.stringify(brackets)})
+      .then(() => {});
+  }
+
 
   router.get('/test', (req, res) => {
     res.render('tournament_view',{email: req.session.email});
   });
 
-  router.get('/new', (req, res) => {
-    res.render('create_tournament');
-  });
 
   // Creates new tournament
   router.post("/new", (req, res) => {
@@ -131,7 +209,7 @@ module.exports = (knex, _) => {
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
     knex
-      .select("id", "name")
+      .select("id", "name", "no_of_teams")
       .from("tournaments")
       .where({name: name})
       .then((results) => {
@@ -151,6 +229,7 @@ module.exports = (knex, _) => {
                 .from("teams")
                 .where({tournament_id: tournamentID})
                 .then((teamArray) => {
+                  initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
                   res.sendStatus(200);
@@ -162,7 +241,7 @@ module.exports = (knex, _) => {
 
   router.get("/:id", (req, res) => {
     const tournamentID = req.params.id;
-    
+
     if(!tournamentID) {
       // STRETCH: Show 'This tournament does not exist' error page
       res.sendStatus(400);
