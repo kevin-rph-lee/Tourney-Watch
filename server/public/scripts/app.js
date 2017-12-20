@@ -4,7 +4,6 @@ $(document).ready(function () {
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
         Object.keys(teamNames).forEach((t) => {
-            console.log('hi', teamNames)
             $(".card-container").append(`<div class="card mb-3" style="max-width: 20rem;">
                 <div class="card-header">${teamNames[t]}</div>
                 <div class="card-body">
