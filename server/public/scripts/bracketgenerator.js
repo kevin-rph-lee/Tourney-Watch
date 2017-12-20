@@ -34,18 +34,19 @@ var saveData = {
  * userData: optional data given when bracket is created.
  */
 function saveFn(data) {
-    var json = JSON.stringify(data)
-    console.log(json);
-    // $('#saveOutput').text('POST '+userData+' '+json)
-    alert("The paragraph was clicked.");
-
-    /* You probably want to do something like this
-    jQuery.ajax("rest/"+userData, {contentType: 'application/json',
-                                  dataType: 'json',
-                                  type: 'post',
-                                  data: json})
-    */
+    var bracketData = JSON.stringify(data)
+    console.log("bracketData", bracketData)
+    $.ajax({
+        type: "POST",
+        url: "/tournaments/update/",
+        data: {bracketData: bracketData, tournamentID:1},
+        success: function () {
+            alert("Tournament Changes Saved!");
+        }
+    })
 }
+
+
 
 $(function () {
     var container = $('div#save .demo')
@@ -117,7 +118,7 @@ $(function () {
         init: saveData,
         disableToolbar: true,
         disableTeamEdit: true,
-        save: function () { }, 
+        save: function () { },
         decorator: {
             edit: edit_fn,
             render: render_fn
