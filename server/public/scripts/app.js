@@ -4,17 +4,18 @@ $(document).ready(function () {
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
         Object.keys(teamNames).forEach((t) => {
+<<<<<<< HEAD
             console.log('hi', teamNames)
             $(".row").append(`<div class="card mb-3" style="max-width: 15rem;">
+=======
+            $(".card-container").append(`<div class="card mb-3" style="max-width: 20rem;">
+>>>>>>> master
                 <div class="card-header">${teamNames[t]}</div>
                 <div class="card-body">
                     <h4 class="card-title">Light card title</h4>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
             </div>`)})
-        // console.log(card)
-        // $(".card-container").html(card)
-       
     }
 
     function loadCards() {
