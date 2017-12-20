@@ -1,6 +1,29 @@
 
 $(document).ready(function () {
 
+    function renderTeamCards(teamRoster) {
+        const teamNames = Object.keys(teamRoster)
+        console.log("teamNames", teamNames)
+        Object.keys(teamNames).forEach((t) => {
+            $(".row").append(`<div class="card mb-3" style="max-width: 15rem;">
+                <div class="card-header">${teamNames[t]}</div>
+                <div class="card-body">
+                    <h4 class="card-title">Light card title</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>`)})
+            console.log("testing")
+    }
+
+    function loadCards() {
+        $.getJSON("/tournaments/cards.json")
+            .done(renderTeamCards);
+    }
+
+    loadCards();
+
+    // renderTeamCards(teamRoster);
+
     $("#registration-form").on('submit', function (event) {
         event.preventDefault();
         var formData = {
