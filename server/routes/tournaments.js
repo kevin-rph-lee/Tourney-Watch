@@ -65,8 +65,6 @@ module.exports = (knex, _) => {
     });
   }
 
-<<<<<<< HEAD
-
     router.get("/test", (req, res) => {
       const tournamentID = req.params.id;
       
@@ -89,11 +87,10 @@ module.exports = (knex, _) => {
           res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
         });
     });
-=======
+    
   // router.get('/test', (req, res) => {
   //   res.render('tournament_view');
   // });
->>>>>>> 4c191e7ef972d0f2b1fdb2821fd6a37bb1661941
 
   router.get('/new', (req, res) => {
     res.render('create_tournament');
