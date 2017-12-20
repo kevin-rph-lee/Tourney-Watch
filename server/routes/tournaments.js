@@ -5,6 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex, _) => {
 
+
   /**
    * This assigns each player to a team based off their skill level
    *
@@ -65,7 +66,14 @@ module.exports = (knex, _) => {
     });
   }
 
-    router.get("/test", (req, res) => {
+
+    //tournament bracket and teams page
+    router.get('/test', (req, res) => {
+      res.render('brackets',{email: req.session.email});
+    });
+
+
+    router.get("/cards", (req, res) => {
       const tournamentID = req.params.id;
       
       // if(!tournamentID) {
@@ -88,13 +96,7 @@ module.exports = (knex, _) => {
         });
     });
 
-  // router.get('/test', (req, res) => {
-  //   res.render('tournament_view');
-  // });
-
-  router.get('/new', (req, res) => {
-    res.render('create_tournament');
-  });
+ 
 
   // Creates new tournament
   router.post("/new", (req, res) => {
@@ -177,19 +179,19 @@ module.exports = (knex, _) => {
       });
   });
 
-  router.get("/test", (req, res) => {
-    const tournamentID = req.params.id;
+  // router.get("/test", (req, res) => {
+  //   const tournamentID = req.params.id;
     
-    // if(!tournamentID) {
-    //   // STRETCH: Show 'This tournament does not exist' error page
-    //   res.sendStatus(400);
-    //   return;
-    // }
-    // Gets player stats for each team in a specific tournament
-        res.render("tournament_view", {email: req.session.eqmail});
-  });
+  //   // if(!tournamentID) {
+  //   //   // STRETCH: Show 'This tournament does not exist' error page
+  //   //   res.sendStatus(400);
+  //   //   return;
+  //   // }
+  //   // Gets player stats for each team in a specific tournament
+  //       res.render("tournament_view", {email: req.session.eqmail});
+  // });
 
-  router.get("/test.json", (req, res) => {
+  router.get("/cards.json", (req, res) => {
     const tournamentID = req.params.id;
     
     // if(!tournamentID) {
