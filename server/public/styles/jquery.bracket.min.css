@@ -237,7 +237,8 @@ div.jQBracket.rl .loserBracket {
     float:left;clear:right
 }
 div.jQBracket.rl .round {
-    margin-right:0;float:right
+    margin-right:0;
+    float:right
 }
 div.jQBracket.rl .team {
     float:right

@@ -24,6 +24,7 @@ var saveData = {
             { name: "Team 7", flag: 'in' },
             { name: "Team 8", flag: 'in' },
         ],
+       
     ],
 
     results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
@@ -110,10 +111,10 @@ function render_fn(container, data, score, state) {
 
 $(function () {
     $('div#save .demo').bracket({
-        teamWidth: 80,
-        scoreWidth: 20,
-        matchMargin: 10,
-        roundMargin: 30,
+        teamWidth: 81,
+        scoreWidth: 27,
+        matchMargin: 61,
+        roundMargin: 71,
         centerConnectors: true,
         init: saveData,
         disableToolbar: true,
