@@ -66,7 +66,6 @@ exports.seed = async function(knex, promise){
   })();
   const teamsTask = (async () => {
     const [tournament] = await tournamentTask;
-    // console.log(tournaments);
     const tournament_id = tournament.id;
     await knex('teams').del();
     return knex('teams').insert([
@@ -77,12 +76,13 @@ exports.seed = async function(knex, promise){
       {tournament_id},
       {tournament_id},
       {tournament_id},
-      {tournament_id},      
+      {tournament_id},
     ]);
   })();
   const tournament_enrollmentTask = (async () => {
     const [tournament] = await tournamentTask;
     const tournament_id = tournament.id;
+    console.log('Tournement ID, ' + tournament_id);
     const users = await usersTask;
     await knex('tournament_enrollments').del();
     return knex('tournament_enrollments').insert([

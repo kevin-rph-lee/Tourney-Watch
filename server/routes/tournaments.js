@@ -159,6 +159,18 @@ module.exports = (knex, _) => {
     res.render('brackets',{email: req.session.email});
   });
 
+    //tournament bracket and teams page
+  router.get('/test/:id', (req, res) => {
+     knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: req.param.id})
+      .then((results) => {
+        res.render('brackets',{email: req.session.email, bracketData: results[0].brackets});
+      });
+    res.sendStatus(404);
+  });
+
 
   router.get("/cards", (req, res) => {
     const tournamentID = req.params.id;
@@ -227,6 +239,7 @@ module.exports = (knex, _) => {
   router.post("/start", (req, res) => {
     // GET PARAMS CORRECTLY
     const name = req.body.name;
+    console.log('name, ', name);
 
     if(!name){
       // STRETCH: Show 'You did not enter a tournament name' error page
@@ -241,6 +254,8 @@ module.exports = (knex, _) => {
       .where({name: name})
       .then((results) => {
         const tournamentID = results[0].id;
+        console.log('Tournament ID, ' + results[0].id);
+
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
@@ -256,6 +271,7 @@ module.exports = (knex, _) => {
                 .from("teams")
                 .where({tournament_id: tournamentID})
                 .then((teamArray) => {
+                  console.log(teamArray);
                   initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
