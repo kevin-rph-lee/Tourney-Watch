@@ -269,11 +269,7 @@ module.exports = (knex, _) => {
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.params.id;
 
-    if(!tournamentID) {
-      // STRETCH: Show 'This tournament does not exist' error page
-      res.sendStatus(400);
-      return;
-    }
+
 
     // Gets player stats for each team in a specific tournament
     knex
