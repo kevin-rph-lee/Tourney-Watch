@@ -4,11 +4,6 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex, _) => {
-  
-  //Goes to new tournaments page
-  router.get('/new', (req, res) => {
-    res.render('create_tournament',{email: req.session.email});
-  });
 
   /**
    * This assigns each player to a team based off their skill level
@@ -70,10 +65,9 @@ module.exports = (knex, _) => {
     });
   }
 
-
-  router.get('/test', (req, res) => {
-    res.render('tournament_view',{email: req.session.email});
-  });
+  // router.get('/test', (req, res) => {
+  //   res.render('tournament_view');
+  // });
 
   router.get('/new', (req, res) => {
     res.render('create_tournament');
@@ -160,26 +154,40 @@ module.exports = (knex, _) => {
       });
   });
 
-  router.get("/:id", (req, res) => {
+  router.get("/test", (req, res) => {
     const tournamentID = req.params.id;
     
-    if(!tournamentID) {
-      // STRETCH: Show 'This tournament does not exist' error page
-      res.sendStatus(400);
-      return;
-    }
+    // if(!tournamentID) {
+    //   // STRETCH: Show 'This tournament does not exist' error page
+    //   res.sendStatus(400);
+    //   return;
+    // }
+    // Gets player stats for each team in a specific tournament
+        res.render("tournament_view", {email: req.session.eqmail});
+  });
+
+  router.get("/test.json", (req, res) => {
+    const tournamentID = req.params.id;
+    
+    // if(!tournamentID) {
+    //   // STRETCH: Show 'This tournament does not exist' error page
+    //   res.sendStatus(400);
+    //   return;
+    // }
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: tournamentID})
+      .where({tournament_id: 11})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
-        res.render("/:id", {'teamRoster': teamRoster});
+        console.log(teamRoster);
+        res.send(teamRoster);
       });
   });
+
   return router;
 };
