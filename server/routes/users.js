@@ -40,27 +40,28 @@ module.exports = (knex, bcrypt, cookieSession) => {
           .returning('id')
           .then((results)=>{
             req.session.userID = results[0];
+            req.session.email = email;
+            console.log('IN /NEW', req.session)
+            res.sendStatus(200);
           });
-          req.session.email = email;
-          res.sendStatus(200);
         } else{
           res.sendStatus(400);
         }
     });
   });
 
-  //logs a user in
+  // logs a user in
   router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    //error checking
+    // error checking
     if(!email || !password){
       res.sendStatus(400);
       return;
     }
 
-    //Checking if user already exists, if user does not exist, throw back a 404
+    // Checking if user already exists, if user does not exist, throw back a 404
     knex
       .select("password", "id")
       .from("users")

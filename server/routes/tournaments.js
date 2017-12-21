@@ -111,22 +111,6 @@ module.exports = (knex, _) => {
       });
   }
 
-  router.get("/:id", (req, res) => {
-    const tournamentID = req.params.id;
-    knex
-      .select("id")
-      .from("tournaments")
-      .where({id: tournamentID})
-      .then((results) => {
-        if(results.length === 0){
-          sendStatus(404);
-        } else {
-          console.log(results[0].id);
-            res.render("tournament_view", {teamRoster: getTeamRoster(tournamentID), email: req.session.email});
-        }
-      });
-  });
-
   router.get('/test', (req, res) => {
 
     res.render('brackets',{email: req.session.email})
@@ -193,8 +177,9 @@ module.exports = (knex, _) => {
         // If the tournament name does not exist, create new line in tournaments
         // and creates new lines in teams (based on # of teams needed)
         if(results.length === 0) {
+          console.log(req.session)
           knex
-            .insert({name: name, no_of_teams: teamCount, description: description, })
+            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false})
             .into('tournaments')
             .returning('id')
             .then((tournamentID)=> {
@@ -285,6 +270,22 @@ module.exports = (knex, _) => {
         .where({"id": req.body.tournamentID})
         .update({"brackets": req.body.bracketData})
         .then(() => {console.log('Bracket data updated')});
+  });
+
+  router.get("/:id", (req, res) => {
+    const tournamentID = req.params.id;
+    knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) => {
+        if(results.length === 0){
+          sendStatus(404);
+        } else {
+          console.log(results[0].id);
+            res.render("tournament_view", {teamRoster: getTeamRoster(tournamentID), email: req.session.email});
+        }
+      });
   });
 
 
