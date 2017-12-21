@@ -84,7 +84,7 @@ module.exports = (knex, _) => {
     }
     knex("tournaments")
       .where({"id": tournamentID})
-      .update({"brackets": JSON.stringify(data)})
+      .update({"brackets": JSON.stringify(data), is_started: true})
       .then(() => {});
   }
 
@@ -112,12 +112,11 @@ module.exports = (knex, _) => {
   }
 
   router.get('/test', (req, res) => {
-
     res.render('brackets',{email: req.session.email})
     // res.sendStatus(404);
   });
 
-    //tournament bracket and teams page
+  // Tournament bracket and teams page
   router.get('/brackets.json', (req, res) => {
     knex
       .select("brackets")
@@ -197,6 +196,8 @@ module.exports = (knex, _) => {
       });
   });
 
+  // TODO
+  // Use param instead of body should it be /:id/start or /start/:id
   // Starts seeding the registered players in to balanced teams
   router.post("/start", (req, res) => {
     // GET PARAMS CORRECTLY
@@ -272,20 +273,29 @@ module.exports = (knex, _) => {
         .then(() => {console.log('Bracket data updated')});
   });
 
+  //TODO : get a coutn of enrolled ppl and pass it down
   router.get("/:id", (req, res) => {
-    const tournamentID = req.params.id;
-    knex
-      .select("id")
+    const tournamentID = parseInt(req.params.id);
+    // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
+    if (!Number.isInteger(tournamentID)) {
+      console.log('not a vaid id')
+      res.sendStatus(404);
+    } else {
+      knex
+      .select("id", "is_started", "creator_user_id")
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
         if(results.length === 0){
-          sendStatus(404);
+          console.log("inside selct")
+          res.sendStatus(404);
         } else {
-          console.log(results[0].id);
-            res.render("tournament_view", {teamRoster: getTeamRoster(tournamentID), email: req.session.email});
+          console.log(results);
+          res.render("tournament_view", {teamRoster: getTeamRoster(tournamentID), email: req.session.email});
         }
       });
+    }
+    
   });
 
 
