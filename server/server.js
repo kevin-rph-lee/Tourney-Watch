@@ -66,7 +66,9 @@ app.get('/', (req, res) => {
 // });
 
 
-
+app.get('/json', (req, res) => {
+  res.json(['Joel', 'Mel']);
+})
 
 app.use(express.static(__dirname + '/public'));
 
