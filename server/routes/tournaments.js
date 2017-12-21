@@ -109,36 +109,36 @@ module.exports = (knex, _) => {
       brackets =
       {"teams": [
                 [
-                    { name: teamArray[0].id flag: 'in' },
-                    { name: teamArray[1].id flag: 'in' },
+                    { name: teamArray[0].id, flag: 'in' },
+                    { name: teamArray[1].id, flag: 'in' },
                 ],
                 [
-                    { name: teamArray[2].id flag: 'in' },
-                    { name: teamArray[3].id flag: 'in' },
+                    { name: teamArray[2].id, flag: 'in' },
+                    { name: teamArray[3].id, flag: 'in' },
                 ],
                 [
-                    { name: teamArray[4].id flag: 'in' },
-                    { name: teamArray[5].id flag: 'in' }
+                    { name: teamArray[4].id, flag: 'in' },
+                    { name: teamArray[5].id, flag: 'in' }
                 ],
                 [
-                    { name: teamArray[6].id flag: 'in' },
-                    { name: teamArray[7].id flag: 'in' },
+                    { name: teamArray[6].id, flag: 'in' },
+                    { name: teamArray[7].id, flag: 'in' },
                 ],
                 [
-                    { name: teamArray[8].id flag: 'in' },
-                    { name: teamArray[9].id flag: 'in' },
+                    { name: teamArray[8].id, flag: 'in' },
+                    { name: teamArray[9].id, flag: 'in' },
                 ],
                 [
-                    { name: teamArray[10].i, flag: 'in' },
-                    { name: teamArray[11].i, flag: 'in' },
+                    { name: teamArray[10].id, flag: 'in' },
+                    { name: teamArray[11].id, flag: 'in' },
                 ],
                 [
-                    { name: teamArray[12].i, flag: 'in' },
-                    { name: teamArray[13].i, flag: 'in' },
+                    { name: teamArray[12].id, flag: 'in' },
+                    { name: teamArray[13].id, flag: 'in' },
                 ],
                 [
-                    { name: teamArray[14].i, flag: 'in' },
-                    { name: teamArray[15].i, flag: 'in' },
+                    { name: teamArray[14].id, flag: 'in' },
+                    { name: teamArray[15].id, flag: 'in' },
                 ],
 
             ],
