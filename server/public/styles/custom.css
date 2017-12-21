@@ -101,12 +101,6 @@ div.card.mb-3 p{
 
 div.card.mb-3 div.card-header {
   background-color: #F7931D;
-
-}
-
-div.card.mb-3 p{
-  text-align: left;
-  padding-left: 3.5em;
 }
 
 /* Bootstrap Table */

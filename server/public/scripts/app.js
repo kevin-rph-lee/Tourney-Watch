@@ -11,7 +11,6 @@ $(document).ready(function () {
                     <div class="card-body" data-team-id="${teamNames[t]}">
 
                 </div>
-<<<<<<< HEAD
             </div>`)
 
             teamRoster[teamNames[t]].forEach((user) => {
@@ -20,10 +19,6 @@ $(document).ready(function () {
         
         })
             // console.log(teamRoster["1"]["0"]["battlenet_id"])
-=======
-            </div>`)})
-            console.log("testing")
->>>>>>> master
     }
     
 
