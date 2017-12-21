@@ -4,11 +4,6 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex, _) => {
-  //Goes to new tournaments page
-  router.get('/new', (req, res) => {
-    res.render('create_tournament',{email: req.session.email});
-  });
-
 
   /**
    * This assigns each player to a team based off their skill level
@@ -98,7 +93,39 @@ module.exports = (knex, _) => {
      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
      .from("tournament_enrollments")
      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+     .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+     .where({tournament_id: tournamentID})
+     .orderBy("team_id", "ascd")
+     .then((playerStats) => {
+       return _.groupBy(playerStats, "team_id");
+     });
   }
+
+  function countPlayersEnrolled(tournamentID){
+    knex
+      .select("id")
+      .from("tournament_enrollments")
+      .count('id')
+      .then((result) => {
+        console.log(result)
+      });
+  }
+
+  router.get("/:id", (req, res) => {
+    const tournamentID = req.params.id;
+    knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) => {
+        if(results.length === 0){
+          sendStatus(404);
+        } else {
+          console.log(results[0].id);
+            res.render("tournament_view", {teamRoster: getTeamRoster(tournamentID), email: req.session.email});
+        }
+      });
+  });
 
   router.get('/test', (req, res) => {
 
@@ -141,6 +168,10 @@ module.exports = (knex, _) => {
       });
   });
 
+  // Goes to new tournaments page
+  router.get('/new', (req, res) => {
+    res.render('create_tournament',{email: req.session.email});
+  });
 
   // Creates new tournament
   router.post("/new", (req, res) => {
@@ -163,7 +194,7 @@ module.exports = (knex, _) => {
         // and creates new lines in teams (based on # of teams needed)
         if(results.length === 0) {
           knex
-            .insert({name: name, no_of_teams: teamCount, description: description})
+            .insert({name: name, no_of_teams: teamCount, description: description, })
             .into('tournaments')
             .returning('id')
             .then((tournamentID)=> {
