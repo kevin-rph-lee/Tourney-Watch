@@ -6,29 +6,10 @@ $(function () {
     })
 })
 
-var saveData = {
-    "teams": [
-        [
-            { name: "Team 1", flag: 'in' },
-            { name: "Team 2", flag: 'in' },
-        ],
-        [
-            { name: "Team 3", flag: 'in' },
-            { name: "Team 4", flag: 'in' },
-        ],
-        [
-            { name: "Team 5", flag: 'in' },
-            { name: "Team 6", flag: 'in' }
-        ],
-        [
-            { name: "Team 7", flag: 'in' },
-            { name: "Team 8", flag: 'in' },
-        ],
-       
-    ],
 
-    results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
-};
+
+
+
 /* Called whenever bracket is modified
  *
  * data:     changed bracket object in format given to init
@@ -48,14 +29,39 @@ function saveFn(data) {
 }
 
 
-
 $(function () {
     var container = $('div#save .demo')
-    container.bracket({
-        init: saveData,
-        save: saveFn,
-        userData: "http://myapi"
-    })
+
+    $.ajax({
+      type: "GET",
+      url: "/tournaments/brackets.json",
+      success: function (results) {
+
+        console.log(results);
+        container.bracket({
+            init: results.brackets,
+            save: saveFn,
+            userData: "http://myapi"
+        })
+
+        $('div#save .demo').bracket({
+          teamWidth: 81,
+          scoreWidth: 27,
+          matchMargin: 61,
+          roundMargin: 71,
+          centerConnectors: true,
+          init: results.brackets,
+          disableToolbar: true,
+          disableTeamEdit: true,
+          save: function () { },
+          decorator: {
+              edit: edit_fn,
+              render: render_fn
+          }
+      })
+    }
+})
+
 
     /* You can also inquiry the current data */
 
@@ -110,23 +116,10 @@ function render_fn(container, data, score, state) {
 }
 
 $(function () {
-    $('div#save .demo').bracket({
-        teamWidth: 81,
-        scoreWidth: 27,
-        matchMargin: 61,
-        roundMargin: 71,
-        centerConnectors: true,
-        init: saveData,
-        disableToolbar: true,
-        disableTeamEdit: true,
-        save: function () { },
-        decorator: {
-            edit: edit_fn,
-            render: render_fn
-        }
-    })
-})
 
+
+
+})
 
 
 
