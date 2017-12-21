@@ -4,8 +4,6 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex, _) => {
-
-
   //Goes to new tournaments page
   router.get('/new', (req, res) => {
     res.render('create_tournament',{email: req.session.email});
@@ -75,81 +73,31 @@ module.exports = (knex, _) => {
   /**
    * Intializes the brackets json object based on the no of teams and updates the tournaments table
    * @param  {array} teamArray    Array of team ID objects
-   * @param  {int} no_of_teams  No of teams in the tournament
+   * @param  {int} teamCount  No of teams in the tournament
    * @param  {int} tournamentID Tournament ID
    */
-  function initializeBrackets(teamArray, no_of_teams, tournamentID){
-    let brackets = {};
-    if(no_of_teams === 8){
-      brackets =
-      {"teams": [
-            [
-                { name: teamArray[0].id, flag: "in" },
-                { name: teamArray[1].id, flag: "in" },
-            ],
-            [
-                { name: teamArray[2].id, flag: "in" },
-                { name: teamArray[3].id, flag: "in" },
-            ],
-            [
-                { name: teamArray[4].id, flag: "in" },
-                { name: teamArray[5].id, flag: "in" }
-            ],
-            [
-                { name: teamArray[6].id, flag: "in" },
-                { name: teamArray[7].id, flag: "in" },
-            ],
-
-
-        ],
-
-        results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
-      }
-    } else {
-      brackets =
-      {"teams": [
-                [
-                    { name: teamArray[0].id, flag: 'in' },
-                    { name: teamArray[1].id, flag: 'in' },
-                ],
-                [
-                    { name: teamArray[2].id, flag: 'in' },
-                    { name: teamArray[3].id, flag: 'in' },
-                ],
-                [
-                    { name: teamArray[4].id, flag: 'in' },
-                    { name: teamArray[5].id, flag: 'in' }
-                ],
-                [
-                    { name: teamArray[6].id, flag: 'in' },
-                    { name: teamArray[7].id, flag: 'in' },
-                ],
-                [
-                    { name: teamArray[8].id, flag: 'in' },
-                    { name: teamArray[9].id, flag: 'in' },
-                ],
-                [
-                    { name: teamArray[10].id, flag: 'in' },
-                    { name: teamArray[11].id, flag: 'in' },
-                ],
-                [
-                    { name: teamArray[12].id, flag: 'in' },
-                    { name: teamArray[13].id, flag: 'in' },
-                ],
-                [
-                    { name: teamArray[14].id, flag: 'in' },
-                    { name: teamArray[15].id, flag: 'in' },
-                ],
-
-            ],
-
-            results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
-        }
+  function initializeBrackets(teamArray, teamCount, tournamentID){
+    let data = {"teams": [], "results":[]};
+    for (let b = 0; b < teamArray.length; b+=2 ) {
+      data.teams.push(
+        [{ name: teamArray[b].id    , flag: "in" },
+         { name: teamArray[b + 1].id, flag: "in" },]
+      );
+      data.results.push(
+        [0,0], [0, 0]
+      );
     }
     knex("tournaments")
       .where({"id": tournamentID})
-      .update({"brackets": JSON.stringify(brackets)})
+      .update({"brackets": JSON.stringify(data)})
       .then(() => {});
+  }
+
+  function getTeamRoster(tournamentID){
+    knex
+     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+     .from("tournament_enrollments")
+     .innerJoin("users", "users.id", "tournament_enrollments.user_id")
   }
 
   router.get('/test', (req, res) => {
@@ -181,7 +129,7 @@ module.exports = (knex, _) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+      .select("tournaments.name", "tournaments.id", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")

@@ -3,9 +3,7 @@ $(document).ready(function () {
 
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
-        console.log("teamNames", teamNames)
         Object.keys(teamNames).forEach((t) => {
-            console.log(teamRoster[t])
             $(".row").append(`<div class="card mb-3" style="min-width: 15rem">
                 <div class="card-header">${teamNames[t]}</div>
                     <div class="card-body" data-team-id="${teamNames[t]}">
@@ -15,12 +13,9 @@ $(document).ready(function () {
             teamRoster[teamNames[t]].forEach((user) => {
                 $(`[data-team-id="${teamNames[t]}"`).append(`<p>${user.battlenet_id}</p>`)
             })
-        
         })
-            // console.log(teamRoster["1"]["0"]["battlenet_id"])
     }
     
-
     function loadCards() {
         $.getJSON("/tournaments/cards.json")
             .done(renderTeamCards);
