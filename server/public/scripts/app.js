@@ -4,7 +4,6 @@ $(document).ready(function () {
     
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
-        console.log(teamRoster["1"]["0"]["name"])
         $(".tournamentheader").append(`
         <h1>${teamRoster["1"]["0"]["name"]}</h1>
         `)
@@ -25,13 +24,36 @@ $(document).ready(function () {
             // console.log(teamRoster["1"]["0"]["battlenet_id"])
     }
     
-
     function loadCards() {
         $.getJSON("/tournaments/cards.json")
             .done(renderTeamCards);
     }
 
     loadCards();
+
+    function renderPlayerCount(playerRoster) {
+        const playerNames = Object.keys(playerRoster)
+        Object.keys(playerNames).forEach((i) => {
+            $(".player-table-stats").append(`
+            <tr data-player-id="${playerNames[i]}">
+            <th scope="row">${[i]}</th>
+          </tr>
+            `)
+
+            playerRoster[playerNames[i]].forEach((user) => {
+                $(`[data-player-id="${playerNames[i]}"`).append(`                    
+                <td>${user.battlenet_id}</td>`)
+                })
+        })
+            // console.log(teamRoster["1"]["0"]["battlenet_id"])
+    }
+
+    function loadTable() {
+        $.getJSON("/tournaments/cards.json")
+            .done(renderPlayerCount);
+    }
+
+    loadTable();
 
     // renderTeamCards(teamRoster);
 

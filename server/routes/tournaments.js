@@ -170,15 +170,15 @@ module.exports = (knex, _) => {
       });
   });
 
-
   router.get("/cards", (req, res) => {
     const tournamentID = req.params.id;
 
-    // if(!tournamentID) {
-    //   // STRETCH: Show 'This tournament does not exist' error page
-    //   res.sendStatus(400);
-    //   return;
-    // }
+    // if(not req.session.owner and tournament has not started) {
+      // STRETCH: Show 'This tournament does not exist' error page
+      res.render("tournament_notready", {teamRoster: teamRoster, email: req.session.email});
+      return;
+    // } else if({
+
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
@@ -193,6 +193,20 @@ module.exports = (knex, _) => {
       });
   });
 
+  router.get('/staging', (req, res) => {
+    knex
+    .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+    .from("tournament_enrollments")
+    .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+    .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+    .where({tournament_id: 1})
+    .orderBy("team_id", "ascd")
+    .then((playerStats) => {
+    const playerRoster = _.groupBy(playerStats, "team_id");
+
+    res.render('tournament_staging', {playerRoster: playerRoster, email: req.session.email})
+    });
+  });
 
   // Creates new tournament
   router.post("/new", (req, res) => {
