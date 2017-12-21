@@ -79,73 +79,72 @@ module.exports = (knex, _) => {
    * @param  {int} tournamentID Tournament ID
    */
   function initializeBrackets(teamArray, no_of_teams, tournamentID){
-    let brackets = '';
+    let brackets = {};
     if(no_of_teams === 8){
       brackets =
-      `{
-        "teams": [
+      {"teams": [
             [
-                { name: ${teamArray[0].id}, flag: "in" },
-                { name: ${teamArray[1].id}, flag: "in" },
+                { name: teamArray[0].id, flag: "in" },
+                { name: teamArray[1].id, flag: "in" },
             ],
             [
-                { name: ${teamArray[2].id}, flag: "in" },
-                { name: ${teamArray[3].id}, flag: "in" },
+                { name: teamArray[2].id, flag: "in" },
+                { name: teamArray[3].id, flag: "in" },
             ],
             [
-                { name: ${teamArray[4].id}, flag: "in" },
-                { name: ${teamArray[5].id}, flag: "in" }
+                { name: teamArray[4].id, flag: "in" },
+                { name: teamArray[5].id, flag: "in" }
             ],
             [
-                { name: ${teamArray[6].id}, flag: "in" },
-                { name: ${teamArray[7].id}, flag: "in" },
+                { name: teamArray[6].id, flag: "in" },
+                { name: teamArray[7].id, flag: "in" },
             ],
 
 
         ],
 
         results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
-      }`
+      }
     } else {
-      brakets =
-      `{"teams": [
+      brackets =
+      {"teams": [
                 [
-                    { name: ${teamArray[0].id}, flag: 'in' },
-                    { name: ${teamArray[1].id}, flag: 'in' },
+                    { name: teamArray[0].id, flag: 'in' },
+                    { name: teamArray[1].id, flag: 'in' },
                 ],
                 [
-                    { name: ${teamArray[2].id}, flag: 'in' },
-                    { name: ${teamArray[3].id}, flag: 'in' },
+                    { name: teamArray[2].id, flag: 'in' },
+                    { name: teamArray[3].id, flag: 'in' },
                 ],
                 [
-                    { name: ${teamArray[4].id}, flag: 'in' },
-                    { name: ${teamArray[5].id}, flag: 'in' }
+                    { name: teamArray[4].id, flag: 'in' },
+                    { name: teamArray[5].id, flag: 'in' }
                 ],
                 [
-                    { name: ${teamArray[6].id}, flag: 'in' },
-                    { name: ${teamArray[7].id}, flag: 'in' },
+                    { name: teamArray[6].id, flag: 'in' },
+                    { name: teamArray[7].id, flag: 'in' },
                 ],
                 [
-                    { name: ${teamArray[8].id}, flag: 'in' },
-                    { name: ${teamArray[9].id}, flag: 'in' },
+                    { name: teamArray[8].id, flag: 'in' },
+                    { name: teamArray[9].id, flag: 'in' },
                 ],
                 [
-                    { name: ${teamArray[10].id}, flag: 'in' },
-                    { name: ${teamArray[11].id}, flag: 'in' },
+                    { name: teamArray[10].id, flag: 'in' },
+                    { name: teamArray[11].id, flag: 'in' },
                 ],
                 [
-                    { name: ${teamArray[12].id}, flag: 'in' },
-                    { name: ${teamArray[13].id}, flag: 'in' },
+                    { name: teamArray[12].id, flag: 'in' },
+                    { name: teamArray[13].id, flag: 'in' },
                 ],
                 [
-                    { name: ${teamArray[14].id}, flag: 'in' },
-                    { name: ${teamArray[15].id}, flag: 'in' },
+                    { name: teamArray[14].id, flag: 'in' },
+                    { name: teamArray[15].id, flag: 'in' },
                 ],
 
             ],
 
             results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
-        }`
+        }
     }
     knex("tournaments")
       .where({"id": tournamentID})
@@ -153,22 +152,22 @@ module.exports = (knex, _) => {
       .then(() => {});
   }
 
-
-  //tournament bracket and teams page
   router.get('/test', (req, res) => {
-    res.render('brackets',{email: req.session.email});
+
+    res.render('brackets',{email: req.session.email})
+    // res.sendStatus(404);
   });
 
     //tournament bracket and teams page
-  router.get('/test/:id', (req, res) => {
-     knex
+  router.get('/brackets.json', (req, res) => {
+    knex
       .select("brackets")
       .from("tournaments")
-      .where({id: req.param.id})
+      .where({id: 1})
       .then((results) => {
-        res.render('brackets',{email: req.session.email, bracketData: results[0].brackets});
+        console.log(results[0]);
+        res.json(results[0]);
       });
-    res.sendStatus(404);
   });
 
 
@@ -190,7 +189,6 @@ module.exports = (knex, _) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
-        console.log(teamRoster)
         res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
       });
   });
@@ -254,7 +252,7 @@ module.exports = (knex, _) => {
       .where({name: name})
       .then((results) => {
         const tournamentID = results[0].id;
-        console.log('Tournament ID, ' + results[0].id);
+        // console.log('Tournament ID, ' + results[0].id);
 
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
@@ -271,7 +269,7 @@ module.exports = (knex, _) => {
                 .from("teams")
                 .where({tournament_id: tournamentID})
                 .then((teamArray) => {
-                  console.log(teamArray);
+                  // console.log(teamArray);
                   initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
@@ -284,9 +282,6 @@ module.exports = (knex, _) => {
 
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.params.id;
-
-
-
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
@@ -297,17 +292,19 @@ module.exports = (knex, _) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
-        console.log(teamRoster);
+        // console.log(teamRoster);
         res.send(teamRoster);
       });
   });
 
 
   //Updates bracket data in the DB
-  router.post("update/", (req, res) => {
+  router.post("/update", (req, res) => {
+    console.log('Updating DB brackets');
+    console.log(req.body.tournamentID + req.body.bracketData);
     knex("tournaments")
-        .where({"id": req.params.id})
-        .update({"brackets": req.params.bracketData})
+        .where({"id": req.body.tournamentID})
+        .update({"brackets": req.body.bracketData})
         .then(() => {console.log('Bracket data updated')});
   });
 
