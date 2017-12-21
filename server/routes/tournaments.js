@@ -5,6 +5,13 @@ const router  = express.Router();
 
 module.exports = (knex, _) => {
 
+
+  //Goes to new tournaments page
+  router.get('/new', (req, res) => {
+    res.render('create_tournament',{email: req.session.email});
+  });
+
+
   /**
    * This assigns each player to a team based off their skill level
    *
@@ -18,7 +25,7 @@ module.exports = (knex, _) => {
     const teamCount = teamArray.length;
     const maxPlayerOffset = playerCount - (playerCount % teamCount);
     let ascending = true;
-  
+
     for (let p = 0; p < maxPlayerOffset; p += teamCount) {
       if(ascending) {
         for (let t = 0; t < teamCount; t++) {
@@ -50,7 +57,7 @@ module.exports = (knex, _) => {
     });
     return count;
   }
-  
+
   /**
    * This updates database to show team assignments
    *
@@ -65,36 +72,129 @@ module.exports = (knex, _) => {
     });
   }
 
-    router.get("/test", (req, res) => {
-      const tournamentID = req.params.id;
-      
-      // if(!tournamentID) {
-      //   // STRETCH: Show 'This tournament does not exist' error page
-      //   res.sendStatus(400);
-      //   return;
-      // }
-      // Gets player stats for each team in a specific tournament
-      knex
-        .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-        .from("tournament_enrollments")
-        .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-        .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-        .where({tournament_id: 1})
-        .orderBy("team_id", "ascd")
-        .then((playerStats) => {
-          const teamRoster = _.groupBy(playerStats, "team_id");
-          console.log(teamRoster)
-          res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
-        });
-    });
+  /**
+   * Intializes the brackets json object based on the no of teams and updates the tournaments table
+   * @param  {array} teamArray    Array of team ID objects
+   * @param  {int} no_of_teams  No of teams in the tournament
+   * @param  {int} tournamentID Tournament ID
+   */
+  function initializeBrackets(teamArray, no_of_teams, tournamentID){
+    let brackets = '';
+    if(no_of_teams === 8){
+      brackets =
+      `{
+        "teams": [
+            [
+                { name: ${teamArray[0].id}, flag: "in" },
+                { name: ${teamArray[1].id}, flag: "in" },
+            ],
+            [
+                { name: ${teamArray[2].id}, flag: "in" },
+                { name: ${teamArray[3].id}, flag: "in" },
+            ],
+            [
+                { name: ${teamArray[4].id}, flag: "in" },
+                { name: ${teamArray[5].id}, flag: "in" }
+            ],
+            [
+                { name: ${teamArray[6].id}, flag: "in" },
+                { name: ${teamArray[7].id}, flag: "in" },
+            ],
 
-  // router.get('/test', (req, res) => {
-  //   res.render('tournament_view');
-  // });
 
-  router.get('/new', (req, res) => {
-    res.render('create_tournament');
+        ],
+
+        results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
+      }`
+    } else {
+      brakets =
+      `{"teams": [
+                [
+                    { name: ${teamArray[0].id}, flag: 'in' },
+                    { name: ${teamArray[1].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[2].id}, flag: 'in' },
+                    { name: ${teamArray[3].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[4].id}, flag: 'in' },
+                    { name: ${teamArray[5].id}, flag: 'in' }
+                ],
+                [
+                    { name: ${teamArray[6].id}, flag: 'in' },
+                    { name: ${teamArray[7].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[8].id}, flag: 'in' },
+                    { name: ${teamArray[9].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[10].id}, flag: 'in' },
+                    { name: ${teamArray[11].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[12].id}, flag: 'in' },
+                    { name: ${teamArray[13].id}, flag: 'in' },
+                ],
+                [
+                    { name: ${teamArray[14].id}, flag: 'in' },
+                    { name: ${teamArray[15].id}, flag: 'in' },
+                ],
+
+            ],
+
+            results: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]],
+        }`
+    }
+    knex("tournaments")
+      .where({"id": tournamentID})
+      .update({"brackets": JSON.stringify(brackets)})
+      .then(() => {});
+  }
+
+
+  //tournament bracket and teams page
+  router.get('/test', (req, res) => {
+    res.render('brackets',{email: req.session.email});
   });
+
+    //tournament bracket and teams page
+  router.get('/test/:id', (req, res) => {
+     knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: req.param.id})
+      .then((results) => {
+        res.render('brackets',{email: req.session.email, bracketData: results[0].brackets});
+      });
+    res.sendStatus(404);
+  });
+
+
+  router.get("/cards", (req, res) => {
+    const tournamentID = req.params.id;
+
+    // if(!tournamentID) {
+    //   // STRETCH: Show 'This tournament does not exist' error page
+    //   res.sendStatus(400);
+    //   return;
+    // }
+    // Gets player stats for each team in a specific tournament
+    knex
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+      .from("tournament_enrollments")
+      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+      .where({tournament_id: 1})
+      .orderBy("team_id", "ascd")
+      .then((playerStats) => {
+        const teamRoster = _.groupBy(playerStats, "team_id");
+        console.log(teamRoster)
+        res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
+      });
+  });
+
 
   // Creates new tournament
   router.post("/new", (req, res) => {
@@ -139,6 +239,7 @@ module.exports = (knex, _) => {
   router.post("/start", (req, res) => {
     // GET PARAMS CORRECTLY
     const name = req.body.name;
+    console.log('name, ', name);
 
     if(!name){
       // STRETCH: Show 'You did not enter a tournament name' error page
@@ -148,11 +249,13 @@ module.exports = (knex, _) => {
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
     knex
-      .select("id", "name")
+      .select("id", "name", "no_of_teams")
       .from("tournaments")
       .where({name: name})
       .then((results) => {
         const tournamentID = results[0].id;
+        console.log('Tournament ID, ' + results[0].id);
+
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
@@ -168,6 +271,8 @@ module.exports = (knex, _) => {
                 .from("teams")
                 .where({tournament_id: tournamentID})
                 .then((teamArray) => {
+                  console.log(teamArray);
+                  initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
                   res.sendStatus(200);
@@ -177,26 +282,11 @@ module.exports = (knex, _) => {
       });
   });
 
-  router.get("/test", (req, res) => {
+  router.get("/cards.json", (req, res) => {
     const tournamentID = req.params.id;
-    
-    // if(!tournamentID) {
-    //   // STRETCH: Show 'This tournament does not exist' error page
-    //   res.sendStatus(400);
-    //   return;
-    // }
-    // Gets player stats for each team in a specific tournament
-        res.render("tournament_view", {email: req.session.eqmail});
-  });
 
-  router.get("/test.json", (req, res) => {
-    const tournamentID = req.params.id;
-    
-    // if(!tournamentID) {
-    //   // STRETCH: Show 'This tournament does not exist' error page
-    //   res.sendStatus(400);
-    //   return;
-    // }
+
+
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
@@ -211,6 +301,17 @@ module.exports = (knex, _) => {
         res.send(teamRoster);
       });
   });
+
+
+  //Updates bracket data in the DB
+  router.post("update/", (req, res) => {
+    knex("tournaments")
+        .where({"id": req.params.id})
+        .update({"brackets": req.params.bracketData})
+        .then(() => {console.log('Bracket data updated')});
+  });
+
+
 
   return router;
 };
