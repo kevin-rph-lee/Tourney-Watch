@@ -201,11 +201,9 @@ module.exports = (knex, _) => {
     .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
     .where({tournament_id: 1})
     .orderBy("team_id", "ascd")
-    .then((playerStats) => {
-    const playerRoster = _.groupBy(playerStats, "team_id");
-
-    res.render('tournament_staging', {playerRoster: playerRoster, email: req.session.email})
-    });
+    .then((playerStats)
+        const teamRoster = _.groupBy(playerStats, "team_id");    
+    res.render('tournament_staging', {teamRoster: teamRoster, email: req.session.email})
   });
 
   // Creates new tournament
