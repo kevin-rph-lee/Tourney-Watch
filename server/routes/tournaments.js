@@ -223,16 +223,16 @@ module.exports = (knex, _) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then( async (results) => {
-        const enrolledCount = await playersEnrolled(tournamentID);
+        const enrolledPlayers = await playersEnrolled(tournamentID);
         const started = results[0].is_started;
         const teamCount = results[0].no_of_teams;
         const creatorUserID = results[0].creator_user_id;
         const tournamentName = results[0].name;
-        const isReady = (enrolledCount.length === teamCount * 6);
+        const isReady = (enrolledPlayers.length === teamCount * 6);
         if (isReady && started) {
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID), 
-            playerCount: enrolledCount.length, 
+            playerCount: enrolledPlayers.length, 
             email: req.session.email,
             started: started,
             tournamentName: tournamentName
@@ -240,7 +240,7 @@ module.exports = (knex, _) => {
         } else {
           if (req.session.userID === creatorUserID) {
             res.render("tournament_staging", {
-              playerCount: enrolledCount,
+              playerCount: enrolledPlayers,
               email: req.session.email,
               tournamentName: tournamentName,
               teamCount: teamCount,
@@ -249,7 +249,7 @@ module.exports = (knex, _) => {
           } else {
             res.render("tournament_notready", {
               tournamentName: tournamentName,
-              playerCount: enrolledCount.length,
+              playerCount: enrolledPlayers.length,
               teamCount: teamCount,
               email: req.session.email,
             })
