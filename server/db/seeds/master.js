@@ -2,14 +2,14 @@ exports.seed = async function(knex, promise){
   const tournamentTask = (async () => {
     await knex('tournaments').del();
     return knex('tournaments').returning('*').insert([
-      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8}
+      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8, creator_user_id: 1, is_started: false}
     ]);
   })();
 
   const usersTask = (async () => {
     await knex('users').del();
     return knex('users').returning('*').insert([
-      {email:'pp0.c26@7agxrm.com',password:'password',battlenet_id:'Samuel#1066'},
+      {email:'lil@lil.com',password:'123456',battlenet_id:'Samuel#1066'},
       {email:'pfa7u7.n0v7_iin@iw2fv4.com',password:'password',battlenet_id:'Rubye#3562'},
       {email:'28xmm0jsmpsf-@lfkh1eg9.com',password:'password',battlenet_id:'Stormy#691'},
       {email:'g-jmucg@92atcmqm4.com',password:'password',battlenet_id:'Lela#1231'},

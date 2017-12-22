@@ -6,10 +6,6 @@ $(function () {
     })
 })
 
-
-
-
-
 /* Called whenever bracket is modified
  *
  * data:     changed bracket object in format given to init
@@ -17,7 +13,6 @@ $(function () {
  */
 function saveFn(data) {
     var bracketData = JSON.stringify(data)
-    console.log("bracketData", bracketData)
     $.ajax({
         type: "POST",
         url: "/tournaments/update/",
