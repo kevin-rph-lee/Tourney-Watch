@@ -213,7 +213,7 @@ module.exports = (knex, _) => {
     if (!Number.isInteger(tournamentID)) {
       console.log('not a vaid id')
       return res.sendStatus(404);
-    } 
+    }
 
     return knex
       .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
