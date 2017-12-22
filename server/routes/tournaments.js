@@ -46,7 +46,7 @@ module.exports = (knex, _) => {
       if (key[roleChoice] === 'support') {
         return count ++;
       }
-      // TO DO: possible refactor? 
+      // TO DO: possible refactor?
       (key[roleChoice] === "support") ? count++ : 0;
 
     });
@@ -92,7 +92,7 @@ module.exports = (knex, _) => {
 
   /**
    * Gets each team's roster
-   * 
+   *
    * @param {integer} tournamentID from req params
    * @returns {array}
    */
@@ -111,9 +111,9 @@ module.exports = (knex, _) => {
 
   /**
    * Gets a list of all players enrolled in an tournament
-   * 
+   *
    * @param {integer} tournamentID from req params
-   * @returns {array} 
+   * @returns {array}
    */
   function playersEnrolled(tournamentID){
     return knex
@@ -131,7 +131,7 @@ module.exports = (knex, _) => {
     knex
       .select("brackets")
       .from("tournaments")
-      .where({id: 1})
+      .where({id: req.session.tournamentID})
       .then((results) => {
         res.json(results[0]);
       });
@@ -192,7 +192,7 @@ module.exports = (knex, _) => {
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: 1})
+      .where({tournament_id: req.session.tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
@@ -231,8 +231,8 @@ module.exports = (knex, _) => {
         const isReady = (enrolledPlayers.length === teamCount * 6);
         if (isReady && started) {
           res.render("tournament_view", {
-            teamRoster: getTeamRoster(tournamentID), 
-            playerCount: enrolledPlayers.length, 
+            teamRoster: getTeamRoster(tournamentID),
+            playerCount: enrolledPlayers.length,
             email: req.session.email,
             started: started,
             tournamentName: tournamentName
@@ -272,7 +272,7 @@ module.exports = (knex, _) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
-        
+
         // console.log('Tournament ID, ' + results[0].id);
 
         if(results.length === 0) {

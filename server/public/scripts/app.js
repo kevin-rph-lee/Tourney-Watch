@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-    
+
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
         $(".tournamentheader").append(`
@@ -21,10 +21,15 @@ $(document).ready(function () {
             })
         })
     }
-    
+
     function loadCards() {
-        $.getJSON("/tournaments/cards.json")
-            .done(renderTeamCards);
+      $.ajax({
+        url: '/tournaments/cards.json',
+        data: {data: req.session.tournamentID},
+        method: 'GET'
+      }).done((playerRoster) => {
+        renderTeamCards(playerRoster);
+      });
     }
 
     loadCards();
@@ -39,16 +44,21 @@ $(document).ready(function () {
             `)
 
             playerRoster[playerNames[i]].forEach((user) => {
-                $(`[data-player-id="${playerNames[i]}"`).append(`                    
+                $(`[data-player-id="${playerNames[i]}"`).append(`
                 <td>${user.battlenet_id}</td>`)
                 })
         })
-            // console.log(teamRoster["1"]["0"]["battlenet_id"])
+
     }
 
     function loadTable() {
-        $.getJSON("/tournaments/cards.json")
-            .done(renderPlayerCount);
+      $.ajax({
+        url: '/tournaments/cards.json',
+        data: {data: req.session.tournamentID},
+        method: 'GET'
+      }).done((playerRoster) => {
+        renderPlayerCount(playerRoster);
+      });
     }
 
     loadTable();
@@ -97,7 +107,7 @@ $(document).ready(function () {
             url: "/users/logout",
             success: function (result) {
                 location.href="/";
-                
+
             }
         })
     })
