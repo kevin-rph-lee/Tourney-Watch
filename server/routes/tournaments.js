@@ -46,7 +46,7 @@ module.exports = (knex, _, env) => {
       if (key[roleChoice] === 'support') {
         return count ++;
       }
-      // TO DO: possible refactor? 
+      // TO DO: possible refactor?
       (key[roleChoice] === "support") ? count++ : 0;
 
     });
@@ -92,7 +92,7 @@ module.exports = (knex, _, env) => {
 
   /**
    * Gets each team's roster
-   * 
+   *
    * @param {integer} tournamentID from req params
    * @returns {array}
    */
@@ -111,9 +111,9 @@ module.exports = (knex, _, env) => {
 
   /**
    * Gets a list of all players enrolled in an tournament
-   * 
+   *
    * @param {integer} tournamentID from req params
-   * @returns {array} 
+   * @returns {array}
    */
   function playersEnrolled(tournamentID){
     return knex
@@ -126,6 +126,20 @@ module.exports = (knex, _, env) => {
       });
   }
 
+<<<<<<< HEAD
+=======
+  // Tournament bracket and teams page
+  router.get('/brackets.json', (req, res) => {
+    knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: req.session.tournamentID})
+      .then((results) => {
+        res.json(results[0]);
+      });
+  });
+
+>>>>>>> 1fed4965afb2ebc41495fd884dd22cff305c3a7b
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
@@ -185,7 +199,7 @@ module.exports = (knex, _, env) => {
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: 1})
+      .where({tournament_id: req.session.tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
@@ -238,8 +252,13 @@ module.exports = (knex, _, env) => {
         const isReady = (enrolledPlayers.length === teamCount * 6);
         if (isReady && started) {
           res.render("tournament_view", {
+<<<<<<< HEAD
             teamRoster: getTeamRoster(tournamentID), 
             playerCount: enrolledPlayers.length, 
+=======
+            teamRoster: getTeamRoster(tournamentID),
+            playerCount: enrolledPlayers.length,
+>>>>>>> 1fed4965afb2ebc41495fd884dd22cff305c3a7b
             email: req.session.email,
             started: started,
             tournamentName: tournamentName
@@ -280,7 +299,12 @@ module.exports = (knex, _, env) => {
       .select("id", "name", "no_of_teams")
       .from("tournaments")
       .where({id: tournamentID})
+<<<<<<< HEAD
       .then((results) => {  
+=======
+      .then((results) => {
+
+>>>>>>> 1fed4965afb2ebc41495fd884dd22cff305c3a7b
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
