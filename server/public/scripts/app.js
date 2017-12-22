@@ -1,14 +1,20 @@
 
 $(document).ready(function () {
 
+    
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
+        $(".tournamentheader").append(`
+        <h1>${teamRoster["1"]["0"]["name"]}</h1>
+        `)
         Object.keys(teamNames).forEach((t) => {
-            $(".row").append(`<div class="card mb-3" style="min-width: 15rem">
+            $(".row").append(`
+            <div class="card mb-3" style="min-width: 15rem">
                 <div class="card-header">${teamNames[t]}</div>
                     <div class="card-body" data-team-id="${teamNames[t]}">
                 </div>
-            </div>`)
+            </div>
+            `)
 
             teamRoster[teamNames[t]].forEach((user) => {
                 $(`[data-team-id="${teamNames[t]}"`).append(`<p>${user.battlenet_id}</p>`)
@@ -22,6 +28,32 @@ $(document).ready(function () {
     }
 
     loadCards();
+
+    function renderPlayerCount(playerRoster) {
+        const playerNames = Object.keys(playerRoster)
+        Object.keys(playerNames).forEach((i) => {
+            $(".player-table-stats").append(`
+            <tr data-player-id="${playerNames[i]}">
+            <th scope="row">${[i]}</th>
+          </tr>
+            `)
+
+            playerRoster[playerNames[i]].forEach((user) => {
+                $(`[data-player-id="${playerNames[i]}"`).append(`                    
+                <td>${user.battlenet_id}</td>`)
+                })
+        })
+            // console.log(teamRoster["1"]["0"]["battlenet_id"])
+    }
+
+    function loadTable() {
+        $.getJSON("/tournaments/cards.json")
+            .done(renderPlayerCount);
+    }
+
+    loadTable();
+
+    // renderTeamCards(teamRoster);
 
     $("#registration-form").on('submit', function (event) {
         event.preventDefault();

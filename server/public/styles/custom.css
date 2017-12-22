@@ -11,7 +11,7 @@ main {
   font-family: 'Oswald', sans-serif;
   color: white;
   width: 1050px;
-  height: -webkit-fill-available;
+  height: 100%;
   overflow-y: scroll;
   margin: auto;
   padding-right:20px;
@@ -28,6 +28,11 @@ main {
 }
 
   main h1 {
+    text-align: center;
+    padding:20px;
+  }
+
+  main h3 {
     text-align: center;
     padding:20px;
   }
@@ -101,6 +106,10 @@ div.card.mb-3 p{
 
 div.card.mb-3 div.card-header {
   background-color: #F7931D;
+}
+
+div.row{
+  padding-top: 20px;
 }
 
 /* Bootstrap Table */

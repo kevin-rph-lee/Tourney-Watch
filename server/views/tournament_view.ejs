@@ -6,10 +6,10 @@
     <body>
         <% include partials/navbar %>
         <main>
-            <h1>Tournament Name Here</h1>
-            
-
-            <!-- BRACKET CODE WILL GO HERE -->
+          <div class="tournamentheader">
+            <!-- Tournament Name gets appended here from App.js -->
+          </div>
+            <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
             <container>
                     <center>
                     <div id="save" style="display: inline-block;">
@@ -17,44 +17,19 @@
                     </div>
                 </center>
             </container>
-            <button id="target" class="submit butt0n">Save</button>
-            
-            <!-- Bootstrap Cards will go Here -->
+
+          <%= if (user === owner)  {%>
+            <div style="text-align: center">
+              <button id="target" class="save button">Save</button>
+            </div>
+          <%= } %>
+
+            <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
             <div class="container">
                 <div class="row">
                 
                 </div> 
             </div>
-            <table class="table table-striped table-dark">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Team ID</th>
-                        <th scope="col">Blizzard ID</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
-                    </tbody>
-                  </table>
         </main>
     </body>
 
