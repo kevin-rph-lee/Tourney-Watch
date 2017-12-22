@@ -4,17 +4,12 @@ $(document).ready(function () {
     
     function renderTeamCards(teamRoster) {
         const teamNames = Object.keys(teamRoster)
-<<<<<<< HEAD
         $(".tournamentheader").append(`
         <h1>${teamRoster["1"]["0"]["name"]}</h1>
         `)
         Object.keys(teamNames).forEach((t) => {
             $(".row").append(`
             <div class="card mb-3" style="min-width: 15rem">
-=======
-        Object.keys(teamNames).forEach((t) => {
-            $(".row").append(`<div class="card mb-3" style="min-width: 15rem">
->>>>>>> master
                 <div class="card-header">${teamNames[t]}</div>
                     <div class="card-body" data-team-id="${teamNames[t]}">
                 </div>
@@ -34,7 +29,6 @@ $(document).ready(function () {
 
     loadCards();
 
-<<<<<<< HEAD
     function renderPlayerCount(playerRoster) {
         const playerNames = Object.keys(playerRoster)
         Object.keys(playerNames).forEach((i) => {
@@ -61,8 +55,6 @@ $(document).ready(function () {
 
     // renderTeamCards(teamRoster);
 
-=======
->>>>>>> master
     $("#registration-form").on('submit', function (event) {
         event.preventDefault();
         var formData = {

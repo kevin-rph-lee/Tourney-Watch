@@ -137,44 +137,6 @@ module.exports = (knex, _) => {
       });
   });
 
-<<<<<<< HEAD
-  router.get("/cards", (req, res) => {
-    const tournamentID = req.params.id;
-
-    // if(not req.session.owner and tournament has not started) {
-      // STRETCH: Show 'This tournament does not exist' error page
-      res.render("tournament_notready", {teamRoster: teamRoster, email: req.session.email});
-      return;
-    // } else if({
-
-    // Gets player stats for each team in a specific tournament
-    knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-      .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: 1})
-      .orderBy("team_id", "ascd")
-      .then((playerStats) => {
-        const teamRoster = _.groupBy(playerStats, "team_id");
-        res.render("tournament_view", {teamRoster: teamRoster, email: req.session.email});
-      });
-  });
-
-  router.get('/staging', (req, res) => {
-    knex
-    .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-    .from("tournament_enrollments")
-    .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-    .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-    .where({tournament_id: 1})
-    .orderBy("team_id", "ascd")
-    .then((playerStats)
-        const teamRoster = _.groupBy(playerStats, "team_id");    
-    res.render('tournament_staging', {teamRoster: teamRoster, email: req.session.email})
-  });
-
-=======
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
@@ -183,7 +145,6 @@ module.exports = (knex, _) => {
     res.render('create_tournament',{email: req.session.email});
   });
 
->>>>>>> master
   // Creates new tournament
   router.post("/new", (req, res) => {
     // GET PARAMS CORRECTLY
