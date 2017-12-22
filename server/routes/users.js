@@ -80,8 +80,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
         }
     });
   });
-
-
+  
   // User logs out
   router.post("/logout", (req, res) => {
       req.session = null;

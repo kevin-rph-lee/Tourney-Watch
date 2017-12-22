@@ -126,24 +126,10 @@ module.exports = (knex, _, env) => {
       });
   }
 
-  // Tournament bracket and teams page
-  router.get('/brackets.json', (req, res) => {
-    if(req.session.email !== process.env.ADMIN_EMAIL) {
-      res.sendStatus(403);
-    }
-
-    knex
-      .select("brackets")
-      .from("tournaments")
-      .where({id: 1})
-      .then((results) => {
-        res.json(results[0]);
-      });
-  });
-
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
+      // STRETCH: "Forbidden" error page
       res.sendStatus(403);
     }
     res.render('create_tournament',{email: req.session.email});
@@ -155,7 +141,6 @@ module.exports = (knex, _, env) => {
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
-
     if(!name){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
@@ -191,9 +176,9 @@ module.exports = (knex, _, env) => {
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.params.id;
     if(req.session.email !== process.env.ADMIN_EMAIL) {
+      // STRETCH: "Forbidden" error page
       res.sendStatus(403);
     }
-
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
@@ -205,6 +190,21 @@ module.exports = (knex, _, env) => {
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
         res.send(teamRoster);
+      });
+  });
+
+  // Tournament bracket and teams page
+  router.get('/brackets.json', (req, res) => {
+    if(req.session.email !== process.env.ADMIN_EMAIL) {
+      // STRETCH: "Forbidden" error page
+      res.sendStatus(403);
+    }
+    knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: 1})
+      .then((results) => {
+        res.json(results[0]);
       });
   });
 
@@ -225,30 +225,31 @@ module.exports = (knex, _, env) => {
       console.log('not a vaid id')
       return res.sendStatus(404);
     }
-
     return knex
       .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
       .from("tournaments")
       .where({id: tournamentID})
       .then( async (results) => {
-        const enrolledCount = await playersEnrolled(tournamentID);
+        const enrolledPlayers = await playersEnrolled(tournamentID);
         const started = results[0].is_started;
         const teamCount = results[0].no_of_teams;
         const creatorUserID = results[0].creator_user_id;
         const tournamentName = results[0].name;
-        const isReady = (enrolledCount.length === teamCount * 6);
+        const isReady = (enrolledPlayers.length === teamCount * 6);
         if (isReady && started) {
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID), 
-            playerCount: enrolledCount.length, 
+            playerCount: enrolledPlayers.length, 
             email: req.session.email,
             started: started,
             tournamentName: tournamentName
           })
         } else {
           if (req.session.userID === creatorUserID) {
+            //  ADD THIS IN
+            req.session.isOwner = true;
             res.render("tournament_staging", {
-              playerCount: enrolledCount,
+              playerCount: enrolledPlayers,
               email: req.session.email,
               tournamentName: tournamentName,
               teamCount: teamCount,
@@ -257,7 +258,7 @@ module.exports = (knex, _, env) => {
           } else {
             res.render("tournament_notready", {
               tournamentName: tournamentName,
-              playerCount: enrolledCount.length,
+              playerCount: enrolledPlayers.length,
               teamCount: teamCount,
               email: req.session.email,
             })
@@ -279,10 +280,8 @@ module.exports = (knex, _, env) => {
       .select("id", "name", "no_of_teams")
       .from("tournaments")
       .where({id: tournamentID})
-      .then((results) => {
-        
+      .then((results) => {  
         // console.log('Tournament ID, ' + results[0].id);
-
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
@@ -307,6 +306,5 @@ module.exports = (knex, _, env) => {
         }
       });
   });
-
   return router;
 };
