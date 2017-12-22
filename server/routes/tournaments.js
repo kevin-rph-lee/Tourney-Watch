@@ -232,7 +232,6 @@ module.exports = (knex, _) => {
             teamRoster: getTeamRoster(tournamentID), 
             playerCount: enrolledCount.length, 
             email: req.session.email,
-            isOwner: creatorUserID === req.session.userID ? "true" : "false",
             started: started,
             tournamentName: tournamentName
           })
@@ -298,6 +297,6 @@ module.exports = (knex, _) => {
         }
       });
   });
-  
+
   return router;
 };
