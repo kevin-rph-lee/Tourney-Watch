@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _) => {
+module.exports = (knex, _, env) => {
 
   /**
    * This assigns each player to a team based off their skill level
@@ -128,6 +128,10 @@ module.exports = (knex, _) => {
 
   // Tournament bracket and teams page
   router.get('/brackets.json', (req, res) => {
+    if(req.session.email !== process.env.ADMIN_EMAIL) {
+      res.sendStatus(403);
+    }
+
     knex
       .select("brackets")
       .from("tournaments")
@@ -186,6 +190,10 @@ module.exports = (knex, _) => {
 
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.params.id;
+    if(req.session.email !== process.env.ADMIN_EMAIL) {
+      res.sendStatus(403);
+    }
+
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")

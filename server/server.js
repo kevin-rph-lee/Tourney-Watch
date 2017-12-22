@@ -45,7 +45,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt));
 app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex, owjs));
-app.use('/tournaments', tournamentsRoutes(knex, _));
+app.use('/tournaments', tournamentsRoutes(knex, _, env));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 
