@@ -139,6 +139,9 @@ module.exports = (knex, _) => {
 
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
+    if (!req.session.email) {
+      res.sendStatus(403);
+    }
     res.render('create_tournament',{email: req.session.email});
   });
 
@@ -226,7 +229,6 @@ module.exports = (knex, _) => {
         const creatorUserID = results[0].creator_user_id;
         const tournamentName = results[0].name;
         const isReady = (enrolledCount.length === teamCount * 6);
-
         if (isReady && started) {
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID), 
@@ -236,7 +238,7 @@ module.exports = (knex, _) => {
             tournamentName: tournamentName
           })
         } else {
-          if (req.session.id === creatorUserID) {
+          if (req.session.userID === creatorUserID) {
             res.render("tournament_staging", {
               playerCount: enrolledCount,
               email: req.session.email,
