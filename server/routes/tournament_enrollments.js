@@ -72,7 +72,7 @@ module.exports = (knex, owjs) => {
 
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
-  router.post("/new", (req, res) => {
+  router.post("/:id/enroll/", (req, res) => {
     // GET PARAMS CORRECTLY
     knex
       .select("id", "battlenet_id")
@@ -89,7 +89,7 @@ module.exports = (knex, owjs) => {
               return knex('tournament_enrollments').insert({
                 'user_id': results[0].id,
                 'team_id': null,
-                'tournament_id': req.body.tournID,
+                'tournament_id': req.params.id,
                 'level': data.profile.level,
                 'first_role': roleRanks[0].role,
                 'first_role_time_played': roleRanks[0].time,
@@ -105,5 +105,24 @@ module.exports = (knex, owjs) => {
         }
       });
   });
+
+  //page for enrolling in a currently existing tournament
+  router.get("/:id/enroll", (req, res) => {
+    knex
+    .select("name", "description", "no_of_teams")
+    .from("tournaments")
+    .where({id: req.params.id})
+    .then((results) => {
+      const name = results[0].name;
+      const description = results[0].description;
+      const teamCount = results[0].no_of_teams;
+      req.session.tournamentID = req.params.id;
+      // res.sendStatus(200);
+      res.render('tournament_enroll', {email: req.session.email, name: name, description: description, teamCount: teamCount, tournamentID: req.params.id})
+    });
+    
+  });
+
   return router;
 };
+

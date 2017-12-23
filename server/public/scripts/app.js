@@ -23,9 +23,14 @@ $(document).ready(function () {
     }
     
     function loadCards() {
-        $.getJSON("/tournaments/cards.json")
-            .done(renderTeamCards);
-    }
+        $.ajax({
+          url: '/tournaments/cards.json',
+          data: tournamentID,
+          method: 'GET'
+        }).done((playerRoster) => {
+          renderTeamCards(playerRoster);
+        });
+      }
 
     loadCards();
 
@@ -45,11 +50,17 @@ $(document).ready(function () {
         })
             // console.log(teamRoster["1"]["0"]["battlenet_id"])
     }
+    
 
     function loadTable() {
-        $.getJSON("/tournaments/cards.json")
-            .done(renderPlayerCount);
-    }
+        $.ajax({
+          url: '/tournaments/cards.json',
+          data: tournamentID,
+          method: 'GET'
+        }).done((playerRoster) => {
+          renderPlayerCount(playerRoster);
+        });
+      }
 
     loadTable();
 
@@ -118,5 +129,22 @@ $(document).ready(function () {
             }
         })
     })
+
+    $(".enroll-me").on('click', function (event) {
+        
+        $.ajax({
+            type: "POST",
+            url: "/tournaments/" + tournamentID + "/enroll",
+            success: function () {
+                $("#new-tournament-form").html("Enrolled! Created!");
+            }
+        })
+    })
+
+    function showTournamentID(){
+        console.log('Tournament name: ', tournamentID);
+    }
+
+    showTournamentID();
 })
 
