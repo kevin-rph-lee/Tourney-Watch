@@ -185,18 +185,19 @@ module.exports = (knex, _, env) => {
   });
 
   router.get("/cards.json", (req, res) => {
-    const tournamentID = req.params.id;
-    if(req.session.email !== process.env.ADMIN_EMAIL) {
-      // STRETCH: "Forbidden" error page
-      res.sendStatus(403);
-    }
+    const tournamentID = req.query.tournamentID;
+    console.log('HEEEEEY', req.query.tournamentID);
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: req.body})
+      .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
@@ -295,13 +296,16 @@ module.exports = (knex, _, env) => {
         const creatorUserID = results[0].creator_user_id;
         const tournamentName = results[0].name;
         const isReady = (enrolledPlayers.length === teamCount * 6);
+        const isOwner = (req.session.userID === creatorUserID);
         if (isReady && started) {
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
             email: req.session.email,
             started: started,
-            tournamentName: tournamentName
+            tournamentName: tournamentName,
+            tournamentID: tournamentID,
+            isOwner: isOwner
           })
         } else {
           res.render("tournament_notready", {
@@ -309,18 +313,20 @@ module.exports = (knex, _, env) => {
             playerCount: enrolledPlayers.length,
             teamCount: teamCount,
             email: req.session.email,
+            tournamentID: tournamentID
           })
         }
       });
   });
 
-  router.post("/:id/start", (req, res) => {
+  router.post("/start/:id", (req, res) => {
   const tournamentID = req.params.id
-    if(!name){
-      // STRETCH: Show 'You did not enter a tournament name' error page
-      res.sendStatus(400);
-      return;
-    }
+    // if(!tournamentID){
+    //   // STRETCH: Show 'You did not enter a tournament name' error page
+    //   res.sendStatus(400);
+    //   return;
+    // }
+    console.log(tournamentID)
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
     knex

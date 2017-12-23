@@ -10,7 +10,7 @@ $(document).ready(function () {
         Object.keys(teamNames).forEach((t) => {
             $(".row").append(`
             <div class="card mb-3" style="min-width: 15rem">
-                <div class="card-header">${teamNames[t]}</div>
+                <div class="card-header">${teamNames[t]}</div>n
                     <div class="card-body" data-team-id="${teamNames[t]}">
                 </div>
             </div>
@@ -23,11 +23,13 @@ $(document).ready(function () {
     }
 
     function loadCards() {
+        console.log('i am in load cards', tournamentID);
         $.ajax({
           url: '/tournaments/cards.json',
-          data: tournamentID,
+          data: {tournamentID: tournamentID},
           method: 'GET'
         }).done((playerRoster) => {
+          console.log(tournamentID);
           renderTeamCards(playerRoster);
         });
       }
