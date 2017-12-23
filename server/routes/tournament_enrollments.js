@@ -70,14 +70,53 @@ module.exports = (knex, owjs) => {
     return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
+  router.get("/:id/new", (req, res) => {
+    const tournamentID = req.params.id;
+    const currUserID = req.session.userID;
+    knex
+      .select("battlenet_id, email")
+      .from("users")
+      .where({id: userID})
+      .then((currUser) => {
+        const currBattlenetID = currUser[0].battlenet_id;
+        const currEmail = currUser[0].email;
+        knex
+          .select("users.battlenet_id", "id", "is_started", "creator_user_id", "no_of_teams", "name")
+          .from("tournaments")
+          .innerJoin("users", "users.id", "tournaments.creator_user_id")
+          .where({id: tournamentID})
+          .then( async (results) => {
+            const enrolledPlayers = await playersEnrolled(tournamentID);
+            const started = results[0].is_started;
+            const teamCount = results[0].no_of_teams;
+            const creatorUserID = results[0].creator_user_id;
+            const tournamentName = results[0].name;
+            const tournamentDescr = results[0].description;
+            const isReady = (enrolledPlayers.length === teamCount * 6);
+             
+            res.render("tournament_enroll", {
+              email: currEmail,
+              teamCount: teamCount,
+              tournamentID: tournamentID,
+              tournamentName: tournamentName,
+              tournamentDescr: tournamentDescr,
+              tournamentCreator: results[0].users.battlenet_id,
+              isReady: isReady
+            })
+          })
+      })
+  })
+
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
-  router.post("/new", (req, res) => {
+  // :id is the tournament ID
+  router.post("/:id/new", (req, res) => {
+    const currUserID = req.session.userID;
     // GET PARAMS CORRECTLY
     knex
       .select("id", "battlenet_id")
       .from("users")
-      .where({email: req.body.email})
+      .where({id: currUserID})
       .then((results) => {
         if(results.length === 0){
           // STRETCH: Show 'Invalid Battlenet ID' error page
@@ -89,7 +128,7 @@ module.exports = (knex, owjs) => {
               return knex('tournament_enrollments').insert({
                 'user_id': results[0].id,
                 'team_id': null,
-                'tournament_id': req.body.tournID,
+                'tournament_id': req.params.id,
                 'level': data.profile.level,
                 'first_role': roleRanks[0].role,
                 'first_role_time_played': roleRanks[0].time,

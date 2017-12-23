@@ -126,8 +126,6 @@ module.exports = (knex, _, env) => {
       });
   }
 
-<<<<<<< HEAD
-=======
   // Tournament bracket and teams page
   router.get('/brackets.json', (req, res) => {
     knex
@@ -139,7 +137,6 @@ module.exports = (knex, _, env) => {
       });
   });
 
->>>>>>> 1fed4965afb2ebc41495fd884dd22cff305c3a7b
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
@@ -232,6 +229,54 @@ module.exports = (knex, _, env) => {
         .then(() => {console.log('Bracket data updated')});
   });
 
+  router.get("/:id/admin", (req, res) => {
+    if(!Number.isInteger(tournamentID)) {
+      console.log('not a vaid id')
+      return res.sendStatus(404);
+    }
+
+    if(req.session.userID === creatorUserID) {
+      const isOwner = true;
+      knex
+        .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
+        .from("tournaments")
+        .where({id: tournamentID})
+        .then( async (results) => {
+          const enrolledPlayers = await playersEnrolled(tournamentID);
+          const started = results[0].is_started;
+          const teamCount = results[0].no_of_teams;
+          const creatorUserID = results[0].creator_user_id;
+          const tournamentName = results[0].name;
+          const isReady = (enrolledPlayers.length === teamCount * 6);
+          const tournamentDescr = results[0].description;
+          if (isReady && started) {
+            res.render("tournament_view", {
+              teamRoster: getTeamRoster(tournamentID),
+              playerCount: enrolledPlayers.length,
+              tournamentDescr: tournamentDescr,
+              tournamentName: tournamentName,
+              email: req.session.email,
+              started: started,
+              isOwner: isOwner
+            })
+          } else {
+            res.render("tournament_staging", {
+              playerCount: enrolledPlayers,
+              teamCount: teamCount,
+              tournamentDescr: tournamentDescr,
+              tournamentName: tournamentName,
+              email: req.session.email,
+              isReady: isReady
+            })
+          }
+        })
+    } else {
+    // STRETCH: "You don't have access for this page"
+    res.sendStatus(403);
+    }
+
+  })
+
   router.get("/:id", (req, res) => {
     const tournamentID = parseInt(req.params.id);
     // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
@@ -252,36 +297,19 @@ module.exports = (knex, _, env) => {
         const isReady = (enrolledPlayers.length === teamCount * 6);
         if (isReady && started) {
           res.render("tournament_view", {
-<<<<<<< HEAD
-            teamRoster: getTeamRoster(tournamentID), 
-            playerCount: enrolledPlayers.length, 
-=======
             teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
->>>>>>> 1fed4965afb2ebc41495fd884dd22cff305c3a7b
             email: req.session.email,
             started: started,
             tournamentName: tournamentName
           })
         } else {
-          if (req.session.userID === creatorUserID) {
-            //  ADD THIS IN
-            req.session.isOwner = true;
-            res.render("tournament_staging", {
-              playerCount: enrolledPlayers,
-              email: req.session.email,
-              tournamentName: tournamentName,
-              teamCount: teamCount,
-              isReady: isReady
-            })
-          } else {
-            res.render("tournament_notready", {
-              tournamentName: tournamentName,
-              playerCount: enrolledPlayers.length,
-              teamCount: teamCount,
-              email: req.session.email,
-            })
-          }
+          res.render("tournament_notready", {
+            tournamentName: tournamentName,
+            playerCount: enrolledPlayers.length,
+            teamCount: teamCount,
+            email: req.session.email,
+          })
         }
       });
   });
@@ -299,12 +327,8 @@ module.exports = (knex, _, env) => {
       .select("id", "name", "no_of_teams")
       .from("tournaments")
       .where({id: tournamentID})
-<<<<<<< HEAD
-      .then((results) => {  
-=======
       .then((results) => {
 
->>>>>>> 1fed4965afb2ebc41495fd884dd22cff305c3a7b
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
