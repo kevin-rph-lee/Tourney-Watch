@@ -131,7 +131,7 @@ module.exports = (knex, _, env) => {
     knex
       .select("brackets")
       .from("tournaments")
-      .where({id: req.session.tournamentID})
+      .where({id: req.body})
       .then((results) => {
         res.json(results[0]);
       });
@@ -196,7 +196,7 @@ module.exports = (knex, _, env) => {
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: req.session.tournamentID})
+      .where({tournament_id: req.body})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");

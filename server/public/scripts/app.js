@@ -23,14 +23,14 @@ $(document).ready(function () {
     }
 
     function loadCards() {
-      $.ajax({
-        url: '/tournaments/cards.json',
-        data: {data: req.session.tournamentID},
-        method: 'GET'
-      }).done((playerRoster) => {
-        renderTeamCards(playerRoster);
-      });
-    }
+        $.ajax({
+          url: '/tournaments/cards.json',
+          data: tournamentID,
+          method: 'GET'
+        }).done((playerRoster) => {
+          renderTeamCards(playerRoster);
+        });
+      }
 
     loadCards();
 
@@ -50,16 +50,17 @@ $(document).ready(function () {
         })
 
     }
+    
 
     function loadTable() {
-      $.ajax({
-        url: '/tournaments/cards.json',
-        data: {data: req.session.tournamentID},
-        method: 'GET'
-      }).done((playerRoster) => {
-        renderPlayerCount(playerRoster);
-      });
-    }
+        $.ajax({
+          url: '/tournaments/cards.json',
+          data: tournamentID,
+          method: 'GET'
+        }).done((playerRoster) => {
+          renderPlayerCount(playerRoster);
+        });
+      }
 
     loadTable();
 
@@ -128,5 +129,22 @@ $(document).ready(function () {
             }
         })
     })
+
+    $(".enroll-me").on('click', function (event) {
+        
+        $.ajax({
+            type: "POST",
+            url: "/tournaments/" + tournamentID + "/enroll",
+            success: function () {
+                $("#new-tournament-form").html("Enrolled! Created!");
+            }
+        })
+    })
+
+    function showTournamentID(){
+        console.log('Tournament name: ', tournamentID);
+    }
+
+    showTournamentID();
 })
 

@@ -2,35 +2,39 @@
 <html lang="en">
 
 <head>
+  <script>
+      window.tournamentID = <%=tournamentID%>;
+      window.isOwner = <%= isOwner %>;
+  </script>
 </head>
-    <body>
-        <% include partials/navbar %>
-        <main>
-          <div class="tournamentheader">
-            <!-- Tournament Name gets appended here from App.js -->
+  <body>
+      <% include partials/navbar %>
+      <main>
+        <div class="tournamentheader">
+          <!-- Tournament Name gets appended here from App.js -->
+        </div>
+          <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
+          <container>
+                  <center>
+                  <div id="save" style="display: inline-block;">
+  
+                  </div>
+              </center>
+          </container>
+
+        <%= if (user === owner)  {%>
+          <div style="text-align: center">
+            <button id="target" class="save button">Save</button>
           </div>
-            <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
-            <container>
-                    <center>
-                    <div id="save" style="display: inline-block;">
-    
-                    </div>
-                </center>
-            </container>
+        <%= } %>
 
-          <%= if (user === owner)  {%>
-            <div style="text-align: center">
-              <button id="target" class="save button">Save</button>
-            </div>
-          <%= } %>
-
-            <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
-            <div class="container">
-                <div class="row">
-                
-                </div> 
-            </div>
-        </main>
-    </body>
+          <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
+          <div class="container">
+              <div class="row">
+              
+              </div> 
+          </div>
+      </main>
+  </body>
 
 </html>
