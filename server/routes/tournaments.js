@@ -195,7 +195,7 @@ module.exports = (knex, _, env) => {
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .innerJoin("users", "users.id", "tourname`nt_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
@@ -207,10 +207,10 @@ module.exports = (knex, _, env) => {
 
   // Tournament bracket and teams page
   router.get('/brackets.json', (req, res) => {
-    if(req.session.email !== process.env.ADMIN_EMAIL) {
-      // STRETCH: "Forbidden" error page
-      res.sendStatus(403);
-    }
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
     knex
       .select("brackets")
       .from("tournaments")
@@ -245,17 +245,13 @@ module.exports = (knex, _, env) => {
         .then( async (results) => {
           const enrolledPlayers = await playersEnrolled(tournamentID);
           const started = results[0].is_started;
-          const teamCount = results[0].no_of_teams;
-          const creatorUserID = results[0].creator_user_id;
-          const tournamentName = results[0].name;
           const isReady = (enrolledPlayers.length === teamCount * 6);
-          const tournamentDescr = results[0].description;
           if (isReady && started) {
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
-              tournamentDescr: tournamentDescr,
-              tournamentName: tournamentName,
+              tournamentDescr: results[0].description,
+              tournamentName: results[0].name,
               email: req.session.email,
               started: started,
               isOwner: isOwner
@@ -263,16 +259,16 @@ module.exports = (knex, _, env) => {
           } else {
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
-              teamCount: teamCount,
-              tournamentDescr: tournamentDescr,
-              tournamentName: tournamentName,
+              teamCount: results[0].no_of_teams,
+              tournamentDescr: results[0].description,
+              tournamentName: results[0].name,
               email: req.session.email,
               isReady: isReady
             })
           }
         })
     } else {
-    // STRETCH: "You don't have access for this page"
+    // STRETCH: "You don't have access to this page"
     res.sendStatus(403);
     }
 
@@ -292,9 +288,7 @@ module.exports = (knex, _, env) => {
       .then( async (results) => {
         const enrolledPlayers = await playersEnrolled(tournamentID);
         const started = results[0].is_started;
-        const teamCount = results[0].no_of_teams;
         const creatorUserID = results[0].creator_user_id;
-        const tournamentName = results[0].name;
         const isReady = (enrolledPlayers.length === teamCount * 6);
         const isOwner = (req.session.userID === creatorUserID);
         if (isReady && started) {
@@ -303,15 +297,15 @@ module.exports = (knex, _, env) => {
             playerCount: enrolledPlayers.length,
             email: req.session.email,
             started: started,
-            tournamentName: tournamentName,
+            tournamentName: results[0].name,
             tournamentID: tournamentID,
             isOwner: isOwner
           })
         } else {
           res.render("tournament_notready", {
-            tournamentName: tournamentName,
+            tournamentName: results[0].name,
             playerCount: enrolledPlayers.length,
-            teamCount: teamCount,
+            teamCount: results[0].no_of_teams,
             email: req.session.email,
             tournamentID: tournamentID
           })
