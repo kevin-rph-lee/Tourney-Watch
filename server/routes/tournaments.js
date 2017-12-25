@@ -200,10 +200,11 @@ module.exports = (knex, _, env) => {
     //   // STRETCH: "Forbidden" error page
     //   res.sendStatus(403);
     // }
+    console.log('Attempting ot get bracket info', req.query.tournamentID);
     knex
       .select("brackets")
       .from("tournaments")
-      .where({id: 1})
+      .where({id: req.query.tournamentID})
       .then((results) => {
         res.json(results[0]);
       });
