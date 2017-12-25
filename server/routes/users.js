@@ -20,12 +20,15 @@ module.exports = (knex, bcrypt, cookieSession) => {
     const email = req.body.email;
     const password = req.body.password;
     const battlenetID = req.body.battlenet_id;
-    //error checking
-    if(!email || !password || !battlenetID){
-      console.log('empty param!');
-      res.sendStatus(400);
-      return;
-    }
+    //error checking NOT WORKING!!!
+    // if(!email || !password || !battlenetID){
+    //   console.log('empty param!');
+    //   console.log(!email);
+    //   console.log('i am body', req.body);
+    //   console.log('i am params', req.params);
+    //   res.sendStatus(400);
+    //   return;
+    // }
     //Checking if user already exists, if user exists, DO NOT create it
     knex
       .select("email")
@@ -42,7 +45,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
             req.session.userID = results[0];
             req.session.email = email;
             console.log('IN /NEW', req.session)
-            res.sendStatus(200);
+            res.redirect("/");
           });
         } else{
           res.sendStatus(400);
@@ -80,8 +83,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
         }
     });
   });
-
-
+  
   // User logs out
   router.post("/logout", (req, res) => {
       req.session = null;

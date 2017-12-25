@@ -2,7 +2,7 @@ exports.seed = async function(knex, promise){
   const tournamentTask = (async () => {
     await knex('tournaments').del();
     return knex('tournaments').returning('*').insert([
-      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8, creator_user_id: 1, is_started: false}
+      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8, creator_user_id: 54, is_started: false}
     ]);
   })();
 
