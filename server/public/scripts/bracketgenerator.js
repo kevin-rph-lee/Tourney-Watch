@@ -16,7 +16,7 @@ function saveFn(data) {
     $.ajax({
         type: "POST",
         url: "/tournaments/update/",
-        data: {bracketData: bracketData, tournamentID:1},
+        data: {bracketData: bracketData, tournamentID: tournamentID},
         success: function () {
             alert("Tournament Changes Saved!");
         }
@@ -30,9 +30,10 @@ $(function () {
     $.ajax({
       type: "GET",
       url: "/tournaments/brackets.json",
+      data: {tournamentID: tournamentID},
       success: function (results) {
 
-        console.log(results);
+        console.log('i am in bracketgenerator', results);
         container.bracket({
             init: results.brackets,
             save: saveFn,
