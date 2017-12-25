@@ -20,9 +20,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
     const email = req.body.email;
     const password = req.body.password;
     const battlenetID = req.body.battlenet;
-    
-    console.log(battlenetID);
-    console.log(req.body);
+
     //error checking NOT WORKING!!!
     // if(!email || !password || !battlenetID){
     //   console.log('empty param!');
