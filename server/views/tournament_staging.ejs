@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
     <script>
-            window.tournamentID = <%=tournamentID%>;
+        window.tournamentID = <%=tournamentID%>;
+        console.log('hiii', tournamentID);
     </script>
+    
+
 </head>
 <body>
     <% include partials/navbar %>
+    <script src="/scripts/tournament_setup.js"></script>
+
     <main>
         <div class="tournamentheader">
             <!-- Tournament Name gets appended here from App.js -->
@@ -23,14 +28,16 @@
         <table class="table table-striped table-dark">
             <thead>
                 <tr>
-                <th scope="col">#</th>
-                <th scope="col">Blizzard ID</th>
+                  <th scope="col">#</th>
+                  <th scope="col">Blizzard ID</th>
+                  <th scope="col">Level</th>
+                  <th scope="col">Games Won</th>
                 </tr>
             </thead>
             <tbody class="player-table-stats">
 
             </tbody>
-            </table>
+        </table>
 
     </main>
 </body>

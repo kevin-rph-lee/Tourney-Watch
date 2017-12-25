@@ -143,7 +143,7 @@ module.exports = (knex, _, env) => {
       // STRETCH: "Forbidden" error page
       res.sendStatus(403);
     }
-    res.render('create_tournament',{email: req.session.email});
+    res.render('tournament_new',{email: req.session.email});
   });
 
   // Creates new tournament
@@ -175,7 +175,7 @@ module.exports = (knex, _, env) => {
                   .insert({"tournament_id": tournamentID[0]})
                   .then(() => {});
               }
-              res.sendStatus(200);
+              res.redirect(`/tournament/${tournamentID[0]}`)
             });
         } else {
           // STRETCH: Show 'Tournament name taken' error page
@@ -186,7 +186,6 @@ module.exports = (knex, _, env) => {
 
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
-    console.log('HEEEEEY', req.query.tournamentID);
     // if(req.session.email !== process.env.ADMIN_EMAIL) {
     //   // STRETCH: "Forbidden" error page
     //   res.sendStatus(403);
@@ -195,7 +194,7 @@ module.exports = (knex, _, env) => {
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tourname`nt_enrollments.user_id")
+      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
@@ -231,10 +230,11 @@ module.exports = (knex, _, env) => {
   });
 
   router.get("/:id/admin", (req, res) => {
-    if(!Number.isInteger(tournamentID)) {
-      console.log('not a vaid id')
-      return res.sendStatus(404);
-    }
+    const tournamentID = parseInt(req.params.id);
+    // if(!Number.isInteger(tournamentID)) {
+    //   console.log('not a vaid id')
+    //   return res.sendStatus(404);
+    // }
 
     if(req.session.userID === creatorUserID) {
       const isOwner = true;
@@ -252,6 +252,7 @@ module.exports = (knex, _, env) => {
               playerCount: enrolledPlayers.length,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
+              tournamentID: tournamentID,
               email: req.session.email,
               started: started,
               isOwner: isOwner
@@ -262,6 +263,7 @@ module.exports = (knex, _, env) => {
               teamCount: results[0].no_of_teams,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
+              tournamentID: tournamentID,
               email: req.session.email,
               isReady: isReady
             })
@@ -287,6 +289,7 @@ module.exports = (knex, _, env) => {
       .where({id: tournamentID})
       .then( async (results) => {
         const enrolledPlayers = await playersEnrolled(tournamentID);
+        const teamCount = results[0].no_of_teams;
         const started = results[0].is_started;
         const creatorUserID = results[0].creator_user_id;
         const isReady = (enrolledPlayers.length === teamCount * 6);

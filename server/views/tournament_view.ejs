@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  
   <script>
       window.tournamentID = <%=tournamentID%>;
       window.isOwner = <%= isOwner %>;
@@ -10,6 +11,7 @@
 </head>
   <body>
       <% include partials/navbar %>
+      <script src="/scripts/tournament_view.js"></script>
       <main>
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
