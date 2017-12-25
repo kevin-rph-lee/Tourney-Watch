@@ -9,7 +9,7 @@ $(document).ready(function () {
     Object.keys(teamNames).forEach((t) => {
         $(".row").append(`
         <div class="card mb-3" style="min-width: 15rem">
-          <div class="card-header">${teamNames[t]}</div>n
+          <div class="card-header">${teamNames[t]}</div>
             <div class="card-body" data-team-id="${teamNames[t]}">
           </div>
         </div>
