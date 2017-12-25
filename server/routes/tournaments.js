@@ -206,6 +206,8 @@ module.exports = (knex, _, env) => {
 
   // Tournament bracket and teams page
   router.get('/brackets.json', (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    console.log('in bracekt.json, am tournid', tournamentID);
     // if(req.session.email !== process.env.ADMIN_EMAIL) {
     //   // STRETCH: "Forbidden" error page
     //   res.sendStatus(403);
@@ -213,8 +215,9 @@ module.exports = (knex, _, env) => {
     knex
       .select("brackets")
       .from("tournaments")
-      .where({id: 1})
+      .where({id: tournamentID})
       .then((results) => {
+        console.log('i am in brackets.json', results[0]);
         res.json(results[0]);
       });
   });

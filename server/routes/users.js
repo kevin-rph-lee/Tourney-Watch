@@ -19,7 +19,10 @@ module.exports = (knex, bcrypt, cookieSession) => {
 
     const email = req.body.email;
     const password = req.body.password;
-    const battlenetID = req.body.battlenet_id;
+    const battlenetID = req.body.battlenet;
+    
+    console.log(battlenetID);
+    console.log(req.body);
     //error checking NOT WORKING!!!
     // if(!email || !password || !battlenetID){
     //   console.log('empty param!');
@@ -33,7 +36,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
     knex
       .select("email")
       .from("users")
-      .where({email:email})
+      .where({email: email})
       .then((results) => {
         console.log(results);
         if(results.length === 0){
@@ -44,6 +47,8 @@ module.exports = (knex, bcrypt, cookieSession) => {
           .then((results)=>{
             req.session.userID = results[0];
             req.session.email = email;
+            req.session.battlenetID = battlenetID;
+            console.log('just registered, am results', results)
             console.log('IN /NEW', req.session)
             res.redirect("/");
           });
