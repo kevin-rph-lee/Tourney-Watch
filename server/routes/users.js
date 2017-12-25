@@ -45,7 +45,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
             req.session.userID = results[0];
             req.session.email = email;
             console.log('IN /NEW', req.session)
-            res.sendStatus(200);
+            res.redirect("/");
           });
         } else{
           res.sendStatus(400);
