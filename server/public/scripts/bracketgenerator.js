@@ -30,6 +30,7 @@ $(function () {
     $.ajax({
       type: "GET",
       url: "/tournaments/brackets.json",
+      data: {tournamentID: tournamentID},
       success: function (results) {
 
         console.log('i am in bracketgenerator', results);

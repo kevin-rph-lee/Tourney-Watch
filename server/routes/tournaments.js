@@ -126,17 +126,6 @@ module.exports = (knex, _, env) => {
       });
   }
 
-  // Tournament bracket and teams page
-  router.get('/brackets.json', (req, res) => {
-    knex
-      .select("brackets")
-      .from("tournaments")
-      .where({id: req.body})
-      .then((results) => {
-        res.json(results[0]);
-      });
-  });
-
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
@@ -181,6 +170,19 @@ module.exports = (knex, _, env) => {
           // STRETCH: Show 'Tournament name taken' error page
           res.sendStatus(400);
         }
+      });
+  });
+
+  // Tournament bracket and teams page
+  router.get('/brackets.json', (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) => {
+        console.log('am in brackets.json', results);
+        res.json(results[0]);
       });
   });
 
@@ -254,6 +256,7 @@ module.exports = (knex, _, env) => {
           const isReady = (enrolledPlayers.length === teamCount * 6);
 
           if (isReady && started) {
+            initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
@@ -284,7 +287,7 @@ module.exports = (knex, _, env) => {
     const tournamentID = parseInt(req.params.id);
     // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
     if (!Number.isInteger(tournamentID)) {
-      console.log('not a vaid id')
+      console.log('not a valid id')
       return res.sendStatus(404);
     }
 
@@ -305,6 +308,7 @@ module.exports = (knex, _, env) => {
         }
         
         if (isReady && started) {
+          // initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
