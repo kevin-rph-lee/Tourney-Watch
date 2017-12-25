@@ -19,7 +19,8 @@ module.exports = (knex, bcrypt, cookieSession) => {
 
     const email = req.body.email;
     const password = req.body.password;
-    const battlenetID = req.body.battlenet_id;
+    const battlenetID = req.body.battlenet;
+    console.log(req.body);
     //error checking NOT WORKING!!!
     // if(!email || !password || !battlenetID){
     //   console.log('empty param!');
@@ -83,7 +84,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
         }
     });
   });
-  
+
   // User logs out
   router.post("/logout", (req, res) => {
       req.session = null;

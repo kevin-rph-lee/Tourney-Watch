@@ -5,8 +5,8 @@ $(document).ready(function () {
       'email': $('input[id=entry-email]').val(),
       'battlenet_id': $('input[id=entry-battlenet]').val(),
       'password': $('input[id=entry-password]').val(),
-
     };
+    console.log(formData);
     $.ajax({
       type: "POST",
       url: "/users/new",

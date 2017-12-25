@@ -7,6 +7,7 @@ $(document).ready(function () {
       'name': $('input[id=entry-name]').val(),
       'description': $('input[id=entry-description]').val(),
     };
+    console.log(formData);
     $.ajax({
       type: "POST",
       url: "/tournaments/new",
