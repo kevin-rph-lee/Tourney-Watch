@@ -175,7 +175,7 @@ module.exports = (knex, _, env) => {
                   .insert({"tournament_id": tournamentID[0]})
                   .then(() => {});
               }
-              res.redirect(`/tournament/${tournamentID[0]}`)
+              res.redirect(`/tournaments/${tournamentID[0]}`)
             });
         } else {
           // STRETCH: Show 'Tournament name taken' error page
@@ -272,8 +272,7 @@ module.exports = (knex, _, env) => {
             });
           }
         } else {
-          // STRETCH: "You don't have access to this page"
-          res.sendStatus(403);
+          res.redirect(`/tournaments/${tournamentID}`);
         }
       })
   });
@@ -285,6 +284,7 @@ module.exports = (knex, _, env) => {
       console.log('not a vaid id')
       return res.sendStatus(404);
     }
+
     return knex
       .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
       .from("tournaments")
@@ -296,6 +296,11 @@ module.exports = (knex, _, env) => {
         const creatorUserID = results[0].creator_user_id;
         const isReady = (enrolledPlayers.length === teamCount * 6);
         const isOwner = (req.session.userID === creatorUserID);
+
+        if(isOwner) {
+          res.redirect(`/tournaments/${tournamentID}/admin`);
+        }
+        
         if (isReady && started) {
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID),
