@@ -12,7 +12,7 @@ $(document).ready(function () {
       url: "/users/new",
       data: formData,
       success: function () {
-          $("#registration-form").html("You have successfully registered!");
+        $("#registration-form").html("You have successfully registered!");
       }
     })
   })

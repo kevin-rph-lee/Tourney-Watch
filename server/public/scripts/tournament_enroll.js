@@ -4,7 +4,7 @@ $(document).ready(function () {
       type: "POST",
       url: "/tournaments/" + tournamentID + "/enroll",
       success: function () {
-          $("#new-tournament-form").html("Enrolled! Created!");
+        $("#new-tournament-form").html("Enrolled! Created!");
       }
     })
   })
