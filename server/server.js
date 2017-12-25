@@ -56,16 +56,6 @@ app.get('/', (req, res) => {
   res.render('index', {email: req.session.email});
 });
 
-// Method to test the cookie has been deleted
-// app.get('/test',(req,res) => {
-//   if(req.session.email){
-//     console.log("you are logged in")
-//   } else {
-//     console.log("you are not logged in");
-//   }
-// });
-
-
 app.get('/json', (req, res) => {
   res.json(['Joel', 'Mel']);
 })

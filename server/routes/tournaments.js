@@ -323,7 +323,7 @@ module.exports = (knex, _, env) => {
       });
   });
 
-  router.post("/start/:id", (req, res) => {
+  router.post("/:id/start", (req, res) => {
   const tournamentID = req.params.id
     // if(!tournamentID){
     //   // STRETCH: Show 'You did not enter a tournament name' error page
@@ -358,7 +358,7 @@ module.exports = (knex, _, env) => {
                   initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
-                  res.sendStatus(200);
+                  res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
             });
         }
