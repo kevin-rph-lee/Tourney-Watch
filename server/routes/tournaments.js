@@ -126,16 +126,6 @@ module.exports = (knex, _, env) => {
       });
   }
 
-  // Tournament bracket and teams page
-  router.get('/brackets.json', (req, res) => {
-    knex
-      .select("brackets")
-      .from("tournaments")
-      .where({id: req.body})
-      .then((results) => {
-        res.json(results[0]);
-      });
-  });
 
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
@@ -231,7 +221,7 @@ module.exports = (knex, _, env) => {
 
   router.get("/:id/admin", (req, res) => {
     const tournamentID = parseInt(req.params.id);
-    
+
     // if(!Number.isInteger(tournamentID)) {
     //   console.log('not a vaid id')
     //   return res.sendStatus(404);
@@ -300,7 +290,7 @@ module.exports = (knex, _, env) => {
         if(isOwner) {
           res.redirect(`/tournaments/${tournamentID}/admin`);
         }
-        
+
         if (isReady && started) {
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID),
