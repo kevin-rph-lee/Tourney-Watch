@@ -231,21 +231,25 @@ module.exports = (knex, _, env) => {
 
   router.get("/:id/admin", (req, res) => {
     const tournamentID = parseInt(req.params.id);
+    
     // if(!Number.isInteger(tournamentID)) {
     //   console.log('not a vaid id')
     //   return res.sendStatus(404);
     // }
 
-    if(req.session.userID === creatorUserID) {
-      const isOwner = true;
-      knex
-        .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
-        .from("tournaments")
-        .where({id: tournamentID})
-        .then( async (results) => {
+    knex
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then(async (results) => {
+        const isOwner = (req.session.userID === results[0].creator_user_id);
+        if(isOwner) {
           const enrolledPlayers = await playersEnrolled(tournamentID);
+          const isOwner = true;
+          const teamCount = results[0].no_of_teams;
           const started = results[0].is_started;
           const isReady = (enrolledPlayers.length === teamCount * 6);
+
           if (isReady && started) {
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
@@ -255,8 +259,7 @@ module.exports = (knex, _, env) => {
               tournamentID: tournamentID,
               email: req.session.email,
               started: started,
-              isOwner: isOwner
-            })
+              isOwner: isOwner});
           } else {
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
@@ -266,15 +269,14 @@ module.exports = (knex, _, env) => {
               tournamentID: tournamentID,
               email: req.session.email,
               isReady: isReady
-            })
+            });
           }
-        })
-    } else {
-    // STRETCH: "You don't have access to this page"
-    res.sendStatus(403);
-    }
-
-  })
+        } else {
+          // STRETCH: "You don't have access to this page"
+          res.sendStatus(403);
+        }
+      })
+  });
 
   router.get("/:id", (req, res) => {
     const tournamentID = parseInt(req.params.id);
