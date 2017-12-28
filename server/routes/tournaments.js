@@ -301,7 +301,7 @@ module.exports = (knex, _, env) => {
     }
 
     return knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
       .from("tournaments")
       .where({id: tournamentID})
       .then( async (results) => {
@@ -311,6 +311,7 @@ module.exports = (knex, _, env) => {
         const creatorUserID = results[0].creator_user_id;
         const isReady = (enrolledPlayers.length === teamCount * 6);
         const isOwner = (req.session.userID === creatorUserID);
+        const twitchChannel = results[0].twitch_channel;
 
         if(isOwner) {
           res.redirect(`/tournaments/${tournamentID}/admin`);
@@ -325,7 +326,8 @@ module.exports = (knex, _, env) => {
             started: started,
             tournamentName: results[0].name,
             tournamentID: tournamentID,
-            isOwner: isOwner
+            isOwner: isOwner,
+            twitchChannel: twitchChannel
           })
         } else {
           res.render("tournament_notready", {
