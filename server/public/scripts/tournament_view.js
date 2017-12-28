@@ -11,7 +11,8 @@ $(document).ready(function () {
         <div class="card mb-3" style="min-width: 15rem">
           <div class="card-header">${teamNames[t]}</div>
             <div class="card-body" data-team-id="${teamNames[t]}">
-          </div>
+            <span class="tooltiptext">Test text</span>
+            </div>
         </div>
         `)
 

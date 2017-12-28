@@ -56,6 +56,11 @@ app.get('/', (req, res) => {
   res.render('index', {email: req.session.email});
 });
 
+app.get("/faq", (req, res) => {
+
+  res.render("faq", {email: req.session.email})
+});
+
 app.get('/json', (req, res) => {
   res.json(['Joel', 'Mel']);
 })
