@@ -148,6 +148,8 @@ module.exports = (knex, _, env) => {
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
+    const twitchChannel = req.body.twitch_channel;
+    console.log(req.body);
     if(!name){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
@@ -162,7 +164,7 @@ module.exports = (knex, _, env) => {
         // and creates new lines in teams (based on # of teams needed)
         if(results.length === 0) {
           knex
-            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false})
+            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false, twitch_channel: twitchChannel})
             .into('tournaments')
             .returning('id')
             .then((tournamentID)=> {
@@ -250,7 +252,7 @@ module.exports = (knex, _, env) => {
     // }
 
     knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
       .from("tournaments")
       .where({id: tournamentID})
       .then(async (results) => {
@@ -261,6 +263,8 @@ module.exports = (knex, _, env) => {
           const teamCount = results[0].no_of_teams;
           const started = results[0].is_started;
           const isReady = (enrolledPlayers.length === teamCount * 6);
+          const twitchChannel = `<iframe src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>`;
+          const twitchName = results[0].twitch_channel;
 
           if (isReady && started) {
 
@@ -272,7 +276,9 @@ module.exports = (knex, _, env) => {
               tournamentID: tournamentID,
               email: req.session.email,
               started: started,
-              isOwner: isOwner});
+              twitchChannel: twitchChannel,
+              twitchName: twitchName,
+              isOwner: isOwner})
           } else {
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
@@ -299,7 +305,7 @@ module.exports = (knex, _, env) => {
     }
 
     return knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
       .from("tournaments")
       .where({id: tournamentID})
       .then( async (results) => {
@@ -309,7 +315,9 @@ module.exports = (knex, _, env) => {
         const creatorUserID = results[0].creator_user_id;
         const isReady = (enrolledPlayers.length === teamCount * 6);
         const isOwner = (req.session.userID === creatorUserID);
-
+        const twitchChannel = `<iframe src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>`;
+        const twitchName = results[0].twitch_channel;
+        console.log('This should be the results: ', results)
         if(isOwner) {
           res.redirect(`/tournaments/${tournamentID}/admin`);
         }
@@ -323,7 +331,9 @@ module.exports = (knex, _, env) => {
             started: started,
             tournamentName: results[0].name,
             tournamentID: tournamentID,
-            isOwner: isOwner
+            isOwner: isOwner,
+            twitchChannel: twitchChannel,
+            twitchName: twitchName
           })
         } else {
           res.render("tournament_notready", {
