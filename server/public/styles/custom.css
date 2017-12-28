@@ -104,41 +104,42 @@ div.card.mb-3{
   margin: auto;
 }
 
-div.card.mb-3 p{
-  height:10px;
+div.card.mb-3 div.battlenetid{
+  padding-bottom: 10px;
 }
 
 div.card.mb-3 div.card-header {
   background-color: #F7931D;
 }
 
-div.card.mb-3 div.card-body .tooltiptext {
+/* Tooltips for Cards */
+
+div.battlenetid .tooltiptext {
   visibility: hidden;
-  width: 120px;
   background-color: black;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
+  padding: 5px;
+  position: relative;
   z-index: 1;
   bottom: 150%;
   left: 50%;
   margin-left: -60px;
 }
 
-div.card.mb-3 div.card-body .tooltiptext::after {
-  content: "";
+div.battlenetid .tooltiptext::after {
+  content: " ";
   position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: black transparent transparent transparent;
+  border-color: transparent black transparent transparent;
 }
 
-div.card.mb-3 div.card-body:hover .tooltiptext{
+div.battlenetid:hover .tooltiptext{
   visibility: visible;
 }
 
@@ -172,6 +173,8 @@ div.enroll-now button:active {
   cursor: pointer;
 
 }
+
+/* Twitch Video Player Centering */
 
 div.twitch-display{
   text-align: center;

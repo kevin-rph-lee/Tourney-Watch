@@ -11,13 +11,15 @@ $(document).ready(function () {
         <div class="card mb-3" style="min-width: 15rem">
           <div class="card-header">${teamNames[t]}</div>
             <div class="card-body" data-team-id="${teamNames[t]}">
-            <span class="tooltiptext">Test text</span>
             </div>
         </div>
         `)
 
         teamRoster[teamNames[t]].forEach((user) => {
-          $(`[data-team-id="${teamNames[t]}"`).append(`<p>${user.battlenet_id}</p>`)
+          $(`[data-team-id="${teamNames[t]}"`).append(`
+          <div class="battlenetid">${user.battlenet_id}
+            <span class="tooltiptext">${user.battlenet_id}</span>
+          </div>`)
         })
     })
   }
