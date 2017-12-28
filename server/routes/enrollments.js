@@ -114,6 +114,7 @@ module.exports = (knex, owjs) => {
     
     if (!currUserID) {
       // Figure out a better way to handle this. 
+      // Maybe status 400, with link to register or sign in
       res.redirect('/users/new');
     } else {
       knex
@@ -121,7 +122,6 @@ module.exports = (knex, owjs) => {
       .from("users")
       .where({id: currUserID})
       .then((currUser) => {
-        console.log(currUser)
         const currBattlenetID = currUser[0].battlenet_id;
         const currEmail = currUser[0].email;
         knex
