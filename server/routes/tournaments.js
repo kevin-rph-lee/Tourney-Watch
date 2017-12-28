@@ -133,8 +133,13 @@ module.exports = (knex, _, env) => {
       });
   }
 
+  /**
+   * Checks a string for special characters. Returns false if one is found
+   * @param  {string} string string to be checked
+   * @return {boolean}        returns false if invalid characters found
+   */
   function checkInvalidCharacters(string){
-    return /^[a-zA-Z0-9-#]*$/.test(string) == false;
+    return !(/^[a-zA-Z0-9-#]*$/.test(string));
   }
 
   // Goes to new tournaments page
@@ -155,7 +160,7 @@ module.exports = (knex, _, env) => {
     const twitchChannel = req.body.twitch_channel;
 
     //
-    if(!name ||  checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name) ){
+    if(!name || !description ||  checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name) ){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
       return;
