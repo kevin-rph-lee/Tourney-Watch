@@ -5,8 +5,18 @@ const router  = express.Router();
 
 module.exports = (knex, bcrypt, cookieSession) => {
 
+  /**
+   * Checks a string for special characters. Returns false if one is found
+   * @param  {string} string string to be checked
+   * @return {boolean}        returns false if invalid characters found
+   */
+  function checkInvalidCharacters(string){
+    return !(/^[a-zA-Z0-9-#]*$/.test(string));
+  }
+
+
    //Goes to registration page
-   router.get('/new', (req, res) => {
+  router.get('/new', (req, res) => {
     res.render('register', {email: req.session.email});
   });
   //Goes to login page
@@ -21,16 +31,11 @@ module.exports = (knex, bcrypt, cookieSession) => {
     const password = req.body.password;
     const battlenetID = req.body.battlenet;
 
-    //error checking NOT WORKING!!!
-    // if(!email || !password || !battlenetID){
-    //   console.log('empty param!');
-    //   console.log(!email);
-    //   console.log('i am body', req.body);
-    //   console.log('i am params', req.params);
-    //   res.sendStatus(400);
-    //   return;
-    // }
-    //Checking if user already exists, if user exists, DO NOT create it
+    if(checkInvalidCharacters(battlenetID)){
+      return res.sendStatus(400);
+    }
+
+
     knex
       .select("email")
       .from("users")
@@ -86,7 +91,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
         }
     });
   });
-  
+
   // User logs out
   router.post("/logout", (req, res) => {
       req.session = null;
