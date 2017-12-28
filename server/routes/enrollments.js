@@ -32,8 +32,8 @@ module.exports = (knex, owjs) => {
   function playersEnrolled(tournamentID){
     return knex
       .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
       .then((result) => {
         return result
@@ -101,7 +101,7 @@ module.exports = (knex, owjs) => {
             'medal_bronze': data.quickplay.global.medals_bronze,
             'games_won': data.quickplay.global.games_won
           })
-          .into("tournament_enrollments")
+          .into("enrollments")
           .then(() => {
             console.log('done using owjs')
           });
@@ -126,7 +126,7 @@ module.exports = (knex, owjs) => {
         const currEmail = currUser[0].email;
         knex
           .select("id")
-          .from("tournament_enrollments")
+          .from("enrollments")
           .where({id: currUserID})
           .then((results) => {
             if (results.length > 0 ) {
@@ -186,7 +186,7 @@ module.exports = (knex, owjs) => {
         } else{
           await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
           // THIS RESPONSE DOES NOT WORK. NEITHER RENDER OR REDIRECT WORKS
-          // User's info is inserted to tournament_enrollments though
+          // User's info is inserted to enrollments though
           res.render("index", {email: req.session.email})
         }
       });
