@@ -112,6 +112,36 @@ div.card.mb-3 div.card-header {
   background-color: #F7931D;
 }
 
+div.card.mb-3 div.card-body .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+div.card.mb-3 div.card-body .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+div.card.mb-3 div.card-body:hover .tooltiptext{
+  visibility: visible;
+}
+
 div.row{
   padding-top: 20px;
 }
