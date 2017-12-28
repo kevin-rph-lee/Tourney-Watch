@@ -15,7 +15,8 @@
         <h3> <%= tournamentDescr %> </h3>
         <h3> Created by: <%= tournamentCreator %> </h3>
         <h3> Number of Teams: <%= teamCount %> </h3>
-        <% if (isReady) { %>
+        <h3> Enrolled Players: <%= enrolledPlayers.length %> </h3>
+        <% if(isReady) { %>
         <p> Tournament is full. </p>
         <% } else { %>
         <div class="enroll-now">

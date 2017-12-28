@@ -82,10 +82,43 @@ module.exports = (knex, owjs) => {
     return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
+  function getPlayersInfo(battlenetID, tournamentID, userID) {
+    return owjs.getAll('pc', 'us', battlenetID)
+      .then((data) => {
+        const roleRanks = sortTimePlayed(data);
+        knex
+          .insert({
+            'user_id': userID,
+            'team_id': null,
+            'tournament_id': tournamentID,
+            'level': data.profile.level,
+            'first_role': roleRanks[0].role,
+            'first_role_time_played': roleRanks[0].time,
+            'second_role': roleRanks[1].role,
+            'second_role_time_played': roleRanks[1].time,
+            'medal_gold': data.quickplay.global.medals_gold,
+            'medal_silver': data.quickplay.global.medals_silver,
+            'medal_bronze': data.quickplay.global.medals_bronze,
+            'games_won': data.quickplay.global.games_won
+          })
+          .into("tournament_enrollments")
+          .then(() => {
+            console.log('done using owjs')
+          });
+    });
+  }
+
   router.get("/:id/enroll", (req, res) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
-    knex
+    
+    console.log('i am currUserID', currUserID)
+    if (!currUserID) {
+      // Figure out a better way to handle this. 
+      console.log('i should be printed!!')
+      res.redirect('/users/new');
+    } else {
+      knex
       .select("battlenet_id", "email")
       .from("users")
       .where({id: currUserID})
@@ -99,10 +132,11 @@ module.exports = (knex, owjs) => {
           .where({"tournaments.id": tournamentID})
           .then( async (results) => {
             const enrolledPlayers = await playersEnrolled(tournamentID);
+            console.log(results);
 
             const started = results[0].is_started;
             const teamCount = results[0].no_of_teams;
-            const creatorUserID = results[0].creator_user_id;
+            const creatorUserID = results[0].battlenet_id;
             const tournamentName = results[0].name;
             const tournamentDescr = results[0].description;
             const isReady = (enrolledPlayers.length === teamCount * 6);
@@ -113,45 +147,33 @@ module.exports = (knex, owjs) => {
               tournamentID: tournamentID,
               tournamentName: tournamentName,
               tournamentDescr: tournamentDescr,
-              tournamentCreator: currBattlenetID,
+              tournamentCreator: creatorUserID,
+              enrolledPlayers: enrolledPlayers,
               isReady: isReady
             })
           })
       })
+    }
   })
 
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
   router.post("/:id/enroll/", (req, res) => {
     const currUserID = req.session.userID;
+    const tournamentID = req.params.id;
     knex
       .select("id", "battlenet_id")
       .from("users")
       .where({id: currUserID})
-      .then((results) => {
+      .then( async (results) => {
         if(results.length === 0){
           // STRETCH: Show 'Invalid Battlenet ID' error page
           res.sendStatus(404);
         } else{
-          res.send(owjs.getAll('pc', 'us', results[0].battlenet_id)
-            .then((data) => {
-              const roleRanks = sortTimePlayed(data);
-              return knex('tournament_enrollments').insert({
-                'user_id': results[0].id,
-                'team_id': null,
-                'tournament_id': req.params.id,
-                'level': data.profile.level,
-                'first_role': roleRanks[0].role,
-                'first_role_time_played': roleRanks[0].time,
-                'second_role': roleRanks[1].role,
-                'second_role_time_played': roleRanks[1].time,
-                'medal_gold': data.quickplay.global.medals_gold,
-                'medal_silver': data.quickplay.global.medals_silver,
-                'medal_bronze': data.quickplay.global.medals_bronze,
-                'games_won': data.quickplay.global.games_won
-              });
-            })
-          );
+          await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
+          // THIS RESPONSE DOES NOT WORK. NEITHER RENDER OR REDIRECT WORKS
+          // User's info is inserted to tournament_enrollments though
+          res.render("index", {email: req.session.email})
         }
       });
   });
