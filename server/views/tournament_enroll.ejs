@@ -13,10 +13,16 @@
       <div class="container">
         <h1> <%= tournamentName %> </h1>
         <h3> <%= tournamentDescr %> </h3>
+        <h3> Created by: <%= tournamentCreator %> </h3>
         <h3> Number of Teams: <%= teamCount %> </h3>
+        <% if (isReady) { %>
+        <p> Tournament is full. </p>
+        <% } else { %>
         <div class="enroll-now">
           <button class="enroll-me">Enroll in this Tournament!</button>
         </div>
+        <% } %>
+        <p> testing, is tournament ready? <%= isReady %>
       </div>
     </main>
   </body>

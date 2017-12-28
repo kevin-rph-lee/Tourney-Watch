@@ -19,7 +19,7 @@ var _ = require('lodash')
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
-const tournamentEnrollmentsRoutes = require('./routes/tournament_enrollments');
+const enrollmentsRoutes = require('./routes/enrollments');
 const tournamentsRoutes = require('./routes/tournaments');
 // const gamesRoutes = require('./routes/games');
 // const teamsRoutes = require('./routes/teams');
@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt));
-app.use('/tournament_enrollments', tournamentEnrollmentsRoutes(knex, owjs));
+app.use('/enrollments', enrollmentsRoutes(knex, owjs));
 app.use('/tournaments', tournamentsRoutes(knex, _, env));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
