@@ -263,7 +263,7 @@ module.exports = (knex, _, env) => {
           const isReady = (enrolledPlayers.length === teamCount * 6);
 
           if (isReady && started) {
-            initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
+
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
