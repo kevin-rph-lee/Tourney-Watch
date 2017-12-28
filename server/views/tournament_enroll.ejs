@@ -9,6 +9,7 @@
   <body>
     <% include partials/navbar %>
     <script src="/scripts/tournament_enroll.js"></script>
+
     <main>
       <div class="container">
         <h1> <%= tournamentName %> </h1>
@@ -17,7 +18,8 @@
         <h3> Number of Teams: <%= teamCount %> </h3>
         <h3> Enrolled Players: <%= enrolledPlayers.length %> </h3>
         <% if(isReady) { %>
-        <p> Tournament is full. </p>
+        <h3> Tournament is full. </h3>
+        <h3> <a href="/tournaments/<%= tournamentID %>">Tournament Link</a> </h3>
         <% } else { %>
         <div class="enroll-now">
           <button class="enroll-me">Enroll in this Tournament!</button>

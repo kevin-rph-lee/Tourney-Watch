@@ -114,6 +114,7 @@ module.exports = (knex, owjs) => {
     
     if (!currUserID) {
       // Figure out a better way to handle this. 
+      // Maybe status 400, with link to register or sign in
       res.redirect('/users/new');
     } else {
       knex
@@ -121,36 +122,44 @@ module.exports = (knex, owjs) => {
       .from("users")
       .where({id: currUserID})
       .then((currUser) => {
-        console.log(currUser)
         const currBattlenetID = currUser[0].battlenet_id;
         const currEmail = currUser[0].email;
         knex
-          .select("users.battlenet_id", "tournaments.id", "is_started", "creator_user_id", "no_of_teams", "name", "description")
-          .from("tournaments")
-          .innerJoin("users", "users.id", "tournaments.creator_user_id")
-          .where({"tournaments.id": tournamentID})
-          .then( async (results) => {
-            const enrolledPlayers = await playersEnrolled(tournamentID);
-            console.log(results);
-
-            const started = results[0].is_started;
-            const teamCount = results[0].no_of_teams;
-            const creatorUserID = results[0].battlenet_id;
-            const tournamentName = results[0].name;
-            const tournamentDescr = results[0].description;
-            const isReady = (enrolledPlayers.length === teamCount * 6);
-
-            res.render("tournament_enroll", {
-              email: currEmail,
-              teamCount: teamCount,
-              tournamentID: tournamentID,
-              tournamentName: tournamentName,
-              tournamentDescr: tournamentDescr,
-              tournamentCreator: creatorUserID,
-              enrolledPlayers: enrolledPlayers,
-              isReady: isReady
-            })
-          })
+          .select("id")
+          .from("tournament_enrollments")
+          .where({id: currUserID})
+          .then((results) => {
+            if (results.length > 0 ) {
+              // STRETCH: "You've already enrolled to this tournament"
+              res.sendStatus(400)
+            } else {
+              knex
+              .select("users.battlenet_id", "tournaments.id", "is_started", "creator_user_id", "no_of_teams", "name", "description")
+              .from("tournaments")
+              .innerJoin("users", "users.id", "tournaments.creator_user_id")
+              .where({"tournaments.id": tournamentID})
+              .then( async (results) => {
+                const enrolledPlayers = await playersEnrolled(tournamentID);
+                const started = results[0].is_started;
+                const teamCount = results[0].no_of_teams;
+                const creatorUserID = results[0].battlenet_id;
+                const tournamentName = results[0].name;
+                const tournamentDescr = results[0].description;
+                const isReady = (enrolledPlayers.length === teamCount * 6);
+    
+                res.render("tournament_enroll", {
+                  email: currEmail,
+                  teamCount: teamCount,
+                  tournamentID: tournamentID,
+                  tournamentName: tournamentName,
+                  tournamentDescr: tournamentDescr,
+                  tournamentCreator: creatorUserID,
+                  enrolledPlayers: enrolledPlayers,
+                  isReady: isReady
+                })
+              })
+            }
+          })  
       })
     }
   })
