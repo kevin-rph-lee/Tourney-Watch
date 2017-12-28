@@ -11,7 +11,8 @@ main {
   font-family: 'Oswald', sans-serif;
   color: white;
   width: 1050px;
-  height: -webkit-fill-available;
+  height: 100vh;
+  overflow-y: scroll;
   margin: auto;
   padding-right:20px;
   padding-left:20px;
@@ -22,7 +23,20 @@ main {
   border-right: solid 1px #F7931D;
   }
 
+p {
+  text-align: center;
+}
+
+  ::-webkit-scrollbar { 
+    display: none; 
+}
+
   main h1 {
+    text-align: center;
+    padding:20px;
+  }
+
+  main h3 {
     text-align: center;
     padding:20px;
   }
@@ -33,7 +47,7 @@ main {
     border: solid 1px #F7931D;
   }
 
-  div p{
+  div.container.index p{
     padding-top: 20px;
     padding-bottom: 20px;
   }
@@ -83,14 +97,82 @@ main {
     padding-top: 20px;
   }
 
+  /* Tournament Cards */
+
 div.card.mb-3{
-  background-color: #F7931D;
-  text-align: center;
+  background-color: #474D57;
   margin: auto;
+}
+
+div.card.mb-3 p{
+  height:10px;
+}
+
+div.card.mb-3 div.card-header {
+  background-color: #F7931D;
+}
+
+div.card.mb-3 div.card-body .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+div.card.mb-3 div.card-body .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+div.card.mb-3 div.card-body:hover .tooltiptext{
+  visibility: visible;
+}
+
+div.row{
+  padding-top: 20px;
 }
 
 /* Bootstrap Table */
 
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
   background-color: #474D57;
+}
+
+/* Enroll Button */
+div.enroll-now{
+  text-align: center;
+}
+
+div.enroll-now button{
+  color: #fff;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: Helvetica,sans-serif;
+}
+
+div.enroll-now button:active { 
+  background-color: #191E21;
+  color: #F7931D;
+  cursor: pointer;
+
+}
+
+div.twitch-display{
+  text-align: center;
 }

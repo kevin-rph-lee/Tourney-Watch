@@ -2,14 +2,14 @@ exports.seed = async function(knex, promise){
   const tournamentTask = (async () => {
     await knex('tournaments').del();
     return knex('tournaments').returning('*').insert([
-      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8}
+      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8, creator_user_id: 54, is_started: false, twitch_channel: 'WhtMage'}
     ]);
   })();
 
   const usersTask = (async () => {
     await knex('users').del();
     return knex('users').returning('*').insert([
-      {email:'pp0.c26@7agxrm.com',password:'password',battlenet_id:'Samuel#1066'},
+      {email:'lil@lil.com',password:'123456',battlenet_id:'Samuel#1066'},
       {email:'pfa7u7.n0v7_iin@iw2fv4.com',password:'password',battlenet_id:'Rubye#3562'},
       {email:'28xmm0jsmpsf-@lfkh1eg9.com',password:'password',battlenet_id:'Stormy#691'},
       {email:'g-jmucg@92atcmqm4.com',password:'password',battlenet_id:'Lela#1231'},
@@ -66,7 +66,6 @@ exports.seed = async function(knex, promise){
   })();
   const teamsTask = (async () => {
     const [tournament] = await tournamentTask;
-    // console.log(tournaments);
     const tournament_id = tournament.id;
     await knex('teams').del();
     return knex('teams').insert([
@@ -77,12 +76,13 @@ exports.seed = async function(knex, promise){
       {tournament_id},
       {tournament_id},
       {tournament_id},
-      {tournament_id},      
+      {tournament_id},
     ]);
   })();
   const tournament_enrollmentTask = (async () => {
     const [tournament] = await tournamentTask;
     const tournament_id = tournament.id;
+    console.log('Tournement ID, ' + tournament_id);
     const users = await usersTask;
     await knex('tournament_enrollments').del();
     return knex('tournament_enrollments').insert([

@@ -2,53 +2,50 @@
 <html lang="en">
 
 <head>
-    <% include partials/header %>
+  
+  <script>
+      window.tournamentID = <%=tournamentID%>;
+      window.isOwner = <%= isOwner %>;
+  </script>
 </head>
-    <body>
-        <% include partials/navbar %>
-        <main>
-            <h1>Tournament Name Here</h1>
+  <body>
+      <% include partials/navbar %>
+      <script src="/scripts/tournament_view.js"></script>
+      <script src="/scripts/bracketgenerator.js"></script>
+      <script src="/vendor/jquery.bracket.min.js"></script>
+      <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" h/>
+      <main>
+        <div class="tournamentheader">
+          <!-- Tournament Name gets appended here from App.js -->
+        </div>
+        <% if (twitchChannel !== null) { %>
+        <h3> <%= twitchName %> </h3>
+        <div class="twitch-display">
+          <%- twitchChannel %>
+        </div>
+        <% } %>
+          <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
+          <container>
+                  <center>
+                  <div id="save" style="display: inline-block;">
+  
+                  </div>
+              </center>
+          </container>
 
-            <!-- BRACKET CODE WILL GO HERE -->
+        <% if (isOwner)  {%>
+          <div style="text-align: center">
+            <button id="target" class="save button">Save</button>
+          </div>
+        <% } %>
 
-            <!-- Bootsrtap Cards will go Here -->
-            <div class="container">
-                <div class="row">
-                
-                </div> 
-            </div>
-            <table class="table table-striped table-dark">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Team ID</th>
-                        <th scope="col">Blizzard ID</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  </table>
-        </main>
-    </body>
+          <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
+          <div class="container">
+              <div class="row">
+              
+              </div> 
+          </div>
+      </main>
+  </body>
 
 </html>
