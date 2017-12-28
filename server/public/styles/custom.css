@@ -172,3 +172,7 @@ div.enroll-now button:active {
   cursor: pointer;
 
 }
+
+div.twitch-display{
+  text-align: center;
+}
