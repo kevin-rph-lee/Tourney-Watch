@@ -139,27 +139,33 @@ module.exports = (knex, owjs) => {
               .innerJoin("users", "users.id", "tournaments.creator_user_id")
               .where({"tournaments.id": tournamentID})
               .then( async (results) => {
+
                 const enrolledPlayers = await playersEnrolled(tournamentID);
                 const started = results[0].is_started;
                 const teamCount = results[0].no_of_teams;
-                const creatorUserID = results[0].battlenet_id;
+                const tournamentCreator = results[0].battlenet_id;
                 const tournamentName = results[0].name;
                 const tournamentDescr = results[0].description;
                 const isReady = (enrolledPlayers.length === teamCount * 6);
-    
-                res.render("tournament_enroll", {
-                  email: currEmail,
-                  teamCount: teamCount,
-                  tournamentID: tournamentID,
-                  tournamentName: tournamentName,
-                  tournamentDescr: tournamentDescr,
-                  tournamentCreator: creatorUserID,
-                  enrolledPlayers: enrolledPlayers,
-                  isReady: isReady
-                })
+
+                if (currBattlenetID === tournamentCreator) {
+                  // STRETCH: "You cannot play in a tournament you've made"
+                  res.sendStatus(400);
+                } else {
+                  res.render("tournament_enroll", {
+                    email: currEmail,
+                    teamCount: teamCount,
+                    tournamentID: tournamentID,
+                    tournamentName: tournamentName,
+                    tournamentDescr: tournamentDescr,
+                    tournamentCreator: tournamentCreator,
+                    enrolledPlayers: enrolledPlayers,
+                    isReady: isReady
+                  });
+                }
               })
             }
-          })  
+          })
       })
     }
   })
