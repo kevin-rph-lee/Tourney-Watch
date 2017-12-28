@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _) => {
+module.exports = (knex, _, env) => {
 
   /**
    * This assigns each player to a team based off their skill level
@@ -33,6 +33,13 @@ module.exports = (knex, _) => {
     return teamAssignments;
   }
 
+  function setTournamentStarted(tournamentID){
+    knex("tournaments")
+        .where({"id": tournamentID})
+        .update({"is_started": true})
+        .then(() => {});
+  }
+
   /**
    * Counts how many support type players
    *
@@ -46,7 +53,7 @@ module.exports = (knex, _) => {
       if (key[roleChoice] === 'support') {
         return count ++;
       }
-      // TO DO: possible refactor? 
+      // TO DO: possible refactor?
       (key[roleChoice] === "support") ? count++ : 0;
 
     });
@@ -92,7 +99,7 @@ module.exports = (knex, _) => {
 
   /**
    * Gets each team's roster
-   * 
+   *
    * @param {integer} tournamentID from req params
    * @returns {array}
    */
@@ -111,9 +118,9 @@ module.exports = (knex, _) => {
 
   /**
    * Gets a list of all players enrolled in an tournament
-   * 
+   *
    * @param {integer} tournamentID from req params
-   * @returns {array} 
+   * @returns {array}
    */
   function playersEnrolled(tournamentID){
     return knex
@@ -126,23 +133,13 @@ module.exports = (knex, _) => {
       });
   }
 
-  // Tournament bracket and teams page
-  router.get('/brackets.json', (req, res) => {
-    knex
-      .select("brackets")
-      .from("tournaments")
-      .where({id: 1})
-      .then((results) => {
-        res.json(results[0]);
-      });
-  });
-
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
+      // STRETCH: "Forbidden" error page
       res.sendStatus(403);
     }
-    res.render('create_tournament',{email: req.session.email});
+    res.render('tournament_new',{email: req.session.email});
   });
 
   // Creates new tournament
@@ -151,7 +148,6 @@ module.exports = (knex, _) => {
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
-
     if(!name){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
@@ -175,7 +171,7 @@ module.exports = (knex, _) => {
                   .insert({"tournament_id": tournamentID[0]})
                   .then(() => {});
               }
-              res.sendStatus(200);
+              res.redirect(`/tournaments/${tournamentID[0]}`)
             });
         } else {
           // STRETCH: Show 'Tournament name taken' error page
@@ -184,19 +180,54 @@ module.exports = (knex, _) => {
       });
   });
 
+  // Tournament bracket and teams page
+  router.get('/brackets.json', (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) => {
+        console.log('am in brackets.json', results);
+        res.json(results[0]);
+      });
+  });
+
   router.get("/cards.json", (req, res) => {
-    const tournamentID = req.params.id;
+    const tournamentID = req.query.tournamentID;
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("tournament_enrollments")
       .innerJoin("users", "users.id", "tournament_enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
-      .where({tournament_id: 1})
+      .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
         res.send(teamRoster);
+      });
+  });
+
+  // Tournament bracket and teams page
+  router.get('/brackets.json', (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    console.log('in bracekt.json, am tournid', tournamentID);
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
+    knex
+      .select("brackets")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) => {
+        console.log('i am in brackets.json', results[0]);
+        res.json(results[0]);
       });
   });
 
@@ -210,11 +241,60 @@ module.exports = (knex, _) => {
         .then(() => {console.log('Bracket data updated')});
   });
 
+  router.get("/:id/admin", (req, res) => {
+    const tournamentID = parseInt(req.params.id);
+
+    // if(!Number.isInteger(tournamentID)) {
+    //   console.log('not a vaid id')
+    //   return res.sendStatus(404);
+    // }
+
+    knex
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then(async (results) => {
+        const isOwner = (req.session.userID === results[0].creator_user_id);
+        if(isOwner) {
+          const enrolledPlayers = await playersEnrolled(tournamentID);
+          const isOwner = true;
+          const teamCount = results[0].no_of_teams;
+          const started = results[0].is_started;
+          const isReady = (enrolledPlayers.length === teamCount * 6);
+
+          if (isReady && started) {
+
+            res.render("tournament_view", {
+              teamRoster: getTeamRoster(tournamentID),
+              playerCount: enrolledPlayers.length,
+              tournamentDescr: results[0].description,
+              tournamentName: results[0].name,
+              tournamentID: tournamentID,
+              email: req.session.email,
+              started: started,
+              isOwner: isOwner});
+          } else {
+            res.render("tournament_staging", {
+              playerCount: enrolledPlayers,
+              teamCount: results[0].no_of_teams,
+              tournamentDescr: results[0].description,
+              tournamentName: results[0].name,
+              tournamentID: tournamentID,
+              email: req.session.email,
+              isReady: isReady
+            });
+          }
+        } else {
+          res.redirect(`/tournaments/${tournamentID}`);
+        }
+      })
+  });
+
   router.get("/:id", (req, res) => {
     const tournamentID = parseInt(req.params.id);
     // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
     if (!Number.isInteger(tournamentID)) {
-      console.log('not a vaid id')
+      console.log('not a valid id')
       return res.sendStatus(404);
     }
 
@@ -223,48 +303,48 @@ module.exports = (knex, _) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then( async (results) => {
-        const enrolledCount = await playersEnrolled(tournamentID);
-        const started = results[0].is_started;
+        const enrolledPlayers = await playersEnrolled(tournamentID);
         const teamCount = results[0].no_of_teams;
+        const started = results[0].is_started;
         const creatorUserID = results[0].creator_user_id;
-        const tournamentName = results[0].name;
-        const isReady = (enrolledCount.length === teamCount * 6);
+        const isReady = (enrolledPlayers.length === teamCount * 6);
+        const isOwner = (req.session.userID === creatorUserID);
+
+        if(isOwner) {
+          res.redirect(`/tournaments/${tournamentID}/admin`);
+        }
+
         if (isReady && started) {
+          // initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
           res.render("tournament_view", {
-            teamRoster: getTeamRoster(tournamentID), 
-            playerCount: enrolledCount.length, 
+            teamRoster: getTeamRoster(tournamentID),
+            playerCount: enrolledPlayers.length,
             email: req.session.email,
             started: started,
-            tournamentName: tournamentName
+            tournamentName: results[0].name,
+            tournamentID: tournamentID,
+            isOwner: isOwner
           })
         } else {
-          if (req.session.userID === creatorUserID) {
-            res.render("tournament_staging", {
-              playerCount: enrolledCount,
-              email: req.session.email,
-              tournamentName: tournamentName,
-              teamCount: teamCount,
-              isReady: isReady
-            })
-          } else {
-            res.render("tournament_notready", {
-              tournamentName: tournamentName,
-              playerCount: enrolledCount.length,
-              teamCount: teamCount,
-              email: req.session.email,
-            })
-          }
+          res.render("tournament_notready", {
+            tournamentName: results[0].name,
+            playerCount: enrolledPlayers.length,
+            teamCount: results[0].no_of_teams,
+            email: req.session.email,
+            tournamentID: tournamentID
+          })
         }
       });
   });
 
   router.post("/:id/start", (req, res) => {
   const tournamentID = req.params.id
-    if(!name){
-      // STRETCH: Show 'You did not enter a tournament name' error page
-      res.sendStatus(400);
-      return;
-    }
+    // if(!tournamentID){
+    //   // STRETCH: Show 'You did not enter a tournament name' error page
+    //   res.sendStatus(400);
+    //   return;
+    // }
+    console.log(tournamentID)
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
     knex
@@ -272,9 +352,8 @@ module.exports = (knex, _) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
-        
-        // console.log('Tournament ID, ' + results[0].id);
 
+        // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
@@ -293,12 +372,12 @@ module.exports = (knex, _) => {
                   initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
-                  res.sendStatus(200);
+                  setTournamentStarted(tournamentID);
+                  res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
             });
         }
       });
   });
-
   return router;
 };
