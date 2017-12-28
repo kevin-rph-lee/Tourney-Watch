@@ -133,6 +133,15 @@ module.exports = (knex, _, env) => {
       });
   }
 
+  /**
+   * Checks a string for special characters. Returns false if one is found
+   * @param  {string} string string to be checked
+   * @return {boolean}        returns false if invalid characters found
+   */
+  function checkInvalidCharacters(string){
+    return !(/^[a-zA-Z0-9-#]*$/.test(string));
+  }
+
   // Goes to new tournaments page
   router.get('/new', (req, res) => {
     if (!req.session.email) {
@@ -149,12 +158,14 @@ module.exports = (knex, _, env) => {
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
     const twitchChannel = req.body.twitch_channel;
-    console.log(req.body);
-    if(!name){
+
+    //
+    if(!name || !description ||  checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name) ){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
       return;
     }
+
     knex
       .select("name")
       .from("tournaments")
@@ -355,6 +366,7 @@ module.exports = (knex, _, env) => {
     //   res.sendStatus(400);
     //   return;
     // }
+    //
     console.log(tournamentID)
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
