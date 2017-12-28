@@ -148,6 +148,8 @@ module.exports = (knex, _, env) => {
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
+    const twitchChannel = req.body.twitch_channel;
+    console.log(req.body);
     if(!name){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
@@ -162,7 +164,7 @@ module.exports = (knex, _, env) => {
         // and creates new lines in teams (based on # of teams needed)
         if(results.length === 0) {
           knex
-            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false})
+            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false, twitch_channel: twitchChannel})
             .into('tournaments')
             .returning('id')
             .then((tournamentID)=> {
