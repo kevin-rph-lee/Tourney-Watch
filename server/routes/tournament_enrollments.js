@@ -29,6 +29,18 @@ module.exports = (knex, owjs) => {
     }, 0);
   }
 
+  function playersEnrolled(tournamentID){
+    return knex
+      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+      .from("tournament_enrollments")
+      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .where({tournament_id: tournamentID})
+      .then((result) => {
+        return result
+      });
+  }
+
+
   /**
    * Provides a sorted array of each player's most played (by time) role class
    * from most to least
@@ -70,37 +82,38 @@ module.exports = (knex, owjs) => {
     return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
-  router.get("/:id/new", (req, res) => {
+  router.get("/:id/enroll", (req, res) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
     knex
-      .select("battlenet_id, email")
+      .select("battlenet_id", "email")
       .from("users")
-      .where({id: userID})
+      .where({id: currUserID})
       .then((currUser) => {
         const currBattlenetID = currUser[0].battlenet_id;
         const currEmail = currUser[0].email;
         knex
-          .select("users.battlenet_id", "id", "is_started", "creator_user_id", "no_of_teams", "name")
+          .select("users.battlenet_id", "tournaments.id", "is_started", "creator_user_id", "no_of_teams", "name", "description")
           .from("tournaments")
           .innerJoin("users", "users.id", "tournaments.creator_user_id")
-          .where({id: tournamentID})
+          .where({"tournaments.id": tournamentID})
           .then( async (results) => {
             const enrolledPlayers = await playersEnrolled(tournamentID);
+
             const started = results[0].is_started;
             const teamCount = results[0].no_of_teams;
             const creatorUserID = results[0].creator_user_id;
             const tournamentName = results[0].name;
             const tournamentDescr = results[0].description;
             const isReady = (enrolledPlayers.length === teamCount * 6);
-             
+
             res.render("tournament_enroll", {
               email: currEmail,
               teamCount: teamCount,
               tournamentID: tournamentID,
               tournamentName: tournamentName,
               tournamentDescr: tournamentDescr,
-              tournamentCreator: results[0].users.battlenet_id,
+              tournamentCreator: currBattlenetID,
               isReady: isReady
             })
           })
@@ -157,7 +170,7 @@ module.exports = (knex, owjs) => {
       // res.sendStatus(200);
       res.render('tournament_enroll', {email: req.session.email, name: name, description: description, teamCount: teamCount, tournamentID: req.params.id})
     });
-    
+
   });
 
   return router;

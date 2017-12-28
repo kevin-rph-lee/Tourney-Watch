@@ -33,6 +33,13 @@ module.exports = (knex, _, env) => {
     return teamAssignments;
   }
 
+  function setTournamentStarted(tournamentID){
+    knex("tournaments")
+        .where({"id": tournamentID})
+        .update({"is_started": true})
+        .then(() => {});
+  }
+
   /**
    * Counts how many support type players
    *
@@ -236,7 +243,7 @@ module.exports = (knex, _, env) => {
 
   router.get("/:id/admin", (req, res) => {
     const tournamentID = parseInt(req.params.id);
-    
+
     // if(!Number.isInteger(tournamentID)) {
     //   console.log('not a vaid id')
     //   return res.sendStatus(404);
@@ -256,7 +263,7 @@ module.exports = (knex, _, env) => {
           const isReady = (enrolledPlayers.length === teamCount * 6);
 
           if (isReady && started) {
-            initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
+
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
@@ -306,7 +313,7 @@ module.exports = (knex, _, env) => {
         if(isOwner) {
           res.redirect(`/tournaments/${tournamentID}/admin`);
         }
-        
+
         if (isReady && started) {
           // initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
           res.render("tournament_view", {
@@ -365,6 +372,7 @@ module.exports = (knex, _, env) => {
                   initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
+                  setTournamentStarted(tournamentID);
                   res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
             });
