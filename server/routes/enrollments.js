@@ -112,10 +112,8 @@ module.exports = (knex, owjs) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
     
-    console.log('i am currUserID', currUserID)
     if (!currUserID) {
       // Figure out a better way to handle this. 
-      console.log('i should be printed!!')
       res.redirect('/users/new');
     } else {
       knex
@@ -123,6 +121,7 @@ module.exports = (knex, owjs) => {
       .from("users")
       .where({id: currUserID})
       .then((currUser) => {
+        console.log(currUser)
         const currBattlenetID = currUser[0].battlenet_id;
         const currEmail = currUser[0].email;
         knex
