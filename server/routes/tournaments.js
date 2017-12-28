@@ -33,7 +33,7 @@ module.exports = (knex, _, env) => {
     return teamAssignments;
   }
 
-  function setTournamentStarted(tournamnetID){
+  function setTournamentStarted(tournamentID){
     knex("tournaments")
         .where({"id": tournamentID})
         .update({"is_started": true})
@@ -372,7 +372,7 @@ module.exports = (knex, _, env) => {
                   initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
                   const teamAssigned = assignPlayersToTeams(playersArray, teamArray);
                   assignToTeams(teamAssigned);
-                  setTournamentStarted(tournamnetID);
+                  setTournamentStarted(tournamentID);
                   res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
             });

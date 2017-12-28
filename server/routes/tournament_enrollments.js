@@ -82,13 +82,13 @@ module.exports = (knex, owjs) => {
     return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
   }
 
-  router.get("/:id/enrolle", (req, res) => {
+  router.get("/:id/enroll", (req, res) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
     knex
       .select("battlenet_id", "email")
       .from("users")
-      .where({id: userID})
+      .where({id: currUserID})
       .then((currUser) => {
         const currBattlenetID = currUser[0].battlenet_id;
         const currEmail = currUser[0].email;
@@ -99,6 +99,7 @@ module.exports = (knex, owjs) => {
           .where({"tournaments.id": tournamentID})
           .then( async (results) => {
             const enrolledPlayers = await playersEnrolled(tournamentID);
+
             const started = results[0].is_started;
             const teamCount = results[0].no_of_teams;
             const creatorUserID = results[0].creator_user_id;
@@ -112,7 +113,7 @@ module.exports = (knex, owjs) => {
               tournamentID: tournamentID,
               tournamentName: tournamentName,
               tournamentDescr: tournamentDescr,
-              tournamentCreator: results[0].users.battlenet_id,
+              tournamentCreator: currBattlenetID,
               isReady: isReady
             })
           })
