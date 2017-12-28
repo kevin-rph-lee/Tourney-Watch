@@ -334,7 +334,7 @@ module.exports = (knex, _, env) => {
         }
 
         if (isReady && started) {
-          // initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
+          console.log('if you see me i am ready and have started')
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
@@ -347,6 +347,7 @@ module.exports = (knex, _, env) => {
             twitchName: twitchName
           })
         } else {
+          console.log("if you see me i am not started and am not ready, or both")
           res.render("tournament_notready", {
             tournamentName: results[0].name,
             playerCount: enrolledPlayers.length,

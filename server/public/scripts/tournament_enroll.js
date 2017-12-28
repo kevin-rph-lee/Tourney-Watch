@@ -2,9 +2,9 @@ $(document).ready(function () {
   $(".enroll-me").on('click', function (event) {
     $.ajax({
       type: "POST",
-      url: "/tournaments/" + tournamentID + "/enroll",
+      url: "/enrollments/" + tournamentID + "/enroll",
       success: function () {
-        $("#new-tournament-form").html("Enrolled! Created!");
+        $(".container").html(`<h3> Check out the tournament here: <a href="/tournaments/${tournamentID}">Tournament Link</a> </h3>`);
       }
     })
   })
