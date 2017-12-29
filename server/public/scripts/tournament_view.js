@@ -18,7 +18,7 @@ $(document).ready(function () {
         teamRoster[teamNames[t]].forEach((user) => {
           $(`[data-team-id="${teamNames[t]}"`).append(`
           <div class="battlenetid">${user.battlenet_id}
-            <span class="tooltiptext">${user.battlenet_id}</span>
+            <span class="tooltiptext">Games Won: ${user.games_won} </span>
           </div>`)
         })
     })
