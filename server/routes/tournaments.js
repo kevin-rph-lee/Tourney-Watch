@@ -55,7 +55,6 @@ module.exports = (knex, _, env) => {
       }
       // TO DO: possible refactor?
       (key[roleChoice] === "support") ? count++ : 0;
-
     });
     return count;
   }

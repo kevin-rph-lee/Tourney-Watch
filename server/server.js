@@ -60,53 +60,80 @@ function playersEnrolled(tournamentID){
     });
 }
 
-
-// Home page, passes along whis logged in as the 'login' variable
-app.get('/', (req, res) => {
-  const email = req.session.email
-  // check if they own any tournaments
+function asOwnerListing(email) {
+  const asOwnerList = [];
   knex
     .select("tournaments.id", "name", "is_started",)
     .from("tournaments")
     .innerJoin("users", "users.id", "tournaments.creator_user_id")
     .where({email: email})
     .then( async (asOwner) => {
-      if(asOwner.length === 0) {
-        console.log('does not own any tourneys')
-      } else {
-        asOwner.forEach(async(tournament) => {
-          const enrolledPlayers = await playersEnrolled(tournament.tournament_id)
-          tournament.enrolledPlayers = enrolledPlayers.length
-          console.log(tournament);
-        })
-      }
-
-
-
-    knex
-      .select("tournament_id", "tournaments.name", "tournaments.is_started")
-      .from("enrollments")
-      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .innerJoin("users", "users.id", "enrollments.user_id")
-      .where({email: email})
-      .then((asPlayer) => {
-        if(asPlayer.length === 0) {
-          console.log('is not part of any tourneys')
-        } else {
-          let asPlayerList = [];
-          asPlayer.forEach(async(tournament) => {
-            const enrolledPlayers = await playersEnrolled(tournament.tournament_id)
-            tournament.enrolledPlayers = enrolledPlayers.length
-            asPlayerList.push(tournament);
-          })
-          console.log(asPlayerList);
+      if(asOwner.length !== 0) {
+        for (let t = 0; t < asOwner.length; t++) {
+          const enrolledPlayers = await playersEnrolled(asOwner[t].tournament_id);
+          asOwner[t].enrolledPlayers = enrolledPlayers.length;
+          asOwnerList.push(asOwner[t]);
         }
-      })
-  })
+      }
+      console.log(asOwnerList)
+      return asOwnerList
+    });
+}
 
+async function asPlayerListing(email) {
+  const asPlayerList = [];
+  await knex
+    .select("tournament_id", "tournaments.name", "tournaments.is_started")
+    .from("enrollments")
+    .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+    .innerJoin("users", "users.id", "enrollments.user_id")
+    .where({email: email})
+    .then( async (asPlayer) => {
+        for (let t = 0; t < asPlayer.length; t++) {
+          const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+          asPlayer[t].enrolledPlayers = enrolledPlayers.length;
+          asPlayerList.push(asPlayer[t]);
+        }
+        return asPlayerList
+      })   
+}
 
-  // check which tournaments they are a part of
-  res.render('index', {email: req.session.email});
+// Home page, passes along whis logged in as the 'login' variable
+app.get('/', (req, res) => {
+  const email = req.session.email
+  const asPlayerList = [];
+  const asOwnerList = [];
+  knex
+    .select("tournament_id", "tournaments.name", "tournaments.is_started")
+    .from("enrollments")
+    .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+    .innerJoin("users", "users.id", "enrollments.user_id")
+    .where({email: email})
+    .then( async (asPlayer) => {
+        for (let t = 0; t < asPlayer.length; t++) {
+          const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+          asPlayer[t].enrolledPlayers = enrolledPlayers.length;
+          asPlayerList.push(asPlayer[t]);
+        }
+
+        knex
+          .select("tournaments.id", "name", "is_started",)
+          .from("tournaments")
+          .innerJoin("users", "users.id", "tournaments.creator_user_id")
+          .where({email: email})
+          .then( async (asOwner) => {
+            for (let t = 0; t < asOwner.length; t++) {
+              const enrolledPlayers = await playersEnrolled(asOwner[t].tournament_id);
+              asOwner[t].enrolledPlayers = enrolledPlayers.length;
+              asOwnerList.push(asOwner[t]);
+            }
+            res.render('index', {
+              email: req.session.email, 
+              asPlayerList: asPlayerList, 
+              asOwnerList: asOwnerList
+            });
+          });   
+    })
 });
 
 app.get("/faq", (req, res) => {
