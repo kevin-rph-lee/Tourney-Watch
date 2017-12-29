@@ -70,7 +70,9 @@ function asOwnerListing(email) {
     .then( async (asOwner) => {
       if(asOwner.length !== 0) {
         for (let t = 0; t < asOwner.length; t++) {
-          const enrolledPlayers = await playersEnrolled(asOwner[t].tournament_id);
+          // this won't work with fake data...will have to fake a lot of data
+          // const enrolledPlayers = await playersEnrolled(asOwner[t].tournament_id);
+          const enrolledPlayers = 12;
           asOwner[t].enrolledPlayers = enrolledPlayers.length;
           asOwnerList.push(asOwner[t]);
         }
@@ -90,7 +92,9 @@ async function asPlayerListing(email) {
     .where({email: email})
     .then( async (asPlayer) => {
         for (let t = 0; t < asPlayer.length; t++) {
-          const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+          // this won't work with fake data...will have to fake a lot of data
+          // const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+          const enrolledPlayers = 15;
           asPlayer[t].enrolledPlayers = enrolledPlayers.length;
           asPlayerList.push(asPlayer[t]);
         }
@@ -101,7 +105,11 @@ async function asPlayerListing(email) {
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', (req, res) => {
   const email = req.session.email
-  const asPlayerList = [];
+
+  if(!email){
+    res.render('index', {email: email})
+  } else {
+    const asPlayerList = [];
   const asOwnerList = [];
   knex
     .select("tournament_id", "tournaments.name", "tournaments.is_started")
@@ -111,7 +119,9 @@ app.get('/', (req, res) => {
     .where({email: email})
     .then( async (asPlayer) => {
         for (let t = 0; t < asPlayer.length; t++) {
-          const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+          // this won't work with fake data...will have to fake a lot of data
+          // const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+          const enrolledPlayers = 12;
           asPlayer[t].enrolledPlayers = enrolledPlayers.length;
           asPlayerList.push(asPlayer[t]);
         }
@@ -123,7 +133,9 @@ app.get('/', (req, res) => {
           .where({email: email})
           .then( async (asOwner) => {
             for (let t = 0; t < asOwner.length; t++) {
-              const enrolledPlayers = await playersEnrolled(asOwner[t].tournament_id);
+              // this won't work with fake data...will have to fake a lot of data
+              // const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
+              const enrolledPlayers = 15;
               asOwner[t].enrolledPlayers = enrolledPlayers.length;
               asOwnerList.push(asOwner[t]);
             }
@@ -132,8 +144,9 @@ app.get('/', (req, res) => {
               asPlayerList: asPlayerList, 
               asOwnerList: asOwnerList
             });
-          });   
-    })
+          }); 
+        })
+  }  
 });
 
 app.get("/faq", (req, res) => {

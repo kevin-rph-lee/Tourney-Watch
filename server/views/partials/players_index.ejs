@@ -22,8 +22,8 @@
               <% for (let t = 0; t < asOwnerList.length; t++) { %>
                 <tr>
                   <td><%= asOwnerList[t].name %></td>
-                  <td><%= asOwnerList[t].is_started ? "Readh" : "Waiting" %></td>
-                  <td><a href="/tournaments<%= asOwnerList[t].tournament_id %>">link</a></td>
+                  <td><%= asOwnerList[t].is_started ? "Ready" : "Waiting" %></td>
+                  <td><a href="/tournaments/<%= asOwnerList[t].id %>/admin"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></td>
                 </tr>
               <% } %>
             <% }  else { %>
