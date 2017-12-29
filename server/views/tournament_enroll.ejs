@@ -18,8 +18,7 @@
         <h3> Number of Teams: <%= teamCount %> </h3>
         <h3> Enrolled Players: <%= enrolledPlayers.length %> </h3>
         <% if(isReady) { %>
-        <h3> Tournament is full. </h3>
-        <h3> <a href="/tournaments/<%= tournamentID %>">Tournament Link</a> </h3>
+        <h3> Tournament is full. Check it out <a href="/tournaments/<%= tournamentID %>">here</a> </h3>
         <% } else { %>
         <div class="enroll-now">
           <button class="enroll-me">Enroll in this Tournament!</button>
