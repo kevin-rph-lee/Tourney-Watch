@@ -85,6 +85,7 @@ module.exports = (knex, owjs) => {
   function getPlayersInfo(battlenetID, tournamentID, userID) {
     return owjs.getAll('pc', 'us', battlenetID)
       .then((data) => {
+        console.log('heey')
         const roleRanks = sortTimePlayed(data);
         knex
           .insert({
@@ -184,6 +185,8 @@ module.exports = (knex, owjs) => {
           // STRETCH: Show 'Invalid Battlenet ID' error page
           res.sendStatus(404);
         } else{
+          console.log(results[0].battlenet_id);
+
           await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
           // THIS RESPONSE DOES NOT WORK. NEITHER RENDER OR REDIRECT WORKS
           // User's info is inserted to enrollments though
