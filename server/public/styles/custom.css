@@ -176,3 +176,14 @@ div.enroll-now button:active {
 div.twitch-display{
   text-align: center;
 }
+
+/* Tournament Listing for Individual Users */
+
+.tourney-list{
+  margin: 0 auto;
+}
+
+.sub-header{
+  margin-left: 15px;
+  margin-top: 15px;
+}

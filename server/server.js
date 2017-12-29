@@ -15,7 +15,7 @@ const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
 const bcrypt = require('bcrypt');
-var _ = require('lodash')
+const _ = require('lodash')
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
@@ -52,7 +52,38 @@ app.use('/tournaments', tournamentsRoutes(knex, _, env));
 
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', (req, res) => {
-  
+  const email = req.session.email
+  // check if they own any tournaments
+  knex
+    .select("tournaments.id", "name", "is_started",)
+    .from("tournaments")
+    .innerJoin("users", "users.id", "tournaments.creator_user_id")
+    .where({email: email})
+    .then((asOwner) => {
+      if(asOwner.length === 0) {
+        console.log('does not own any tourneys')
+      }
+    
+    knex
+      .select("tournament_id", "tournaments.name", "tournaments.is_started")
+      .from("enrollments")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .where({email: email})
+      .then((asPlayer) => {
+        if(asPlayer.length === 0) {
+          console.log('is not part of any tourneys')
+        } 
+      
+        console.log('i am asOwner', asOwner)
+        console.log('i am asPlayer', asPlayer)
+
+
+      })
+  })
+
+
+  // check which tournaments they are a part of
   res.render('index', {email: req.session.email});
 });
 
