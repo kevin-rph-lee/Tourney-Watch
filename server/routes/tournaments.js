@@ -33,6 +33,18 @@ module.exports = (knex, _, env) => {
     return teamAssignments;
   }
 
+  /**
+   * Updates the team
+   * @param  {int} userID    userID of user
+   * @param  {int} newTeamID [description]
+   */
+  function userUpdateTeam(userID, newTeamID){
+    knex("users")
+        .where({"id": userID})
+        .update({"team_id": newTeamID})
+        .then(() => {});
+  }
+
   function setTournamentStarted(tournamentID){
     knex("tournaments")
         .where({"id": tournamentID})
@@ -105,13 +117,14 @@ module.exports = (knex, _, env) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
      .where({tournament_id: tournamentID})
      .orderBy("team_id", "ascd")
      .then((playerStats) => {
+      console.log('team roster', playerStats);
        return _.groupBy(playerStats, "team_id");
      });
   }
@@ -405,6 +418,32 @@ module.exports = (knex, _, env) => {
                   res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
             });
+        }
+      });
+  });
+
+  router.post("/:id/swap", (req, res) => {
+  const tournamentID = req.params.id
+    const userID1 = req.body.userID1;
+    const userID2 = req.body.userID2;
+    const teamID1 = req.body.teamID1;
+    const teamID2 = req.body.teamID2;
+    console.log(tournamentID)
+    // Lists players from highest level to lowest, then assigns a team ID #
+    // to each player via an array
+    knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) => {
+
+        // console.log('Tournament ID, ' + results[0].id);
+        if(results.length === 0) {
+          // STRETCH: Show 'No tournament of that name found' error page
+          res.sendStatus(404);
+        } else {
+          userUpdateTeam(userID1, teamID1);
+          userUpdateTeam(userID2, teamID2);
         }
       });
   });
