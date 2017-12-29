@@ -49,6 +49,17 @@ app.use('/tournaments', tournamentsRoutes(knex, _, env));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 
+function playersEnrolled(tournamentID){
+  return knex
+    .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+    .from("enrollments")
+    .innerJoin("users", "users.id", "enrollments.user_id")
+    .where({tournament_id: tournamentID})
+    .then((result) => {
+      return result
+    });
+}
+
 
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', (req, res) => {
@@ -59,11 +70,19 @@ app.get('/', (req, res) => {
     .from("tournaments")
     .innerJoin("users", "users.id", "tournaments.creator_user_id")
     .where({email: email})
-    .then((asOwner) => {
+    .then( async (asOwner) => {
       if(asOwner.length === 0) {
         console.log('does not own any tourneys')
+      } else {
+        asOwner.forEach(async(tournament) => {
+          const enrolledPlayers = await playersEnrolled(tournament.tournament_id)
+          tournament.enrolledPlayers = enrolledPlayers.length
+          console.log(tournament);
+        })
       }
-    
+
+
+
     knex
       .select("tournament_id", "tournaments.name", "tournaments.is_started")
       .from("enrollments")
@@ -73,12 +92,15 @@ app.get('/', (req, res) => {
       .then((asPlayer) => {
         if(asPlayer.length === 0) {
           console.log('is not part of any tourneys')
-        } 
-      
-        console.log('i am asOwner', asOwner)
-        console.log('i am asPlayer', asPlayer)
-
-
+        } else {
+          let asPlayerList = [];
+          asPlayer.forEach(async(tournament) => {
+            const enrolledPlayers = await playersEnrolled(tournament.tournament_id)
+            tournament.enrolledPlayers = enrolledPlayers.length
+            asPlayerList.push(tournament);
+          })
+          console.log(asPlayerList);
+        }
       })
   })
 
