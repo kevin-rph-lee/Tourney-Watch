@@ -246,12 +246,19 @@ module.exports = (knex, _, env) => {
 
   // Updates bracket data in the DB
   router.post("/update", (req, res) => {
-    console.log('Updating DB brackets');
-    console.log(req.body.tournamentID + req.body.bracketData);
-    knex("tournaments")
+    console.log(req.session.email)
+    if (!req.session.email) {
+      // Figure out better way to tell user that they need to sign in to save a score
+      res.sendStatus(400);
+    } else {
+      console.log('Updating DB brackets');
+      console.log(req.body.tournamentID + req.body.bracketData);
+      return knex("tournaments")
         .where({"id": req.body.tournamentID})
         .update({"brackets": req.body.bracketData})
         .then(() => {console.log('Bracket data updated')});
+    }
+    
   });
 
   router.get("/:id/admin", (req, res) => {
