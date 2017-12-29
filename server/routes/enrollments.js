@@ -32,8 +32,8 @@ module.exports = (knex, owjs) => {
   function playersEnrolled(tournamentID){
     return knex
       .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
       .then((result) => {
         return result
@@ -101,7 +101,7 @@ module.exports = (knex, owjs) => {
             'medal_bronze': data.quickplay.global.medals_bronze,
             'games_won': data.quickplay.global.games_won
           })
-          .into("tournament_enrollments")
+          .into("enrollments")
           .then(() => {
             console.log('done using owjs')
           });
@@ -126,7 +126,7 @@ module.exports = (knex, owjs) => {
         const currEmail = currUser[0].email;
         knex
           .select("id")
-          .from("tournament_enrollments")
+          .from("enrollments")
           .where({id: currUserID})
           .then((results) => {
             if (results.length > 0 ) {
@@ -139,27 +139,33 @@ module.exports = (knex, owjs) => {
               .innerJoin("users", "users.id", "tournaments.creator_user_id")
               .where({"tournaments.id": tournamentID})
               .then( async (results) => {
+
                 const enrolledPlayers = await playersEnrolled(tournamentID);
                 const started = results[0].is_started;
                 const teamCount = results[0].no_of_teams;
-                const creatorUserID = results[0].battlenet_id;
+                const tournamentCreator = results[0].battlenet_id;
                 const tournamentName = results[0].name;
                 const tournamentDescr = results[0].description;
                 const isReady = (enrolledPlayers.length === teamCount * 6);
-    
-                res.render("tournament_enroll", {
-                  email: currEmail,
-                  teamCount: teamCount,
-                  tournamentID: tournamentID,
-                  tournamentName: tournamentName,
-                  tournamentDescr: tournamentDescr,
-                  tournamentCreator: creatorUserID,
-                  enrolledPlayers: enrolledPlayers,
-                  isReady: isReady
-                })
+
+                if (currBattlenetID === tournamentCreator) {
+                  // STRETCH: "You cannot play in a tournament you've made"
+                  res.sendStatus(400);
+                } else {
+                  res.render("tournament_enroll", {
+                    email: currEmail,
+                    teamCount: teamCount,
+                    tournamentID: tournamentID,
+                    tournamentName: tournamentName,
+                    tournamentDescr: tournamentDescr,
+                    tournamentCreator: tournamentCreator,
+                    enrolledPlayers: enrolledPlayers,
+                    isReady: isReady
+                  });
+                }
               })
             }
-          })  
+          })
       })
     }
   })
@@ -180,27 +186,10 @@ module.exports = (knex, owjs) => {
         } else{
           await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
           // THIS RESPONSE DOES NOT WORK. NEITHER RENDER OR REDIRECT WORKS
-          // User's info is inserted to tournament_enrollments though
+          // User's info is inserted to enrollments though
           res.render("index", {email: req.session.email})
         }
       });
-  });
-
-  //page for enrolling in a currently existing tournament
-  router.get("/:id/enroll", (req, res) => {
-    knex
-    .select("name", "description", "no_of_teams")
-    .from("tournaments")
-    .where({id: req.params.id})
-    .then((results) => {
-      const name = results[0].name;
-      const description = results[0].description;
-      const teamCount = results[0].no_of_teams;
-      req.session.tournamentID = req.params.id;
-      // res.sendStatus(200);
-      res.render('tournament_enroll', {email: req.session.email, name: name, description: description, teamCount: teamCount, tournamentID: req.params.id})
-    });
-
   });
 
   return router;

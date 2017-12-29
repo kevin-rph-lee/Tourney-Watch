@@ -67,7 +67,7 @@ module.exports = (knex, _, env) => {
    */
   function assignToTeams(teamAssigned) {
     teamAssigned.forEach((p) => {
-      return knex("tournament_enrollments")
+      return knex("enrollments")
         .where({"id": p.id})
         .update({"team_id": p.team_id})
         .then(() => {});
@@ -106,9 +106,9 @@ module.exports = (knex, _, env) => {
   function getTeamRoster(tournamentID){
     return knex
      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-     .from("tournament_enrollments")
-     .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-     .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+     .from("enrollments")
+     .innerJoin("users", "users.id", "enrollments.user_id")
+     .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
      .where({tournament_id: tournamentID})
      .orderBy("team_id", "ascd")
      .then((playerStats) => {
@@ -125,8 +125,8 @@ module.exports = (knex, _, env) => {
   function playersEnrolled(tournamentID){
     return knex
       .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
       .then((result) => {
         return result
@@ -215,9 +215,9 @@ module.exports = (knex, _, env) => {
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-      .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
@@ -383,7 +383,7 @@ module.exports = (knex, _, env) => {
         } else {
           knex
             .select("id", "level")
-            .from("tournament_enrollments")
+            .from("enrollments")
             .where({tournament_id: tournamentID})
             .orderBy("level", "desc")
             .then((playersArray) => {

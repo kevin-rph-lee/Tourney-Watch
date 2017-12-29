@@ -9,7 +9,7 @@ exports.seed = async function(knex, promise){
   const usersTask = (async () => {
     await knex('users').del();
     return knex('users').returning('*').insert([
-      {email:'lil@lil.com',password:'123456',battlenet_id:'Samuel#1066'},
+      {email:'aaaa@aifhiaw.com',password:'123456',battlenet_id:'Samuel#1066'},
       {email:'pfa7u7.n0v7_iin@iw2fv4.com',password:'password',battlenet_id:'Rubye#3562'},
       {email:'28xmm0jsmpsf-@lfkh1eg9.com',password:'password',battlenet_id:'Stormy#691'},
       {email:'g-jmucg@92atcmqm4.com',password:'password',battlenet_id:'Lela#1231'},
@@ -84,8 +84,8 @@ exports.seed = async function(knex, promise){
     const tournament_id = tournament.id;
     console.log('Tournement ID, ' + tournament_id);
     const users = await usersTask;
-    await knex('tournament_enrollments').del();
-    return knex('tournament_enrollments').insert([
+    await knex('enrollments').del();
+    return knex('enrollments').insert([
       {user_id:users[0].id,tournament_id,level:116,first_role:'offense',first_role_time_played:419360598,second_role:'tank',second_role_time_played:140751791,medal_gold:1272,medal_silver:967,medal_bronze:848,games_won:1268},
       {user_id:users[1].id,tournament_id,level:100,first_role:'offense',first_role_time_played:91260000,second_role:'support',second_role_time_played:68400000,medal_gold:688,medal_silver:608,medal_bronze:478,games_won:323},
       {user_id:users[2].id,tournament_id,level:87,first_role:'offense',first_role_time_played:44940000,second_role:'support',second_role_time_played:30600000,medal_gold:342,medal_silver:310,medal_bronze:214,games_won:158},
