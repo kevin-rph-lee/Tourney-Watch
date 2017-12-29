@@ -12,13 +12,29 @@
 
     <main>
       <div class="container">
-        <h1> <%= tournamentName %> </h1>
-        <h3> <%= tournamentDescr %> </h3>
-        <h3> Created by: <%= tournamentCreator %> </h3>
-        <h3> Number of Teams: <%= teamCount %> </h3>
-        <h3> Enrolled Players: <%= enrolledPlayers.length %> </h3>
+        <h1> <%= tournamentName %> Enrollment Page </h1>
+        <table class="table table-striped table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Creator</th>
+              <th scope="col">Total Teams</th>
+              <th scope="col"># of Enrolled</th>
+            </tr>
+          </thead>
+          <tbody class="tournament-details">
+            <tr>
+              <td scope="row"><%= tournamentName %></td>
+              <td scope="row"><%= tournamentDescr %> </td>
+              <td scope="row"><%= tournamentCreator %></td>
+              <td scope="row"><%= teamCount %> teams</td>
+              <td scope="row"><%= enrolledPlayers.length %> Players</td>
+            </tr>
+          </tbody>
+        </table>
         <% if(isReady) { %>
-        <h3> Tournament is full. Check it out <a href="/tournaments/<%= tournamentID %>">here</a> </h3>
+        <h3> This tournament is full. Check it out <a href="/tournaments/<%= tournamentID %>">here</a> </h3>
         <% } else { %>
         <div class="enroll-now">
           <button class="enroll-me">Enroll in this Tournament!</button>

@@ -258,7 +258,6 @@ module.exports = (knex, _, env) => {
         .update({"brackets": req.body.bracketData})
         .then(() => {console.log('Bracket data updated')});
     }
-    
   });
 
   router.get("/:id/admin", (req, res) => {
