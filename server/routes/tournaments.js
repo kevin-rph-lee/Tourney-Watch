@@ -67,7 +67,7 @@ module.exports = (knex, _, env) => {
    */
   function assignToTeams(teamAssigned) {
     teamAssigned.forEach((p) => {
-      return knex("tournament_enrollments")
+      return knex("enrollments")
         .where({"id": p.id})
         .update({"team_id": p.team_id})
         .then(() => {});
@@ -106,9 +106,9 @@ module.exports = (knex, _, env) => {
   function getTeamRoster(tournamentID){
     return knex
      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-     .from("tournament_enrollments")
-     .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-     .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+     .from("enrollments")
+     .innerJoin("users", "users.id", "enrollments.user_id")
+     .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
      .where({tournament_id: tournamentID})
      .orderBy("team_id", "ascd")
      .then((playerStats) => {
@@ -125,12 +125,21 @@ module.exports = (knex, _, env) => {
   function playersEnrolled(tournamentID){
     return knex
       .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
       .then((result) => {
         return result
       });
+  }
+
+  /**
+   * Checks a string for special characters. Returns false if one is found
+   * @param  {string} string string to be checked
+   * @return {boolean}        returns false if invalid characters found
+   */
+  function checkInvalidCharacters(string){
+    return !(/^[a-zA-Z0-9-#]*$/.test(string));
   }
 
   // Goes to new tournaments page
@@ -149,12 +158,14 @@ module.exports = (knex, _, env) => {
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
     const twitchChannel = req.body.twitch_channel;
-    console.log(req.body);
-    if(!name){
+
+    //
+    if(!name || !description ||  checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name) ){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
       return;
     }
+
     knex
       .select("name")
       .from("tournaments")
@@ -204,9 +215,9 @@ module.exports = (knex, _, env) => {
     // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
-      .from("tournament_enrollments")
-      .innerJoin("users", "users.id", "tournament_enrollments.user_id")
-      .innerJoin("tournaments", "tournaments.id", "tournament_enrollments.tournament_id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
@@ -235,12 +246,18 @@ module.exports = (knex, _, env) => {
 
   // Updates bracket data in the DB
   router.post("/update", (req, res) => {
-    console.log('Updating DB brackets');
-    console.log(req.body.tournamentID + req.body.bracketData);
-    knex("tournaments")
+    console.log(req.session.email)
+    if (!req.session.email) {
+      // Figure out better way to tell user that they need to sign in to save a score
+      res.sendStatus(400);
+    } else {
+      console.log('Updating DB brackets');
+      console.log(req.body.tournamentID + req.body.bracketData);
+      return knex("tournaments")
         .where({"id": req.body.tournamentID})
         .update({"brackets": req.body.bracketData})
         .then(() => {console.log('Bracket data updated')});
+    }
   });
 
   router.get("/:id/admin", (req, res) => {
@@ -323,7 +340,7 @@ module.exports = (knex, _, env) => {
         }
 
         if (isReady && started) {
-          // initializeBrackets(teamArray, results[0].no_of_teams, tournamentID);
+          console.log('if you see me i am ready and have started')
           res.render("tournament_view", {
             teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
@@ -336,6 +353,7 @@ module.exports = (knex, _, env) => {
             twitchName: twitchName
           })
         } else {
+          console.log("if you see me i am not started and am not ready, or both")
           res.render("tournament_notready", {
             tournamentName: results[0].name,
             playerCount: enrolledPlayers.length,
@@ -354,6 +372,7 @@ module.exports = (knex, _, env) => {
     //   res.sendStatus(400);
     //   return;
     // }
+    //
     console.log(tournamentID)
     // Lists players from highest level to lowest, then assigns a team ID #
     // to each player via an array
@@ -370,7 +389,7 @@ module.exports = (knex, _, env) => {
         } else {
           knex
             .select("id", "level")
-            .from("tournament_enrollments")
+            .from("enrollments")
             .where({tournament_id: tournamentID})
             .orderBy("level", "desc")
             .then((playersArray) => {
