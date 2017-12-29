@@ -17,9 +17,22 @@ $(document).ready(function () {
         `)
 
         teamRoster[teamNames[t]].forEach((user) => {
-          $(`[data-team-id="${teamNames[t]}"`).append(`<p>${user.battlenet_id}</p>`)
+          $(`[data-team-id="${teamNames[t]}"`).append(`<p class= 'player'>${user.battlenet_id} </p>`)
         })
     })
+
+    $('.player').click(function(e)
+      {
+        console.log($('.selected').length)
+        console.log(e.target.className);
+        console.log(e.target);
+        if($('.selected').length < 3){
+          $(e.target).toggleClass('selected');
+        }
+        if($('.selected').length >= 3 && e.target.className.includes('selected')){
+          $(e.target).toggleClass('selected');
+        }
+      });
   }
 
   function loadCards() {
@@ -34,6 +47,37 @@ $(document).ready(function () {
       });
     }
 
+
+
+
   loadCards();
+
+
+
+
+  //TESTING
+
+    // Get the modal
+  const modal = document.getElementById('swap-players-modal');
+
+  // Get the button that opens the modal
+  const btn = document.getElementById("swap-players-button");
+
+  // When the user clicks on the button, open the modal
+  btn.onclick = function() {
+    if($('.selected').length < 2){
+      alert('must select 2!');
+    }
+    console.log($(".selected").text());
+    console.log($(".selected").prev());
+  }
+
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
 
 });
