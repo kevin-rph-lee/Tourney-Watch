@@ -13,6 +13,7 @@
           <thead>
             <tr>
               <th>Tournament Name</th>
+              <th>Roster</th>
               <th>Status</th>
               <th>Link</th>
             </tr>
@@ -22,6 +23,7 @@
               <% for (let t = 0; t < asOwnerList.length; t++) { %>
                 <tr>
                   <td><%= asOwnerList[t].name %></td>
+                  <td><%= asOwnerList[t].enrolledPlayers %> players</td>
                   <td><%= asOwnerList[t].is_started ? "Ready" : "Waiting" %></td>
                   <td><a href="/tournaments/<%= asOwnerList[t].id %>/admin"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></td>
                 </tr>
@@ -56,7 +58,7 @@
               <% for (let t = 0; t < asPlayerList.length; t++) { %>
                 <tr>
                   <td><%= asPlayerList[t].name %></td>
-                  <td><%= asPlayerList[t].is_started ? "Started" : "Waiting" %></td>
+                  <td><%= asPlayerList[t].is_started ? "In Progress" : "Waiting" %></td>
                   <td><a href="/tournaments/<%= asPlayerList[t].tournament_id %>"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></td>
                 </tr>
               <% } %>

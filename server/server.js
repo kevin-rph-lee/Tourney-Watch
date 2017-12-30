@@ -120,25 +120,29 @@ app.get('/', (req, res) => {
     .then( async (asPlayer) => {
         for (let t = 0; t < asPlayer.length; t++) {
           // this won't work with fake data...will have to fake a lot of data
-          // const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
-          const enrolledPlayers = 12;
-          asPlayer[t].enrolledPlayers = enrolledPlayers.length;
+          const playerRosterCount = await playersEnrolled(asPlayer[t].tournament_id);
+          // const enrolledPlayers = 12;
+          asPlayer[t].enrolledPlayers = playerRosterCount.length;
           asPlayerList.push(asPlayer[t]);
+          
         }
 
         knex
-          .select("tournaments.id", "name", "is_started",)
+          .select("tournaments.id", "name", "is_started", "no_of_teams")
           .from("tournaments")
           .innerJoin("users", "users.id", "tournaments.creator_user_id")
           .where({email: email})
           .then( async (asOwner) => {
             for (let t = 0; t < asOwner.length; t++) {
               // this won't work with fake data...will have to fake a lot of data
-              // const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
-              const enrolledPlayers = 15;
-              asOwner[t].enrolledPlayers = enrolledPlayers.length;
+              const ownerRosterCount = await playersEnrolled(asOwner[t].id);
+              // const enrolledPlayers = 15;
+              asOwner[t].enrolledPlayers = ownerRosterCount.length;
+              // figure out how to allow 3 statuses: waiting, ready, and in progress
               asOwnerList.push(asOwner[t]);
+              console.log(asOwnerList)
             }
+
             res.render('index', {
               email: req.session.email, 
               asPlayerList: asPlayerList, 
