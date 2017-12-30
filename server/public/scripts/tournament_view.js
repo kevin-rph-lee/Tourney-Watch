@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
 
+
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
     $(".tournamentheader").append(`
@@ -54,19 +55,31 @@ $(document).ready(function () {
     });
   }
 
+
+
+  /**
+   *
+   * @param  {[type]}
+   * @return {[type]}
+   */
+  function getPlayerEnrollmentData(bnetID){
+    $.ajax({
+      url: '/enrollments/' + tournamentID + '/enrollmentinfo.json',
+      data: {bnetID: bnetID},
+      method: 'GET'
+    }).done((results) => {
+      console.log(results);
+      return results
+    });
+  }
+
+
+
   $('#swap-players-button').click(function(e){
     const selectedPlayers = $(".selected").text().split(' ');
-    $.ajax({
-      url: '1/swap',
-      data: {bnetID1: selectedPlayers[0], bnetID2: selectedPlayers[1]},
-      method: 'GET'
-    }).done((playerRoster) => {
-      // console.log(tournamentID);
-      renderTeamCards(playerRoster);
-    });
+    console.log('hittin the button');
+
   });
-
-
 
 
   loadCards();
@@ -83,7 +96,7 @@ $(document).ready(function () {
   const btn = document.getElementById("swap-modal-button");
 
   // When the user clicks on the button, open the modal
-  btn.onclick = function() {
+  btn.onclick = async function() {
 
 
     if($('.selected').length < 2){
@@ -93,28 +106,43 @@ $(document).ready(function () {
     modal.style.display = "block";
 
     //TO DO - find a way to use this and grab BOTH selected
-    console.log($('.selected').data());
+    // console.log($('.selected').data());
 
 
     const selectedPlayers = $(".selected").text().split(' ');
-    console.log(selectedPlayers[0] + ' ' + selectedPlayers[1]);
-    $.ajax({
-        url: '/tournaments/cards.json',
-        data: {tournamentID: tournamentID},
-        method: 'GET'
-      }).done((playerRoster) => {
-        //TO DO: there's gotta be a better way to do this....
-        for(let i in playerRoster){
-          // console.log(playerRoster[i]);
-          for(let y in playerRoster[i]){
-            // console.log(playerRoster[i][y]);
-            if(selectedPlayers[0] === playerRoster[i][y].battlenet_id || selectedPlayers[1] === playerRoster[i][y].battlenet_id){
-              // console.log('yarp!');
-              $('.swap-players-container').append(`<h1>${playerRoster[i][y].battlenet_id}</h1><p>${playerRoster[i][y].first_role}<p>`);
-            }
-          }
-        }
-      });
+
+    await const player1 = getPlayerEnrollmentData(selectedPlayers[0]);
+    await const player2 = getPlayerEnrollmentData(selectedPlayers[1]);
+
+
+    // console.log(player1.battlenet_id);
+    // $('.swap-players-container').append(`
+    //   <
+    //   <h1>${playerRoster[i][y].battlenet_id}</h1><p>${playerRoster[i][y].first_role}<p>
+
+
+    // `);
+
+
+
+    // console.log(selectedPlayers[0] + ' ' + selectedPlayers[1]);
+    // $.ajax({
+    //     url: '/tournaments/cards.json',
+    //     data: {tournamentID: tournamentID},
+    //     method: 'GET'
+    //   }).done((playerRoster) => {
+    //     //TO DO: there's gotta be a better way to do this....
+    //     for(let i in playerRoster){
+    //       // console.log(playerRoster[i]);
+    //       for(let y in playerRoster[i]){
+    //         // console.log(playerRoster[i][y]);
+    //         if(selectedPlayers[0] === playerRoster[i][y].battlenet_id || selectedPlayers[1] === playerRoster[i][y].battlenet_id){
+    //           // console.log('yarp!');
+    //           $('.swap-players-container').append(`<h1>${playerRoster[i][y].battlenet_id}</h1><p>${playerRoster[i][y].first_role}<p>`);
+    //         }
+    //       }
+    //     }
+    //   });
 
   }
 

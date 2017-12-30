@@ -176,30 +176,16 @@ module.exports = (knex, owjs) => {
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
   router.get("/:id/enrollmentinfo.json", (req, res) => {
-    console.log(req.query);
-
-    // knex
-    //   .select('id')
-    //   .from('tournaments')
-    //   .where({id: req.params.id})
-    //   .then((results) => {
-    //     if(results.length ===0){
-    //       res.sendStatus(404);
-    //     } else{
-    //       console.log('Im here');
-    //       knex
-    //         .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role")
-    //         .from("enrollments")
-    //         .innerJoin("users", "users.id", "enrollments.user_id")
-    //         .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-    //         .where({'users.battlenet_id': 1})
-    //         .then((playerStats) => {
-    //           res.send(playerStats);
-    //         });
-
-
-    //     }
-    //   });
+    knex
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .where({'users.battlenet_id': req.query.bnetID})
+      .then((playerStats) => {
+        // console.log(playerStats[0]);
+        res.send(playerStats[0]);
+      });
 
   });
 

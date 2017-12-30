@@ -264,7 +264,7 @@ module.exports = (knex, _, env) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
-        console.log('roster ', teamRoster);
+        // console.log('roster ',teamRoster);
         res.send(teamRoster);
       });
   });
@@ -453,11 +453,11 @@ module.exports = (knex, _, env) => {
   });
 
   router.post("/:id/swap", (req, res) => {
-    console.log(req.body);
-    // const tournamentID = req.params.id
-    // const bnetID1 = req.body.bnetID1;
-    // const bnetID2 = req.body.bnetID2;
-    // //TO DO, make sure the user is the owner
+    // console.log(req.body);
+    const tournamentID = req.params.id
+    const bnetID1 = req.body.bnetID1;
+    const bnetID2 = req.body.bnetID2;
+    //TO DO, make sure the user is the owner
     // knex
     //   .select("id")
     //   .from("tournaments")
