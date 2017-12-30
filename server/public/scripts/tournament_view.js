@@ -68,8 +68,27 @@ $(document).ready(function () {
     if($('.selected').length < 2){
       alert('must select 2!');
     }
-    console.log($(".selected").text());
-    console.log($(".selected").prev());
+    modal.style.display = "block";
+
+    const selectedPlayers = $(".selected").text().split(' ');
+    console.log(selectedPlayers[0] + ' ' + selectedPlayers[1]);
+    $.ajax({
+        url: '/tournaments/cards.json',
+        data: {tournamentID: tournamentID},
+        method: 'GET'
+      }).done((playerRoster) => {
+        //TO DO: there's gotta be a better way to do this....
+        for(let i in playerRoster){
+          console.log(playerRoster[i]);
+          for(let y in playerRoster[i]){
+            // console.log(playerRoster[i][y]);
+            if(selectedPlayers[0] === playerRoster[i][y].battlenet_id){
+              console.log('yarp!');
+            }
+          }
+        }
+      });
+
   }
 
 
