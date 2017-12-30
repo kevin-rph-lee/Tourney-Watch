@@ -38,12 +38,31 @@ module.exports = (knex, _, env) => {
    * @param  {int} userID    userID of user
    * @param  {int} newTeamID [description]
    */
-  function userUpdateTeam(userID, newTeamID){
-    knex("users")
-        .where({"id": userID})
-        .update({"team_id": newTeamID})
-        .then(() => {});
-  }
+  function swapTeams(bnetID1, bnetID2){
+    //TODO, REFACTOR THIS SHIT!
+    if(bnetID1 === bnetID2){
+      sendStatus(400);
+      return
+    }
+    knex
+     .select("users.id",'users.battlenet_id', "team_id")
+     .from("enrollments")
+     .innerJoin("users", "users.id", "enrollments.user_id")
+     .where({battlenet_id: bnetID1})
+     .orWhere({battlenet_id: bnetID2})
+     .then((results) => {
+      const team1 = results[0].team_id;
+      const team2 = results[1].team_id;
+      const player1ID = results[0].id;
+      const player2ID = results[1].id;
+      if(team1===team2){
+        sendStatus(400);
+      } else {
+        console.log(team1, team2);
+      }
+
+     });
+ }
 
   function setTournamentStarted(tournamentID){
     knex("tournaments")
@@ -424,13 +443,9 @@ module.exports = (knex, _, env) => {
 
   router.post("/:id/swap", (req, res) => {
   const tournamentID = req.params.id
-    const userID1 = req.body.userID1;
-    const userID2 = req.body.userID2;
-    const teamID1 = req.body.teamID1;
-    const teamID2 = req.body.teamID2;
-    console.log(tournamentID)
-    // Lists players from highest level to lowest, then assigns a team ID #
-    // to each player via an array
+    const bnetID1 = req.body.bnetID1;
+    const bnetID2 = req.body.bnetID2;
+    //TO DO, make sure the user is the owner
     knex
       .select("id")
       .from("tournaments")
@@ -442,8 +457,7 @@ module.exports = (knex, _, env) => {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
         } else {
-          userUpdateTeam(userID1, teamID1);
-          userUpdateTeam(userID2, teamID2);
+          swapTeams(bnetID1, bnetID2);
         }
       });
   });
