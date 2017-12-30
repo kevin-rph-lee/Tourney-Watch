@@ -108,12 +108,14 @@ module.exports = (knex, owjs) => {
     });
   }
 
+
+
   router.get("/:id/enroll", (req, res) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
-    
+
     if (!currUserID) {
-      // Figure out a better way to handle this. 
+      // Figure out a better way to handle this.
       // Maybe status 400, with link to register or sign in
       res.redirect('/users/new');
     } else {
@@ -170,6 +172,38 @@ module.exports = (knex, owjs) => {
     }
   })
 
+
+  // Adds a new line in to enrollments for each new player
+  // given that their battlenet ID exists
+  router.get("/:id/enrollmentinfo.json", (req, res) => {
+    console.log(req.query.battlenetID);
+
+    knex
+      .select('id')
+      .from('tournaments')
+      .where({id: req.params.id})
+      .then((results) => {
+        if(results.length ===0){
+          res.sendStatus(404);
+        } else{
+          console.log('Im here');
+          knex
+            .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role")
+            .from("enrollments")
+            .innerJoin("users", "users.id", "enrollments.user_id")
+            .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+            .where({'users.battlenet_id': 1})
+            .then((playerStats) => {
+              res.send(playerStats);
+            });
+
+
+        }
+      });
+
+  });
+
+
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
   router.post("/:id/enroll/", (req, res) => {
@@ -191,6 +225,8 @@ module.exports = (knex, owjs) => {
         }
       });
   });
+
+
 
   return router;
 };

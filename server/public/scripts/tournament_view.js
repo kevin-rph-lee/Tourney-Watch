@@ -97,6 +97,7 @@ $(document).ready(function () {
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
       if (event.target == modal) {
+        $('.swap-players-container').empty();
           modal.style.display = "none";
       }
   }
