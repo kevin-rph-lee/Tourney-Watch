@@ -109,7 +109,7 @@ app.get('/', (req, res) => {
   if(!email){
     res.render('index', {email: email})
   } else {
-    const asPlayerList = [];
+  const asPlayerList = [];
   const asOwnerList = [];
   knex
     .select("tournament_id", "tournaments.name", "tournaments.is_started")
@@ -119,9 +119,7 @@ app.get('/', (req, res) => {
     .where({email: email})
     .then( async (asPlayer) => {
         for (let t = 0; t < asPlayer.length; t++) {
-          // this won't work with fake data...will have to fake a lot of data
           const playerRosterCount = await playersEnrolled(asPlayer[t].tournament_id);
-          // const enrolledPlayers = 12;
           asPlayer[t].enrolledPlayers = playerRosterCount.length;
           asPlayerList.push(asPlayer[t]);
           
@@ -134,11 +132,9 @@ app.get('/', (req, res) => {
           .where({email: email})
           .then( async (asOwner) => {
             for (let t = 0; t < asOwner.length; t++) {
-              // this won't work with fake data...will have to fake a lot of data
               const ownerRosterCount = await playersEnrolled(asOwner[t].id);
-              // const enrolledPlayers = 15;
               asOwner[t].enrolledPlayers = ownerRosterCount.length;
-              let isReady = (asOwner[t].enrolledPlayers === (asOwner[t].no_of_teams * 6));
+              const isReady = (asOwner[t].enrolledPlayers === (asOwner[t].no_of_teams * 6));
 
               if (!isReady) {
                 asOwner[t].status = "Waiting";
