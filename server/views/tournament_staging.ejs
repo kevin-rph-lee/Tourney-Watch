@@ -14,14 +14,43 @@
     <main>
         <div class="tournamentheader">
             <!-- Tournament Name gets appended here from App.js -->
+            <h1><%= tournamentName %></h1>
         </div>
 
-        <div>
+        <div class="">
 
             <!-- BUTTON GO OFF -->
             <!-- <button class="start-tournament">Start Tournament</button> -->
-            <form method="POST" action="/tournaments/<%= tournamentID %>/start">
-            <input type="submit" value="Start Tournament-test">
+            <form method="POST" action="/tournaments/<%= tournamentID %>/start" class="start-tournament">
+            <button type="submit" value="Start Tournament">Start Tournament</button>
+            </form>
+
+            <form data-target="#share" class="start-tournament">
+            <button data-target="#share" value="Share" data-toggle="toggle">Share</button>
+
+                <div id="share" class="">
+                <!-- fix share url once we put on heroku or something. 
+                Twitter works right now, reddit might work, facebook does not work -->
+                    <i class="fa fa-clipboard" aria-hidden="true" title="Copy to Clipboard"></i>
+                    <i class="fa fa-envelope-o" aria-hidden="true" title="Send via Email"></i>
+                    
+                    <a href="http://reddit.com/submit?url=example.org" target="_blank">
+                        <i class="fa fa-reddit-square" aria-hidden="true" title="Share to Reddit"></i>
+                    </a>
+    
+                    <a href="https://twitter.com/intent/tweet?text=Overwatch%20Tournament&amp;url=https%3A%2F%2Flocalhost%3A8080%2Ftournaments%2F<%=tournamentID%>%2F" target="_blank">
+                        <i class="fa fa-twitter-square" aria-hidden="true" title="Tweet it"></i>
+                    </a>
+                    
+                    
+                    
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank">
+                        <i class="fa fa-facebook-square" aria-hidden="true" title="Share to Facebook"></i>
+                    </a>
+
+                </div>
+            </form>
+            
         </div>
 
         <h3>Players Registered</h3>

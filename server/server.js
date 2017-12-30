@@ -60,55 +60,14 @@ function playersEnrolled(tournamentID){
     });
 }
 
-function asOwnerListing(email) {
-  const asOwnerList = [];
-  knex
-    .select("tournaments.id", "name", "is_started",)
-    .from("tournaments")
-    .innerJoin("users", "users.id", "tournaments.creator_user_id")
-    .where({email: email})
-    .then( async (asOwner) => {
-      if(asOwner.length !== 0) {
-        for (let t = 0; t < asOwner.length; t++) {
-          // this won't work with fake data...will have to fake a lot of data
-          // const enrolledPlayers = await playersEnrolled(asOwner[t].tournament_id);
-          const enrolledPlayers = 12;
-          asOwner[t].enrolledPlayers = enrolledPlayers.length;
-          asOwnerList.push(asOwner[t]);
-        }
-      }
-      console.log(asOwnerList)
-      return asOwnerList
-    });
-}
-
-async function asPlayerListing(email) {
-  const asPlayerList = [];
-  await knex
-    .select("tournament_id", "tournaments.name", "tournaments.is_started")
-    .from("enrollments")
-    .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-    .innerJoin("users", "users.id", "enrollments.user_id")
-    .where({email: email})
-    .then( async (asPlayer) => {
-        for (let t = 0; t < asPlayer.length; t++) {
-          // this won't work with fake data...will have to fake a lot of data
-          // const enrolledPlayers = await playersEnrolled(asPlayer[t].tournament_id);
-          const enrolledPlayers = 15;
-          asPlayer[t].enrolledPlayers = enrolledPlayers.length;
-          asPlayerList.push(asPlayer[t]);
-        }
-        return asPlayerList
-      })   
-}
-
 // Home page, passes along whis logged in as the 'login' variable
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   const email = req.session.email
 
   if(!email){
     res.render('index', {email: email})
   } else {
+
   const asPlayerList = [];
   const asOwnerList = [];
   knex
@@ -118,41 +77,38 @@ app.get('/', (req, res) => {
     .innerJoin("users", "users.id", "enrollments.user_id")
     .where({email: email})
     .then( async (asPlayer) => {
-        for (let t = 0; t < asPlayer.length; t++) {
-          const playerRosterCount = await playersEnrolled(asPlayer[t].tournament_id);
-          asPlayer[t].enrolledPlayers = playerRosterCount.length;
-          asPlayerList.push(asPlayer[t]);
-          
-        }
-
-        knex
-          .select("tournaments.id", "name", "is_started", "no_of_teams")
-          .from("tournaments")
-          .innerJoin("users", "users.id", "tournaments.creator_user_id")
-          .where({email: email})
-          .then( async (asOwner) => {
-            for (let t = 0; t < asOwner.length; t++) {
-              const ownerRosterCount = await playersEnrolled(asOwner[t].id);
-              asOwner[t].enrolledPlayers = ownerRosterCount.length;
-              const isReady = (asOwner[t].enrolledPlayers === (asOwner[t].no_of_teams * 6));
-
-              if (!isReady) {
-                asOwner[t].status = "Waiting";
-              } else if (isReady && asOwner[t].is_started) {
-                asOwner[t].status = "In Progress";
-              } else {
-                asOwner[t].status = "Ready";
-              }
-              asOwnerList.push(asOwner[t]);
+      for (let t = 0; t < asPlayer.length; t++) {
+        const playerRosterCount = await playersEnrolled(asPlayer[t].tournament_id);
+        asPlayer[t].enrolledPlayers = playerRosterCount.length;
+        asPlayerList.push(asPlayer[t]);
+      }
+      knex
+        .select("tournaments.id", "name", "is_started", "no_of_teams")
+        .from("tournaments")
+        .innerJoin("users", "users.id", "tournaments.creator_user_id")
+        .where({email: email})
+        .then( async (asOwner) => {
+          for (let t = 0; t < asOwner.length; t++) {
+            const ownerRosterCount = await playersEnrolled(asOwner[t].id);
+            asOwner[t].enrolledPlayers = ownerRosterCount.length;
+            const isReady = (asOwner[t].enrolledPlayers === (asOwner[t].no_of_teams * 6));
+            if (!isReady) {
+              asOwner[t].status = "Waiting";
+            } else if (isReady && asOwner[t].is_started) {
+              asOwner[t].status = "In Progress";
+            } else {
+              asOwner[t].status = "Ready";
             }
+            asOwnerList.push(asOwner[t]);
+          }
 
-            res.render('index', {
-              email: req.session.email, 
-              asPlayerList: asPlayerList, 
-              asOwnerList: asOwnerList
-            });
-          }); 
-        })
+          res.render('index', {
+            email: req.session.email, 
+            asPlayerList: asPlayerList, 
+            asOwnerList: asOwnerList
+          });
+        }); 
+      })
   }  
 });
 

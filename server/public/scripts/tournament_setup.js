@@ -29,4 +29,18 @@ $(document).ready(function () {
 
   loadTable();
 
+
+  $("[data-toggle='toggle']").click(function() {
+    const selector = $(this).data("target");
+    $(selector).toggleClass('in');
+  });
+
+  $(".fa-clipboard").click(function() {
+    // const shareLink = $(this).data("link");
+    // shareLink.select()
+    // document.execCommand("Copy");
+    // alert("copied!");
+    
+  })
+
 });

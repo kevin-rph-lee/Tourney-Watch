@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+  // this won't redirect after button is clicked
   $("#new-tournament-form").on('submit', function (event) {
     event.preventDefault();
     var formData = {
@@ -18,4 +19,8 @@ $(document).ready(function () {
       }
     })
   })
+
+  // this is to toggle share button
+
+  
 });
