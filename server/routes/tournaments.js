@@ -55,6 +55,21 @@ module.exports = (knex, _, env) => {
       const team2 = results[1].team_id;
       const player1ID = results[0].id;
       const player2ID = results[1].id;
+      console.log('attempting to swap!');
+      console.log(team1 + ' ' + player1ID + ' ' + results[0].battlenet_id);
+      console.log(team2 + ' ' + player2ID + ' ' + results[1].battlenet_id);
+      knex("enrollments")
+        .where({"user_id": player1ID})
+        .update({"team_id": team2})
+        .then(() => {
+          console.log('swapped!');
+        });
+      knex("enrollments")
+        .where({"user_id": player2ID})
+        .update({"team_id": team1})
+        .then(() => {
+          console.log('swapped!');
+        });
 
      });
  }
@@ -138,7 +153,7 @@ module.exports = (knex, _, env) => {
      .where({tournament_id: tournamentID})
      .orderBy("team_id", "ascd")
      .then((playerStats) => {
-      console.log('team roster', playerStats);
+      // console.log('team roster', playerStats);
        return _.groupBy(playerStats, "team_id");
      });
   }
@@ -445,14 +460,15 @@ module.exports = (knex, _, env) => {
       .select("id")
       .from("tournaments")
       .where({id: tournamentID})
-      .then((results) => {
+      .then(async(results) => {
 
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
         } else {
-          swapTeams(bnetID1, bnetID2,res);
+          await swapTeams(bnetID1, bnetID2,res);
+          res.sendStatus(200);
         }
       });
   });
