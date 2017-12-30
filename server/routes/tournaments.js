@@ -38,10 +38,10 @@ module.exports = (knex, _, env) => {
    * @param  {int} userID    userID of user
    * @param  {int} newTeamID [description]
    */
-  function swapTeams(bnetID1, bnetID2){
+  function swapTeams(bnetID1, bnetID2,res){
     //TODO, REFACTOR THIS SHIT!
     if(bnetID1 === bnetID2){
-      sendStatus(400);
+      res.sendStatus(400);
       return
     }
     knex
@@ -55,11 +55,6 @@ module.exports = (knex, _, env) => {
       const team2 = results[1].team_id;
       const player1ID = results[0].id;
       const player2ID = results[1].id;
-      if(team1===team2){
-        sendStatus(400);
-      } else {
-        console.log(team1, team2);
-      }
 
      });
  }
@@ -457,7 +452,7 @@ module.exports = (knex, _, env) => {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
         } else {
-          swapTeams(bnetID1, bnetID2);
+          swapTeams(bnetID1, bnetID2,res);
         }
       });
   });
