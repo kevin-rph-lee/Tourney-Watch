@@ -256,7 +256,7 @@ module.exports = (knex, _, env) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -264,6 +264,7 @@ module.exports = (knex, _, env) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
+        console.log('roster ', teamRoster);
         res.send(teamRoster);
       });
   });
@@ -452,25 +453,28 @@ module.exports = (knex, _, env) => {
   });
 
   router.post("/:id/swap", (req, res) => {
-  const tournamentID = req.params.id
-    const bnetID1 = req.body.bnetID1;
-    const bnetID2 = req.body.bnetID2;
-    //TO DO, make sure the user is the owner
-    knex
-      .select("id")
-      .from("tournaments")
-      .where({id: tournamentID})
-      .then(async(results) => {
+    console.log(req.body);
+    // const tournamentID = req.params.id
+    // const bnetID1 = req.body.bnetID1;
+    // const bnetID2 = req.body.bnetID2;
+    // //TO DO, make sure the user is the owner
+    // knex
+    //   .select("id")
+    //   .from("tournaments")
+    //   .where({id: tournamentID})
+    //   .then(async(results) => {
 
-        // console.log('Tournament ID, ' + results[0].id);
-        if(results.length === 0) {
-          // STRETCH: Show 'No tournament of that name found' error page
-          res.sendStatus(404);
-        } else {
-          await swapTeams(bnetID1, bnetID2,res);
-          res.sendStatus(200);
-        }
-      });
+    //     // console.log('Tournament ID, ' + results[0].id);
+    //     if(results.length === 0) {
+    //       // STRETCH: Show 'No tournament of that name found' error page
+    //       res.sendStatus(404);
+    //     } else {
+    //       await swapTeams(bnetID1, bnetID2,res);
+    //       res.sendStatus(200);
+    //     }
+    //   });
   });
+
+
   return router;
 };
