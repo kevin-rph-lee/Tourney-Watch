@@ -138,9 +138,16 @@ app.get('/', (req, res) => {
               const ownerRosterCount = await playersEnrolled(asOwner[t].id);
               // const enrolledPlayers = 15;
               asOwner[t].enrolledPlayers = ownerRosterCount.length;
-              // figure out how to allow 3 statuses: waiting, ready, and in progress
+              let isReady = (asOwner[t].enrolledPlayers === (asOwner[t].no_of_teams * 6));
+
+              if (!isReady) {
+                asOwner[t].status = "Waiting";
+              } else if (isReady && asOwner[t].is_started) {
+                asOwner[t].status = "In Progress";
+              } else {
+                asOwner[t].status = "Ready";
+              }
               asOwnerList.push(asOwner[t]);
-              console.log(asOwnerList)
             }
 
             res.render('index', {

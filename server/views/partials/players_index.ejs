@@ -24,7 +24,7 @@
                 <tr>
                   <td><%= asOwnerList[t].name %></td>
                   <td><%= asOwnerList[t].enrolledPlayers %> players</td>
-                  <td><%= asOwnerList[t].is_started ? "Ready" : "Waiting" %></td>
+                  <td><%= asOwnerList[t].status %></td>
                   <td><a href="/tournaments/<%= asOwnerList[t].id %>/admin"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></td>
                 </tr>
               <% } %>
