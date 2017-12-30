@@ -48,21 +48,24 @@
           </div>
         <!-- Swap players button -->
 
-        <button id="swap-modal-button">Swap players</button>
 
-        <!-- The Modal -->
-        <div id="swap-players-modal" class="modal">
+        <% if (isOwner)  {%>
+          <button id="swap-modal-button">Swap players</button>
 
-          <!-- Modal content -->
-          <div class="modal-content">
-            <h1>Swap players...  are you sure?</h1>
-            <div class="swap-players-container">
+          <!-- The Modal -->
+          <div id="swap-players-modal" class="modal">
 
+            <!-- Modal content -->
+            <div class="modal-content">
+              <h1>Swap players...  are you sure?</h1>
+              <div class="swap-players-container">
+
+              </div>
+              <button id="swap-players-button">Confirm!</button>
             </div>
-            <button id="swap-players-button">Confirm!</button>
-          </div>
 
-        </div>
+          </div>
+        <% } %>
 
       </main>
 
