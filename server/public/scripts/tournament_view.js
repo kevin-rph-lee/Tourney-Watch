@@ -18,17 +18,19 @@ $(document).ready(function () {
 
         teamRoster[teamNames[t]].forEach((user) => {
           //Don't delete extra space TO DO make this...  good.
-          $(`[data-team-id="${teamNames[t]}"`).append(`<p class= 'player' data-user-id = ${user.id}>${user.battlenet_id} </p>`)
+          $(`[data-team-id="${teamNames[t]}"`).append(`<p class= 'player' data-user-id = ${user.id} data-team = ${user.team_id}>${user.battlenet_id} </p>`)
         })
     })
 
+    //If they're the owner, creates event listener to select users to swap
     if(isOwner){
       $('.player').click(function(e){
-        console.log($('.selected').length)
-        console.log(e.target.className);
-        console.log(e.target);
-
-
+        console.log($('.selected').length);
+        console.log($(e.target).data().team);
+        //TO DO fix conditionals to make looks nicer
+        if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
+          return;
+        }
         if($('.selected').length < 3){
           $(e.target).toggleClass('selected');
         }
@@ -90,6 +92,8 @@ $(document).ready(function () {
     }
     modal.style.display = "block";
 
+    //TO DO - find a way to use this and grab BOTH selected
+    console.log($('.selected').data());
 
 
     const selectedPlayers = $(".selected").text().split(' ');
