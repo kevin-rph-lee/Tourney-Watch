@@ -194,11 +194,23 @@ div.twitch-display{
 }
 
 .nav-tabs a{
-  color: white;
+  color: #DDDDDD;
+  padding: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+a.active {
+  background-color: #DDDDDD;
+  color: black;
 }
 
 .fa-arrow-circle-right{
   font-size: 25px;
   padding-left: 2px;
+}
+
+thead.list{
+  font-size:20px
 }
 
