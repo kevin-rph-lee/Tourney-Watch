@@ -67,6 +67,7 @@ $(document).ready(function () {
   btn.onclick = function() {
     if($('.selected').length < 2){
       alert('must select 2!');
+      return;
     }
     modal.style.display = "block";
 
@@ -81,9 +82,10 @@ $(document).ready(function () {
         for(let i in playerRoster){
           console.log(playerRoster[i]);
           for(let y in playerRoster[i]){
-            // console.log(playerRoster[i][y]);
-            if(selectedPlayers[0] === playerRoster[i][y].battlenet_id){
+            console.log(playerRoster[i][y]);
+            if(selectedPlayers[0] === playerRoster[i][y].battlenet_id || selectedPlayers[1] === playerRoster[i][y].battlenet_id){
               console.log('yarp!');
+              $('.swap-players-container').append(`<h1>${playerRoster[i][y].battlenet_id}</h1><p>${playerRoster[i][y].first_role}<p>`);
             }
           }
         }
