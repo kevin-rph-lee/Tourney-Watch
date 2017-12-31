@@ -235,6 +235,18 @@ thead.list{
   height: 45px;
 }
 
+button.start-tournament {
+  color: #fff;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1em;
+  width: 135px;
+  height: 45px;
+}
+
 .start-tournament button:hover { 
   background-color: #191E21;
   color: #F7931D;
