@@ -115,33 +115,33 @@ $(document).ready(function () {
     console.log('----');
 
     //TO DO -make this shit work
-    const selectedPlayers = $(".selected").text().split(' ');
-    const player1 = await  getPlayerEnrollmentData(selectedPlayers[0]);
-    const player2 = await  getPlayerEnrollmentData(selectedPlayers[1]);
-    console.log('battlnet id ', player1);
+    // const selectedPlayers = $(".selected").text().split(' ');
+    // const player1 = await  getPlayerEnrollmentData(selectedPlayers[0]);
+    // const player2 = await  getPlayerEnrollmentData(selectedPlayers[1]);
+    // console.log('battlnet id ', player1);
 
 
 
-    $('.swap-players-container').append(`
+    // $('.swap-players-container').append(`
 
-      <table>
-        <tr>
-          <th>Battlenet ID</th>
-          <th>Role</th>
-          <th>Level</th>
-        </tr>
-        <tr>
-          <td></td>
-          <td>Smith</td>
-          <td>50</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>Jackson</td>
-          <td>94</td>
-        </tr>
-      </table>
-    `);
+    //   <table>
+    //     <tr>
+    //       <th>Battlenet ID</th>
+    //       <th>Role</th>
+    //       <th>Level</th>
+    //     </tr>
+    //     <tr>
+    //       <td></td>
+    //       <td>Smith</td>
+    //       <td>50</td>
+    //     </tr>
+    //     <tr>
+    //       <td></td>
+    //       <td>Jackson</td>
+    //       <td>94</td>
+    //     </tr>
+    //   </table>
+    // `);
 
 
 
