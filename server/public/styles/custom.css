@@ -27,8 +27,8 @@ p {
   text-align: center;
 }
 
-  ::-webkit-scrollbar { 
-    display: none; 
+  ::-webkit-scrollbar {
+    display: none;
 }
 
   main h1 {
@@ -166,7 +166,7 @@ div.enroll-now button{
   font-family: Helvetica,sans-serif;
 }
 
-div.enroll-now button:active { 
+div.enroll-now button:active {
   background-color: #191E21;
   color: #F7931D;
   cursor: pointer;
@@ -175,4 +175,9 @@ div.enroll-now button:active {
 
 div.twitch-display{
   text-align: center;
+}
+
+
+p.selected {
+  color:red;
 }
