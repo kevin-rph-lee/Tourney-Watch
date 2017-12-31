@@ -1,20 +1,40 @@
 
 $(document).ready(function () {
 
+  // Will function for when a tournament has not started, or
+  // if a person drops out after a tournament has started
   function renderPlayerCount(playerRoster) {
     const playerNames = playerRoster.null;
-    Object.keys(playerNames).forEach((i) => {
-      console.log(playerNames[i]);
-        $(".player-table-stats").append(`
-          <tr data-player-id="${playerNames[i].battlenet_id}">
-            <td scope="row">${Number([i]) + 1}</td>
-            <td>${playerNames[i].battlenet_id}</td>
-            <td>${playerNames[i].level}</td>
-            <td>${playerNames[i].games_won}</td>
+    // if !playerNames, a person dropped out after
+    // tournament has started
+    if (!playerNames) {
+      let count = 1;
+      Object.keys(playerRoster).forEach((i) => {
+        console.log(playerRoster[i])
+        for (let p = 0; p < playerRoster[i].length; p++) {
+          $(".player-table-stats").append(`
+          <tr data-player-id="${playerRoster[i][p].battlenet_id}">
+            <td scope="row">${count++}</td>
+            <td>${playerRoster[i][p].battlenet_id}</td>
+            <td>${playerRoster[i][p].level}</td>
+            <td>${playerRoster[i][p].games_won}</td>
           </tr>
         </tr>`)
-    })
-
+        }
+      })
+    } else {
+      Object.keys(playerNames).forEach((i) => {
+        console.log(playerNames[i]);
+          $(".player-table-stats").append(`
+            <tr data-player-id="${playerNames[i].battlenet_id}">
+              <td scope="row">${Number([i]) + 1}</td>
+              <td>${playerNames[i].battlenet_id}</td>
+              <td>${playerNames[i].level}</td>
+              <td>${playerNames[i].games_won}</td>
+            </tr>
+          </tr>`)
+      })
+    }
   }
   
   function loadTable() {

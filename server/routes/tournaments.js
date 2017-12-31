@@ -296,6 +296,8 @@ module.exports = (knex, _, env) => {
               twitchName: twitchName,
               isOwner: isOwner})
           } else {
+            console.log('HEEEEY')
+            console.log()
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
               teamCount: results[0].no_of_teams,

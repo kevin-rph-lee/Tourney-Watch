@@ -260,10 +260,10 @@ button.start-tournament:hover {
 }
 
 #share {
-  -webkit-transition: width 1s ease;
-  -moz-transition: width 1s ease;
-  -o-transition: width 1s ease;
-  transition: width 1s ease;
+  -webkit-transition: width 0.65s ease;
+  -moz-transition: width 0.65s ease;
+  -o-transition: width 0.65s ease;
+  transition: width 0.65s ease;
   
   display: inline-block;
   overflow: hidden;
