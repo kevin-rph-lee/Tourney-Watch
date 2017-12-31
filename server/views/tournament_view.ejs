@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">
   <script>
       window.tournamentID = <%=tournamentID%>;
       window.isOwner = <%= isOwner %>;
@@ -14,6 +14,7 @@
       <script src="/scripts/bracketgenerator.js"></script>
       <script src="/vendor/jquery.bracket.min.js"></script>
       <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" h/>
+      <link href="/styles/tournament_view.css" rel="stylesheet" type="text/css" h/>
       <main class="container">
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
@@ -34,7 +35,7 @@
           <container>
                   <center>
                   <div id="save" style="display: inline-block;">
-  
+
                   </div>
               </center>
           </container>
@@ -48,10 +49,36 @@
           <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
           <div class="container">
               <div class="row">
-              
-              </div> 
+
+              </div>
           </div>
+        <!-- Swap players button -->
+
+
+        <% if (isOwner)  {%>
+          <button id="swap-modal-button">Swap players</button>
+
+          <!-- The Modal -->
+          <div id="swap-players-modal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <h1>Placeholder text</h1>
+              <div class="swap-players-container">
+
+              </div>
+              <button id="swap-players-button">Confirm!</button>
+            </div>
+
+          </div>
+        <% } %>
+
       </main>
+
+
+
+
+
   </body>
 
 </html>
