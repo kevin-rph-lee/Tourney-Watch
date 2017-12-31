@@ -17,6 +17,10 @@
       <main>
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
+          
+        </div>
+        <div class="share-button">
+          <% include partials/share_button %>
         </div>
         <% if (twitchChannel !== null) { %>
         <h3> <%= twitchName %> </h3>
@@ -24,6 +28,8 @@
           <%- twitchChannel %>
         </div>
         <% } %>
+        
+
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <container>
                   <center>

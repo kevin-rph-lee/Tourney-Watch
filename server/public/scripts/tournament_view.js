@@ -36,4 +36,8 @@ $(document).ready(function () {
 
   loadCards();
 
+  $("[data-toggle='toggle']").click(function() {
+    const selector = $(this).data("target");
+    $(selector).toggleClass('in');
+  });
 });
