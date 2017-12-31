@@ -380,14 +380,11 @@ module.exports = (knex, _, env) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
-
+        console.log(results)
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0 ) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
-        } else if(results.length !== results.no_of_teams * 6) {
-          // STRETCH: Show 'Not Ready' error page
-          res.sendStatus(400);
         } else {
           knex
             .select("id", "level")
@@ -395,7 +392,9 @@ module.exports = (knex, _, env) => {
             .where({tournament_id: tournamentID})
             .orderBy("level", "desc")
             .then((playersArray) => {
-              knex
+
+              if (playersArray.length === (results[0].no_of_teams * 6)) {
+                knex
                 .select("id")
                 .from("teams")
                 .where({tournament_id: tournamentID})
@@ -406,6 +405,11 @@ module.exports = (knex, _, env) => {
                   setTournamentStarted(tournamentID);
                   res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
+              } else {
+                // STRETCH: Show 'Not Ready' error page
+                res.sendStatus(400);
+              }
+              
             });
         }
       });
