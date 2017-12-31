@@ -52,6 +52,7 @@ module.exports = (knex, owjs) => {
       res.sendStatus(400);
       return
     }
+
     knex
      .select("users.id",'users.battlenet_id', "team_id")
      .from("enrollments")

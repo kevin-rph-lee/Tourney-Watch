@@ -12,21 +12,25 @@ $(document).ready(function () {
         <div class="card mb-3" style="min-width: 15rem">
           <div class="card-header">${teamNames[t]}</div>
             <div class="card-body" data-team-id="${teamNames[t]}">
-            <span class="tooltiptext">Test text</span>
             </div>
         </div>
         `)
 
+        //space after battlenet_id is required or function will break, do not remove.
         teamRoster[teamNames[t]].forEach((user) => {
-          //Don't delete extra space TO DO make this...  good.
-          $(`[data-team-id="${teamNames[t]}"`).append(`<p class= 'player' data-user-id = ${user.id} data-team = ${user.team_id}>${user.battlenet_id} </p>`)
+          $(`[data-team-id="${teamNames[t]}"`).append(`
+          <div class='container player'>
+            <span data-balloon="Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break data-team = ${user.team_id}>${user.battlenet_id} </span>
+          </div>
+            `)
         })
     })
 
     //If they're the owner, creates event listener to select users to swap
     if(isOwner){
-      $('.player').click(function(e){
-
+      $('span').click(function(e){
+        console.log("clicked")
+        //TO DO make selector more specific ex. select span within div with team id of #
         //TO DO fix conditionals to make looks nicer
         if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
           return;
