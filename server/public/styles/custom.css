@@ -150,6 +150,6 @@ div.twitch-display{
 }
 
 
-p.selected {
-  color:red;
+span.selected {
+  background-color:#F7931D;
 }
