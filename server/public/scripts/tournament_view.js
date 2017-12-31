@@ -17,16 +17,11 @@ $(document).ready(function () {
         `)
 
         teamRoster[teamNames[t]].forEach((user) => {
-<<<<<<< HEAD
           $(`[data-team-id="${teamNames[t]}"`).append(`
           <div class='container'>
             <span data-balloon="Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break>${user.battlenet_id}</span>
           </div>
             `)
-=======
-          //Don't delete extra space TO DO make this...  good.
-          $(`[data-team-id="${teamNames[t]}"`).append(`<p class= 'player' data-user-id = ${user.id} data-team = ${user.team_id}>${user.battlenet_id} </p>`)
->>>>>>> master
         })
     })
 
