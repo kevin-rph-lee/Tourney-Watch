@@ -57,7 +57,6 @@ module.exports = (knex, _, env) => {
       }
       // TO DO: possible refactor?
       (key[roleChoice] === "support") ? count++ : 0;
-
     });
     return count;
   }
@@ -160,15 +159,15 @@ module.exports = (knex, _, env) => {
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
-    const twitchChannel = req.body.twitch_channel;
+    const twitchChannel = req.body.channel_name;
+    console.log(req.body);
 
     //
-    if(!name || !description ||  checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name) ){
+    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
       return;
     }
-
     knex
       .select("name")
       .from("tournaments")
@@ -301,6 +300,8 @@ module.exports = (knex, _, env) => {
               twitchName: twitchName,
               isOwner: isOwner})
           } else {
+            console.log('HEEEEY')
+            console.log()
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
               teamCount: results[0].no_of_teams,
@@ -385,9 +386,9 @@ module.exports = (knex, _, env) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
-
+        console.log(results)
         // console.log('Tournament ID, ' + results[0].id);
-        if(results.length === 0) {
+        if(results.length === 0 ) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
         } else {
@@ -397,7 +398,9 @@ module.exports = (knex, _, env) => {
             .where({tournament_id: tournamentID})
             .orderBy("level", "desc")
             .then((playersArray) => {
-              knex
+
+              if (playersArray.length === (results[0].no_of_teams * 6)) {
+                knex
                 .select("id")
                 .from("teams")
                 .where({tournament_id: tournamentID})
@@ -408,6 +411,11 @@ module.exports = (knex, _, env) => {
                   setTournamentStarted(tournamentID);
                   res.redirect(`/tournaments/${tournamentID}/admin`);
                 });
+              } else {
+                // STRETCH: Show 'Not Ready' error page
+                res.sendStatus(400);
+              }
+              
             });
         }
       });

@@ -15,7 +15,7 @@ const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
 const bcrypt = require('bcrypt');
-var _ = require('lodash')
+const _ = require('lodash')
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
@@ -49,11 +49,67 @@ app.use('/tournaments', tournamentsRoutes(knex, _, env));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 
+function playersEnrolled(tournamentID){
+  return knex
+    .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+    .from("enrollments")
+    .innerJoin("users", "users.id", "enrollments.user_id")
+    .where({tournament_id: tournamentID})
+    .then((result) => {
+      return result
+    });
+}
 
 // Home page, passes along whis logged in as the 'login' variable
-app.get('/', (req, res) => {
-  
-  res.render('index', {email: req.session.email});
+app.get('/', async (req, res) => {
+  const email = req.session.email
+
+  if(!email){
+    res.render('index', {email: email})
+  } else {
+
+  const asPlayerList = [];
+  const asOwnerList = [];
+  knex
+    .select("tournament_id", "tournaments.name", "tournaments.is_started")
+    .from("enrollments")
+    .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+    .innerJoin("users", "users.id", "enrollments.user_id")
+    .where({email: email})
+    .then( async (asPlayer) => {
+      for (let t = 0; t < asPlayer.length; t++) {
+        const playerRosterCount = await playersEnrolled(asPlayer[t].tournament_id);
+        asPlayer[t].enrolledPlayers = playerRosterCount.length;
+        asPlayerList.push(asPlayer[t]);
+      }
+      knex
+        .select("tournaments.id", "name", "is_started", "no_of_teams")
+        .from("tournaments")
+        .innerJoin("users", "users.id", "tournaments.creator_user_id")
+        .where({email: email})
+        .then( async (asOwner) => {
+          for (let t = 0; t < asOwner.length; t++) {
+            const ownerRosterCount = await playersEnrolled(asOwner[t].id);
+            asOwner[t].enrolledPlayers = ownerRosterCount.length;
+            const isReady = (asOwner[t].enrolledPlayers === (asOwner[t].no_of_teams * 6));
+            if (!isReady) {
+              asOwner[t].status = "Waiting";
+            } else if (isReady && asOwner[t].is_started) {
+              asOwner[t].status = "In Progress";
+            } else {
+              asOwner[t].status = "Ready";
+            }
+            asOwnerList.push(asOwner[t]);
+          }
+
+          res.render('index', {
+            email: req.session.email, 
+            asPlayerList: asPlayerList, 
+            asOwnerList: asOwnerList
+          });
+        }); 
+      })
+  }  
 });
 
 app.get("/faq", (req, res) => {
