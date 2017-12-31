@@ -156,7 +156,8 @@ module.exports = (knex, _, env) => {
     const name = req.body.name;
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
-    const twitchChannel = req.body.twitch_channel;
+    const twitchChannel = req.body.channel_name;
+    console.log(req.body);
 
     //
     if(!name || !description || checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name)){
