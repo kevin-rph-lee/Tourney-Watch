@@ -251,7 +251,12 @@ button.start-tournament {
   background-color: #191E21;
   color: #F7931D;
   cursor: pointer;
+}
 
+button.start-tournament:hover { 
+  background-color: #191E21;
+  color: #F7931D;
+  cursor: pointer;
 }
 
 #share {
