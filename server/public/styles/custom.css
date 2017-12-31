@@ -269,7 +269,6 @@ div.share-button {
 
 
 
-
-span.selected {
+div > span.selected {
   background-color:#F7931D;
 }
