@@ -26,8 +26,7 @@ $(document).ready(function () {
     //If they're the owner, creates event listener to select users to swap
     if(isOwner){
       $('.player').click(function(e){
-        console.log($('.selected').length);
-        console.log($(e.target).data().team);
+
         //TO DO fix conditionals to make looks nicer
         if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
           return;
@@ -68,7 +67,7 @@ $(document).ready(function () {
       data: {bnetID: bnetID},
       method: 'GET'
     }).done((results) => {
-      console.log(results);
+      // console.log(results);
       return results
     });
   }
@@ -77,7 +76,13 @@ $(document).ready(function () {
 
   $('#swap-players-button').click(function(e){
     const selectedPlayers = $(".selected").text().split(' ');
-    console.log('hittin the button');
+    $.ajax({
+      url: '/enrollments/' + tournamentID + '/swap',
+      data: {bnetID1: selectedPlayers[0], bnetID2: selectedPlayers[1]},
+      method: 'post'
+    }).done(() => {
+      location.reload();
+    });
 
   });
 
@@ -107,21 +112,36 @@ $(document).ready(function () {
 
     //TO DO - find a way to use this and grab BOTH selected
     // console.log($('.selected').data());
+    console.log('----');
 
-
+    //TO DO -make this shit work
     const selectedPlayers = $(".selected").text().split(' ');
-
-    await const player1 = getPlayerEnrollmentData(selectedPlayers[0]);
-    await const player2 = getPlayerEnrollmentData(selectedPlayers[1]);
-
-
-    // console.log(player1.battlenet_id);
-    // $('.swap-players-container').append(`
-    //   <
-    //   <h1>${playerRoster[i][y].battlenet_id}</h1><p>${playerRoster[i][y].first_role}<p>
+    const player1 = await  getPlayerEnrollmentData(selectedPlayers[0]);
+    const player2 = await  getPlayerEnrollmentData(selectedPlayers[1]);
+    console.log('battlnet id ', player1);
 
 
-    // `);
+
+    $('.swap-players-container').append(`
+
+      <table>
+        <tr>
+          <th>Battlenet ID</th>
+          <th>Role</th>
+          <th>Level</th>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Smith</td>
+          <td>50</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Jackson</td>
+          <td>94</td>
+        </tr>
+      </table>
+    `);
 
 
 

@@ -33,46 +33,7 @@ module.exports = (knex, _, env) => {
     return teamAssignments;
   }
 
-  /**
-   * Updates the team
-   * @param  {int} userID    userID of user
-   * @param  {int} newTeamID [description]
-   */
-  function swapTeams(bnetID1, bnetID2,res){
-    //TODO, REFACTOR THIS SHIT!
-    if(bnetID1 === bnetID2){
-      res.sendStatus(400);
-      return
-    }
-    knex
-     .select("users.id",'users.battlenet_id', "team_id")
-     .from("enrollments")
-     .innerJoin("users", "users.id", "enrollments.user_id")
-     .where({battlenet_id: bnetID1})
-     .orWhere({battlenet_id: bnetID2})
-     .then((results) => {
-      const team1 = results[0].team_id;
-      const team2 = results[1].team_id;
-      const player1ID = results[0].id;
-      const player2ID = results[1].id;
-      console.log('attempting to swap!');
-      console.log(team1 + ' ' + player1ID + ' ' + results[0].battlenet_id);
-      console.log(team2 + ' ' + player2ID + ' ' + results[1].battlenet_id);
-      knex("enrollments")
-        .where({"user_id": player1ID})
-        .update({"team_id": team2})
-        .then(() => {
-          console.log('swapped!');
-        });
-      knex("enrollments")
-        .where({"user_id": player2ID})
-        .update({"team_id": team1})
-        .then(() => {
-          console.log('swapped!');
-        });
 
-     });
- }
 
   function setTournamentStarted(tournamentID){
     knex("tournaments")
@@ -452,28 +413,6 @@ module.exports = (knex, _, env) => {
       });
   });
 
-  router.post("/:id/swap", (req, res) => {
-    // console.log(req.body);
-    const tournamentID = req.params.id
-    const bnetID1 = req.body.bnetID1;
-    const bnetID2 = req.body.bnetID2;
-    //TO DO, make sure the user is the owner
-    // knex
-    //   .select("id")
-    //   .from("tournaments")
-    //   .where({id: tournamentID})
-    //   .then(async(results) => {
-
-    //     // console.log('Tournament ID, ' + results[0].id);
-    //     if(results.length === 0) {
-    //       // STRETCH: Show 'No tournament of that name found' error page
-    //       res.sendStatus(404);
-    //     } else {
-    //       await swapTeams(bnetID1, bnetID2,res);
-    //       res.sendStatus(200);
-    //     }
-    //   });
-  });
 
 
   return router;
