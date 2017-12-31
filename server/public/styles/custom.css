@@ -286,6 +286,10 @@ button.start-tournament:hover {
   margin: 7px 5px 7px 6px;
 }
 
+#share i:hover{
+  color: #dee4e7;
+}
+
 div.share-button {
   text-align: center;
 }

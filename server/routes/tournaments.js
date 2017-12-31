@@ -160,7 +160,7 @@ module.exports = (knex, _, env) => {
     console.log(req.body);
 
     //
-    if(!name || !description || checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name)){
+    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       // STRETCH: Show 'That name has been taken' error page
       res.sendStatus(400);
       return;
