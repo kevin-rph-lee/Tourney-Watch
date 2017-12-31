@@ -27,8 +27,8 @@ p {
   text-align: center;
 }
 
-  ::-webkit-scrollbar { 
-    display: none; 
+  ::-webkit-scrollbar {
+    display: none;
 }
 
   main h1 {
@@ -104,42 +104,12 @@ div.card.mb-3{
   margin: auto;
 }
 
-div.card.mb-3 p{
-  height:10px;
+div.card.mb-3 div.battlenetid{
+  padding-bottom: 10px;
 }
 
 div.card.mb-3 div.card-header {
   background-color: #F7931D;
-}
-
-div.card.mb-3 div.card-body .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 150%;
-  left: 50%;
-  margin-left: -60px;
-}
-
-div.card.mb-3 div.card-body .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: black transparent transparent transparent;
-}
-
-div.card.mb-3 div.card-body:hover .tooltiptext{
-  visibility: visible;
 }
 
 div.row{
@@ -166,13 +136,20 @@ div.enroll-now button{
   font-family: Helvetica,sans-serif;
 }
 
-div.enroll-now button:active { 
+div.enroll-now button:active {
   background-color: #191E21;
   color: #F7931D;
   cursor: pointer;
 
 }
 
+/* Twitch Video Player Centering */
+
 div.twitch-display{
   text-align: center;
+}
+
+
+span.selected {
+  background-color:#F7931D;
 }
