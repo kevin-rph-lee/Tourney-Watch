@@ -381,9 +381,12 @@ module.exports = (knex, _, env) => {
       .then((results) => {
 
         // console.log('Tournament ID, ' + results[0].id);
-        if(results.length === 0) {
+        if(results.length === 0 ) {
           // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
+        } else if(results.length !== results.no_of_teams * 6) {
+          // STRETCH: Show 'Not Ready' error page
+          res.sendStatus(400);
         } else {
           knex
             .select("id", "level")
