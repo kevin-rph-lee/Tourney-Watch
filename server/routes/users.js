@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, bcrypt, cookieSession) => {
+module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   /**
    * Checks a string for special characters. Returns false if one is found
@@ -15,7 +15,13 @@ module.exports = (knex, bcrypt, cookieSession) => {
   }
 
   function checkInvalidbnetID(bnetID){
-
+    owjs.getAll('pc', 'us', bnetID)
+      .then(() => {
+        return false;
+      })
+      .catch((err) => {
+        return true;
+      })
   }
 
 
@@ -32,13 +38,17 @@ module.exports = (knex, bcrypt, cookieSession) => {
   router.post("/new", (req, res) => {
 
     const email = req.body.email.trim().toLowerCase();
-    const password = req.body.password;
-    const battlenetID = req.body.battlenet;
+    const password = req.body.password.trim();
+    const battlenetID = req.body.battlenet.trim();
+
+    //Converting bnet ID into a format that owjs can take
+    const owjsBattlenetID = battlenetID.toLowerCase();
+    owjsBattlenetID.charAt(0).toUppercase();
+    owjsBattlenetID.replace('#', '-');
 
     if(checkInvalidCharacters(battlenetID)){
       return res.sendStatus(400);
     }
-
 
     knex
       .select("email")
@@ -47,18 +57,24 @@ module.exports = (knex, bcrypt, cookieSession) => {
       .then((results) => {
         console.log(results);
         if(results.length === 0){
-          knex
-          .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID})
-          .into('users')
-          .returning('id')
-          .then((results)=>{
-            req.session.userID = results[0];
-            req.session.email = email;
-            req.session.battlenetID = battlenetID;
-            console.log('just registered, am results', results)
-            console.log('IN /NEW', req.session)
-            res.redirect("/");
-          });
+          owjs.getAll('pc', 'us', owjsBattlenetID)
+            .then(() => {
+              knex
+                .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID})
+                .into('users')
+                .returning('id')
+                .then((results)=>{
+                  req.session.userID = results[0];
+                  req.session.email = email;
+                  req.session.battlenetID = battlenetID;
+                  console.log('just registered, am results', results)
+                  console.log('IN /NEW', req.session)
+                  res.redirect("/");
+                });
+            })
+            .catch((err) => {
+              res.sendStatus(400);
+            })
         } else{
           res.sendStatus(400);
         }

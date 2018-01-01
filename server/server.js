@@ -43,7 +43,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount all resource routes
-app.use('/users', usersRoutes(knex, bcrypt));
+app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs));
 app.use('/tournaments', tournamentsRoutes(knex, _, env));
 // app.use('/games', gamesRoutes(knex));
@@ -103,13 +103,13 @@ app.get('/', async (req, res) => {
           }
 
           res.render('index', {
-            email: req.session.email, 
-            asPlayerList: asPlayerList, 
+            email: req.session.email,
+            asPlayerList: asPlayerList,
             asOwnerList: asOwnerList
           });
-        }); 
+        });
       })
-  }  
+  }
 });
 
 app.get("/faq", (req, res) => {
