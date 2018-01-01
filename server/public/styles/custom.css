@@ -124,6 +124,7 @@ div.row{
 }
 
 /* Enroll Button */
+
 div.enroll-now{
   text-align: center;
 }
@@ -149,6 +150,12 @@ div.enroll-now button:active {
 div.twitch-display{
   text-align: center;
 }
+
+.embed-responsive{
+  max-width: 620px;
+  margin: 0 auto;
+}
+
 
 /* Tournament Listing for Individual Users */
 
@@ -186,6 +193,8 @@ a.active {
 thead.list{
   font-size:20px
 }
+
+/* tournament_view buttons */
 
 .staging-buttons{
   text-align: center;
@@ -232,6 +241,8 @@ button.start-tournament:hover {
   cursor: pointer;
 }
 
+/* share button on tournament_view */
+
 #share {
   -webkit-transition: width 0.65s ease;
   -moz-transition: width 0.65s ease;
@@ -267,14 +278,13 @@ div.share-button {
   text-align: center;
 }
 
+/* swap players */
+
 span.selected {
   background-color:#F7931D;
 }
 
-.embed-responsive{
-  max-width: 620px;
-  margin: 0 auto;
-}
+/* Admin Options */
 
 .admin-options{
   text-align: center;
@@ -300,6 +310,7 @@ div.admin-options > button:hover{
   color: #F7931D;
 }
 
+/* Avatar image on Tournaments_view */
 img.avatar {
   height: 30px;
   width: 30px;
