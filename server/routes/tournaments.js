@@ -163,8 +163,14 @@ module.exports = (knex, _, env) => {
     console.log(req.body);
 
     //
-    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
+    if(!name || !description || checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name)){
       // STRETCH: Show 'That name has been taken' error page
+      console.log(`something is wrong`)
+      console.log(!name)
+      console.log(!description)
+      console.log(!checkInvalidCharacters(twitchChannel))
+      console.log(!checkInvalidCharacters(description))
+      console.log(!checkInvalidCharacters(name))
       res.sendStatus(400);
       return;
     }
