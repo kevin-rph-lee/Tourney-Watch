@@ -266,10 +266,11 @@ div.share-button {
   text-align: center;
 }
 
-
-
-
-
 span.selected {
   background-color:#F7931D;
+}
+
+.embed-responsive{
+  max-width: 620px;
+  margin: 0 auto;
 }
