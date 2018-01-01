@@ -106,7 +106,7 @@ module.exports = (knex, _, env) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id")
+     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "avatar")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -126,7 +126,7 @@ module.exports = (knex, _, env) => {
    */
   function playersEnrolled(tournamentID){
     return knex
-      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
@@ -222,7 +222,7 @@ module.exports = (knex, _, env) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -291,7 +291,6 @@ module.exports = (knex, _, env) => {
           const isReady = (enrolledPlayers.length === teamCount * 6);
           const twitchChannel = `<iframe class="embed-responsive-item" src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" allowfullscreen="true" scrolling="no"></iframe>`;
           const twitchName = results[0].twitch_channel;
-           console.log(twitchChannel);
           if (isReady && started) {
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
@@ -305,8 +304,6 @@ module.exports = (knex, _, env) => {
               twitchName: twitchName,
               isOwner: isOwner})
           } else {
-            console.log('HEEEEY')
-            console.log()
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
               teamCount: results[0].no_of_teams,

@@ -299,3 +299,10 @@ div.admin-options > button:hover{
   background-color: #191E21;
   color: #F7931D;
 }
+
+img.avatar {
+  height: 30px;
+  width: 30px;
+  margin-right: 6px;
+  border-radius: 3px;
+}
