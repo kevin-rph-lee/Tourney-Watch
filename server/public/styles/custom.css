@@ -275,3 +275,27 @@ span.selected {
   max-width: 620px;
   margin: 0 auto;
 }
+
+.admin-options{
+  text-align: center;
+}
+
+div.admin-options > button{
+  color: #fff;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  margin: 0 5px;
+}
+
+div.admin-options > button > i{
+  font-size: 45px;
+  padding: 2px;
+}
+
+div.admin-options > button:hover{
+  background-color: #191E21;
+  color: #F7931D;
+}

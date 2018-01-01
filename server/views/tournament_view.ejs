@@ -48,17 +48,17 @@
           </div>
         <% } %>
 
-          <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
+          
           <div class="container">
               <div class="row">
-
+              <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
               </div>
+          <!-- Swap players button -->
+          <% if (isOwner)  {%>
+          <div class="admin-options">
+          <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
+          <button id="alert-players-button"><i class="fa fa-bell-o" aria-hidden="true" title="Alert Players"></i></button>
           </div>
-        <!-- Swap players button -->
-
-
-        <% if (isOwner)  {%>
-          <button id="swap-modal-button">Swap players</button>
 
           <!-- The Modal -->
           <div id="swap-players-modal" class="modal">
@@ -70,10 +70,18 @@
 
               </div>
               <button id="swap-players-button">Confirm!</button>
+              
             </div>
 
           </div>
         <% } %>
+
+
+          </div>
+      
+
+
+
 
       </main>
 
