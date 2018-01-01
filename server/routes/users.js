@@ -14,6 +14,10 @@ module.exports = (knex, bcrypt, cookieSession) => {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
   }
 
+  function checkInvalidbnetID(bnetID){
+
+  }
+
 
    //Goes to registration page
   router.get('/new', (req, res) => {
@@ -27,7 +31,7 @@ module.exports = (knex, bcrypt, cookieSession) => {
   //user registers
   router.post("/new", (req, res) => {
 
-    const email = req.body.email;
+    const email = req.body.email.trim().toLowerCase();
     const password = req.body.password;
     const battlenetID = req.body.battlenet;
 
