@@ -285,9 +285,8 @@ module.exports = (knex, _, env) => {
           const isReady = (enrolledPlayers.length === teamCount * 6);
           const twitchChannel = `<iframe src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>`;
           const twitchName = results[0].twitch_channel;
-
+           console.log(twitchChannel);
           if (isReady && started) {
-
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
