@@ -16,7 +16,7 @@ main {
   margin: auto;
   padding-right:20px;
   padding-left:20px;
-  padding-top: 50px;
+  padding-top: 67px;
   padding-bottom: 140px;
   background-color: rgba(36, 41, 45, 0.9);
   border-left: solid 1px #F7931D;
@@ -68,34 +68,36 @@ p {
     border-color: #C0C1C2;
   }
 
-  /* Nav Bar Buttons */
+/* Nav Bar Buttons */
 
-  #nav-bar {
-    background: #191E21;
-    color: #F7931D;
-    text-align: center;
-    font-size: 30px;
-    position: fixed;
-    width: 100%;
-  }
+#nav-bar {
+  background: #191E21;
+  color: #F7931D;
+  text-align: center;
+  font-size: 30px;
+  position: fixed;
+  width: 100%;
+}
 
-  nav.navbar.navbar-dark{
-    position: fixed;
-    width:100%;
-    z-index: 1;
-  }
+nav.navbar.navbar-dark{
+  position: fixed;
+  width:100%;
+  z-index: 1;
+}
 
-  nav.navbar.navbar-dark img{
-    height:50px;
-    margin: auto;
-  }
+nav.navbar.navbar-dark img{
+  max-height: 50px;
+  max-width: 80%;
+  margin: 0 auto;
+}
 
-  nav p{
-    font-size: 12px;
-    color: white;
-    float: left;
-    padding-top: 20px;
-  }
+
+nav p{
+  font-size: 12px;
+  color: white;
+  float: left;
+  padding-top: 20px;
+}
 
   /* Tournament Cards */
 
