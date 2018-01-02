@@ -159,8 +159,6 @@ $(document).ready(function () {
         $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_id}</option>`)
       }
     });
-
-
   }
 
   // When the user clicks anywhere outside of the modal, close it

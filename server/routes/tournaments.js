@@ -437,34 +437,37 @@ module.exports = (knex, _, env, mailGun) => {
       });
   });
 
-  // Updates bracket data in the DB
+  // Sends emails to team members in a tournament
   router.post("/:id/sendemail", (req, res) => {
-
-
-    getTeamEmails(req.params.id, req.body.teams)
-    .then(function(results) {
-      for(let i = 0; i < results.length; i++){
-        console.log('Attempting to send message for: ', results[i].battlenet_id);
-        const data = {
-          from: 'Admin <mailer@tourneywatch.org>',
-          to: results[i].email,
-          subject: 'Message from Admin for tournament: ' + results[0].name,
-          text: req.body.emailBody + "\n\n <THIS IS AN AUTOMATIC MESSAGE DO NOT REPLY>"
-        };
-        console.log(data);
-        mailGun.messages().send(data, function (error,body) {
-          console.log(body);
-        })
+    knex
+     .select("creator_user_id")
+     .from("tournaments")
+     .where({id: req.params.id})
+     .then((creatorID) => {
+      //Checking if the user is the owner
+      if(creatorID[0].creator_user_id !== req.session.userID){
+        res.sendStatus(403);
+      } else {
+        //Grabbing the emails for all team members
+        getTeamEmails(req.params.id, req.body.teams)
+        .then(function(results) {
+          for(let i = 0; i < results.length; i++){
+            const data = {
+              from: 'Admin <mailer@tourneywatch.org>',
+              to: results[i].email,
+              subject: '[TourneyWatch] Message from Admin for tournament: ' + results[0].name,
+              text: req.body.emailBody + "\n\n <THIS IS AN AUTOMATIC MESSAGE DO NOT REPLY>"
+            };
+            //Sending the email via mailgun-js
+            mailGun.messages().send(data, function (error,body) {
+              //Logging error/send messages
+              console.log(body);
+            })
+          }
+          res.redirect("/tournaments/" + req.params.id + "/");
+        });
       }
-      res.redirect("/tournaments/" + req.params.id + "/");
-    });
-
-
-
-
-
-    //
-
+     });
   });
 
   return router;
