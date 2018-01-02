@@ -153,7 +153,14 @@ $(document).ready(function () {
       method: 'GET'
     }).done((teamNames) => {
       console.log(teamNames);
+      console.log(teamNames.length);
+      for(let i = 0; i < teamNames.length; i ++){
+        // console.log(teamNames[i].team_id);
+        $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_id}</option>`)
+      }
     });
+
+
   }
 
   // When the user clicks anywhere outside of the modal, close it
@@ -167,6 +174,7 @@ $(document).ready(function () {
       modalSwap.style.display = "none";
     }
     if (event.target == modalEmail){
+      $('#team-ids').empty();
       modalEmail.style.display = "none";
     }
   }
