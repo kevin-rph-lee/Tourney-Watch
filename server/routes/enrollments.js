@@ -251,7 +251,7 @@ module.exports = (knex, owjs) => {
       .orderBy('team_id', 'desc')
       .where({tournament_id: req.params.id})
       .then((teamNames) => {
-        // console.log(playerStats[0]);
+        console.log(teamNames);
         res.send(teamNames);
       });
   });

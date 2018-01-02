@@ -16,7 +16,7 @@ const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API, domain: process.env.MAILGUN_DOMAIN});
+const mailGun = require('mailgun-js')({apiKey: process.env.MAILGUN_API, domain: process.env.MAILGUN_DOMAIN});
 
 
 // // Seperated Routes for each Resource
@@ -47,7 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs));
-app.use('/tournaments', tournamentsRoutes(knex, _, env));
+app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 

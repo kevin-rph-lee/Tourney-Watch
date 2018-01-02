@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _, env) => {
+module.exports = (knex, _, env, mailGun) => {
 
   /**
    * This assigns each player to a team based off their skill level
@@ -117,6 +117,22 @@ module.exports = (knex, _, env) => {
        return _.groupBy(playerStats, "team_id");
      });
   }
+
+
+  function getTeamEmails(tournamentID, teamID){
+    return knex
+     .select("tournaments.name", "users.email", 'users.battlenet_id')
+     .from("enrollments")
+     .innerJoin("users", "users.id", "enrollments.user_id")
+     .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+     .where({tournament_id: tournamentID, team_id: teamID})
+     .orderBy("team_id", "ascd")
+     .then((playerEmails) => {
+       return playerEmails;
+     });
+  }
+
+
 
   /**
    * Gets a list of all players enrolled in an tournament
@@ -423,8 +439,32 @@ module.exports = (knex, _, env) => {
 
   // Updates bracket data in the DB
   router.post("/:id/sendemail", (req, res) => {
-    console.log(req.body)
-    res.redirect("/tournaments/" + req.params.id + "/");
+
+
+    getTeamEmails(req.params.id, req.body.teams)
+    .then(function(results) {
+      for(let i = 0; i < results.length; i++){
+        console.log('Attempting to send message for: ', results[i].battlenet_id);
+        const data = {
+          from: 'Admin <mailer@tourneywatch.org>',
+          to: results[i].email,
+          subject: 'Message from Admin for tournament: ' + results[0].name,
+          text: req.body.emailBody + "\n\n <THIS IS AN AUTOMATIC MESSAGE DO NOT REPLY>"
+        };
+        console.log(data);
+        mailGun.messages().send(data, function (error,body) {
+          console.log(body);
+        })
+      }
+      res.redirect("/tournaments/" + req.params.id + "/");
+    });
+
+
+
+
+
+    //
+
   });
 
   return router;
