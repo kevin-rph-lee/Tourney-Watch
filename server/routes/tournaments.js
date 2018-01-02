@@ -341,7 +341,8 @@ module.exports = (knex, _, env) => {
         const creatorUserID = results[0].creator_user_id;
         const isReady = (enrolledPlayers.length === teamCount * 6);
         const isOwner = (req.session.userID === creatorUserID);
-        const twitchChannel = `<iframe src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>`;
+        const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
+        const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
         const twitchName = results[0].twitch_channel;
         console.log('This should be the results: ', results)
         if(isOwner) {
@@ -359,6 +360,7 @@ module.exports = (knex, _, env) => {
             tournamentID: tournamentID,
             isOwner: isOwner,
             twitchChannel: twitchChannel,
+            twitchChat: twitchChat,
             twitchName: twitchName
           })
         } else {
