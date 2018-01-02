@@ -143,8 +143,11 @@ $(document).ready(function () {
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     if (event.target == modal) {
+      //Empties the modal container
       $('.swap-players-container').empty();
-        modal.style.display = "none";
+      //Unselects all players to reset the cards
+      $('span').removeClass('selected');
+      modal.style.display = "none";
     }
   }
 
