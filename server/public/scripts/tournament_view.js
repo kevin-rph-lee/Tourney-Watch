@@ -65,14 +65,11 @@ $(document).ready(function () {
    * @return {[type]}
    */
   function getPlayerEnrollmentData(bnetID){
-    $.ajax({
+    return $.ajax({
       url: '/enrollments/' + tournamentID + '/enrollmentinfo.json',
       data: {bnetID: bnetID},
       method: 'GET'
-    }).done((results) => {
-      // console.log(results);
-      return results
-    });
+    })
   }
 
 
@@ -104,7 +101,7 @@ $(document).ready(function () {
   const btn = document.getElementById("swap-modal-button");
 
   // When the user clicks on the button, open the modal
-  btn.onclick = async function() {
+  btn.onclick = function() {
 
     if($('.selected').length < 2){
       alert('must select 2!');
@@ -117,11 +114,14 @@ $(document).ready(function () {
     console.log('----');
 
     //TO DO -make this shit work
-    // const selectedPlayers = $(".selected").text().split(' ');
-    // const player1 = await  getPlayerEnrollmentData(selectedPlayers[0]);
-    // const player2 = await  getPlayerEnrollmentData(selectedPlayers[1]);
-    // console.log('battlnet id ', player1);
+    const selectedPlayers = $(".selected").text().split(' ');
+    const player1 = getPlayerEnrollmentData(selectedPlayers[0]);
+    const player2 = getPlayerEnrollmentData(selectedPlayers[1]);
 
+    Promise.all([player1, player2]).then(results => {
+      console.log(results[0].battlenet_id);
+      console.log(results[1].battlenet_id);
+    });
 
 
     // $('.swap-players-container').append(`
