@@ -289,7 +289,8 @@ module.exports = (knex, _, env) => {
           const teamCount = results[0].no_of_teams;
           const started = results[0].is_started;
           const isReady = (enrolledPlayers.length === teamCount * 6);
-          const twitchChannel = `<iframe class="embed-responsive-item" src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" allowfullscreen="true" scrolling="no"></iframe>`;
+          const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
+          const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
           const twitchName = results[0].twitch_channel;
           if (isReady && started) {
             res.render("tournament_view", {
@@ -301,6 +302,7 @@ module.exports = (knex, _, env) => {
               email: req.session.email,
               started: started,
               twitchChannel: twitchChannel,
+              twitchChat: twitchChat,
               twitchName: twitchName,
               isOwner: isOwner})
           } else {

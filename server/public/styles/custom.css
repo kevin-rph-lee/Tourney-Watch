@@ -147,7 +147,7 @@ div.enroll-now button:active {
 
 /* Twitch Video Player Centering */
 
-div.twitch-display{
+/* div.twitch-display{
   text-align: center;
 }
 
@@ -155,8 +155,16 @@ div.twitch-display{
   max-width: 620px;
   margin: 0 auto;
 }
+*/
 
-
+iframe{
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100%;
+}
+.container-fluid, .embeds {
+  height: 100% !important;
+}
 /* Tournament Listing for Individual Users */
 
 .tourney-list{
