@@ -240,8 +240,9 @@ module.exports = (knex, owjs) => {
         // console.log(playerStats[0]);
         res.send(playerStats[0]);
       });
-
   });
+
+
 
   router.post("/:id/swap", (req, res) => {
     console.log(req.body);
