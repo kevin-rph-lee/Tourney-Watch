@@ -18,7 +18,7 @@
       <main class="container">
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
-          
+
         </div>
         <div class="share-button">
           <% include partials/share_button %>
@@ -29,7 +29,7 @@
           <%- twitchChannel %>
         </div>
         <% } %>
-        
+
 
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <container>
@@ -56,21 +56,29 @@
 
 
         <% if (isOwner)  {%>
-          <button id="swap-modal-button">Swap players</button>
+          <div class = 'owner-buttons'>
+            <button id="swap-modal-button">Swap players</button>
+            <button id="email-notifications-button">Send E-mail Notification</button>
+          </div>
 
-          <!-- The Modal -->
+          <!-- Swap players Modal -->
           <div id="swap-players-modal" class="modal">
-
-            <!-- Modal content -->
             <div class="modal-content">
-              <h1>Placeholder text</h1>
+              <h1>Swap Players?</h1>
               <div class="swap-players-container">
-
               </div>
               <button id="swap-players-button">Confirm!</button>
             </div>
-
           </div>
+
+          <!-- Send Email Modal -->
+          <div id="send-email-modal" class="modal">
+            <div class="modal-content">
+              <h1>Placeholder</h1>
+            </div>
+          </div>
+
+
         <% } %>
 
       </main>

@@ -15,7 +15,9 @@ const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
 const bcrypt = require('bcrypt');
-const _ = require('lodash')
+const _ = require('lodash');
+const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API, domain: process.env.MAILGUN_DOMAIN});
+
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
