@@ -242,6 +242,22 @@ module.exports = (knex, owjs) => {
       });
   });
 
+    // Adds a new line in to enrollments for each new player
+  // given that their battlenet ID exists
+  router.get("/:id/teamemailinfo.json", (req, res) => {
+    knex
+      .select("users.battlenet_id", "team_id", "users.email")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .where({team_id: req.query.teamID})
+      .then((emailInfo) => {
+        // console.log(playerStats[0]);
+        res.send(emailInfo);
+      });
+  });
+
+
 
 
   router.post("/:id/swap", (req, res) => {
