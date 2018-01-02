@@ -415,13 +415,17 @@ module.exports = (knex, _, env) => {
                 // STRETCH: Show 'Not Ready' error page
                 res.sendStatus(400);
               }
-              
+
             });
         }
       });
   });
 
-
+  // Updates bracket data in the DB
+  router.post("/:id/sendemail", (req, res) => {
+    console.log(req.body)
+    res.redirect("/tournaments/" + req.params.id + "/");
+  });
 
   return router;
 };

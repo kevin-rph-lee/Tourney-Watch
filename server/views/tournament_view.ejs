@@ -74,7 +74,17 @@
           <!-- Send Email Modal -->
           <div id="send-email-modal" class="modal">
             <div class="modal-content">
-              <h1>Placeholder</h1>
+
+              <h1>Send email to team</h1>
+              <form id= 'email-form' action= 'sendemail' method="POST">
+                <select name="Teams">
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                  <option value="fiat">Fiat</option>
+                  <option value="audi">Audi</option>
+                </select>
+                <input type="submit">
+              </form>
             </div>
           </div>
 

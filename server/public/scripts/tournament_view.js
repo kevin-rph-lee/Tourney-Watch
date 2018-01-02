@@ -140,18 +140,6 @@ $(document).ready(function () {
     });
   }
 
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modalSwap) {
-      //Empties the modal container
-      $('.swap-players-container').empty();
-      //Unselects all players to reset the cards
-      $('span').removeClass('selected');
-      modalSwap.style.display = "none";
-    }
-  }
-
-
   //TO DO: make this look....  nicer.
   // Get the modal
   const modalEmail = document.getElementById('send-email-modal');
@@ -160,12 +148,27 @@ $(document).ready(function () {
   // When the user clicks on the button, open the modal
   btnEmail.onclick = function() {
     modalEmail.style.display = "block";
+    $.ajax({
+      url: '/enrollments/' + tournamentID + '/teamnames.json',
+      method: 'GET'
+    }).done((teamNames) => {
+      console.log(teamNames);
+    });
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    if (event.target == modalEmail) {
+    console.log('clicked!')
+    if (event.target == modalSwap) {
+      //Empties the modal container
+      $('.swap-players-container').empty();
+      //Unselects all players to reset the cards
+      $('span').removeClass('selected');
+      modalSwap.style.display = "none";
+    }
+    if (event.target == modalEmail){
       modalEmail.style.display = "none";
     }
   }
+
 });
