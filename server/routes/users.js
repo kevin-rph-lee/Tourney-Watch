@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, bcrypt, cookieSession) => {
+module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   /**
    * Checks a string for special characters. Returns false if one is found
@@ -12,6 +12,27 @@ module.exports = (knex, bcrypt, cookieSession) => {
    */
   function checkInvalidCharacters(string){
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
+  }
+
+  function checkInvalidbnetID(bnetID){
+    owjs.getAll('pc', 'us', bnetID)
+      .then(() => {
+        return false;
+      })
+      .catch((err) => {
+        return true;
+      })
+  }
+
+  /**
+   * Converts a BNET ID into a string that Overwatch-js can handle
+   * @param  {String} bnetID the BNET ID to convert
+   * @return {String}        Bnet ID that Overwatch-js can handle
+   */
+  function convertBnetID(bnetID) {
+    let name = bnetID.toLowerCase();
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+    return name.replace('#','-');
   }
 
 
@@ -27,14 +48,16 @@ module.exports = (knex, bcrypt, cookieSession) => {
   //user registers
   router.post("/new", (req, res) => {
 
-    const email = req.body.email;
-    const password = req.body.password;
-    const battlenetID = req.body.battlenet;
+    const email = req.body.email.trim().toLowerCase();
+    const password = req.body.password.trim();
+    const battlenetID = req.body.battlenet.trim();
+
+    //Converting bnet ID into a format that owjs can take
+
 
     if(checkInvalidCharacters(battlenetID)){
       return res.sendStatus(400);
     }
-
 
     knex
       .select("email")
@@ -43,23 +66,31 @@ module.exports = (knex, bcrypt, cookieSession) => {
       .then((results) => {
         console.log(results);
         if(results.length === 0){
-          knex
-          .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID})
-          .into('users')
-          .returning('id')
-          .then((results)=>{
-            req.session.userID = results[0];
-            req.session.email = email;
-            req.session.battlenetID = battlenetID;
-            console.log('just registered, am results', results)
-            console.log('IN /NEW', req.session)
-            res.redirect("/");
-          });
+          owjs.getAll('pc', 'us', convertBnetID(battlenetID))
+            .then(() => {
+              knex
+                .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID})
+                .into('users')
+                .returning('id')
+                .then((results)=>{
+                  req.session.userID = results[0];
+                  req.session.email = email;
+                  req.session.battlenetID = battlenetID;
+                  console.log('just registered, am results', results)
+                  console.log('IN /NEW', req.session)
+                  res.redirect("/");
+                });
+            })
+            .catch((err) => {
+              res.sendStatus(400);
+            })
+          //stuff tha relies on it
         } else{
           res.sendStatus(400);
         }
     });
   });
+
 
   // logs a user in
   router.post("/login", (req, res) => {

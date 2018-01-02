@@ -40,8 +40,18 @@ module.exports = (knex, owjs) => {
       });
   }
 
+  /**
+   * Converts a BNET ID into a string that Overwatch-js can handle
+   * @param  {String} bnetID the BNET ID to convert
+   * @return {String}        Bnet ID that Overwatch-js can handle
+   */
+  function convertBnetID(bnetID) {
+    let name = bnetID.toLowerCase();
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+    return name.replace('#','-');
+  }
 
-    /**
+  /**
    * Updates the team
    * @param  {int} userID    userID of user
    * @param  {int} newTeamID [description]
@@ -126,7 +136,7 @@ module.exports = (knex, owjs) => {
   }
 
   function getPlayersInfo(battlenetID, tournamentID, userID) {
-    return owjs.getAll('pc', 'us', battlenetID)
+    return owjs.getAll('pc', 'us', convertBnetID(battlenetID))
       .then((data) => {
         console.log('heey')
         const roleRanks = sortTimePlayed(data);
