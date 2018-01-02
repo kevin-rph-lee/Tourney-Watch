@@ -19,7 +19,7 @@ $(document).ready(function () {
         teamRoster[teamNames[t]].forEach((user) => {
           $(`[data-team-id="${teamNames[t]}"`).append(`
           <div class='container player'>
-            <span data-balloon="Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break data-team = ${user.team_id}>${user.battlenet_id} </span>
+            <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
           </div>
             `)
         })
