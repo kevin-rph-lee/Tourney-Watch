@@ -24,6 +24,17 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       })
   }
 
+  /**
+   * Converts a BNET ID into a string that Overwatch-js can handle
+   * @param  {String} bnetID the BNET ID to convert
+   * @return {String}        Bnet ID that Overwatch-js can handle
+   */
+  function convertBnetID(bnetID) {
+    let name = bnetID.toLowerCase();
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+    return name.replace('#','-');
+  }
+
 
    //Goes to registration page
   router.get('/new', (req, res) => {
@@ -42,9 +53,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     const battlenetID = req.body.battlenet.trim();
 
     //Converting bnet ID into a format that owjs can take
-    const owjsBattlenetID = battlenetID.toLowerCase();
-    owjsBattlenetID.charAt(0).toUppercase();
-    owjsBattlenetID.replace('#', '-');
+
 
     if(checkInvalidCharacters(battlenetID)){
       return res.sendStatus(400);
@@ -57,7 +66,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       .then((results) => {
         console.log(results);
         if(results.length === 0){
-          owjs.getAll('pc', 'us', owjsBattlenetID)
+          owjs.getAll('pc', 'us', convertBnetID(battlenetID))
             .then(() => {
               knex
                 .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID})
@@ -75,11 +84,13 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
             .catch((err) => {
               res.sendStatus(400);
             })
+          //stuff tha relies on it
         } else{
           res.sendStatus(400);
         }
     });
   });
+
 
   // logs a user in
   router.post("/login", (req, res) => {
