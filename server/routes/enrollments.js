@@ -229,19 +229,35 @@ module.exports = (knex, owjs) => {
 
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
+  // TO DO fix this so it also looks at tournament ID
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .where({'users.battlenet_id': req.query.bnetID})
+      .where({'users.battlenet_id': req.query.bnetID, tournament_id : req.params.id})
       .then((playerStats) => {
         // console.log(playerStats[0]);
         res.send(playerStats[0]);
       });
-
   });
+
+  router.get("/:id/teamnames.json", (req, res) => {
+    knex
+      .distinct('team_id')
+      .select()
+      .from("enrollments")
+      .orderBy('team_id', 'desc')
+      .where({tournament_id: req.params.id})
+      .then((teamNames) => {
+        console.log(teamNames);
+        res.send(teamNames);
+      });
+  });
+
+
+
 
   router.post("/:id/swap", (req, res) => {
     console.log(req.body);

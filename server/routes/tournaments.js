@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _, env) => {
+module.exports = (knex, _, env, mailGun) => {
 
   /**
    * This assigns each player to a team based off their skill level
@@ -117,6 +117,22 @@ module.exports = (knex, _, env) => {
        return _.groupBy(playerStats, "team_id");
      });
   }
+
+
+  function getTeamEmails(tournamentID, teamID){
+    return knex
+     .select("tournaments.name", "users.email", 'users.battlenet_id')
+     .from("enrollments")
+     .innerJoin("users", "users.id", "enrollments.user_id")
+     .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+     .where({tournament_id: tournamentID, team_id: teamID})
+     .orderBy("team_id", "ascd")
+     .then((playerEmails) => {
+       return playerEmails;
+     });
+  }
+
+
 
   /**
    * Gets a list of all players enrolled in an tournament
@@ -415,13 +431,44 @@ module.exports = (knex, _, env) => {
                 // STRETCH: Show 'Not Ready' error page
                 res.sendStatus(400);
               }
-              
+
             });
         }
       });
   });
 
-
+  // Sends emails to team members in a tournament
+  router.post("/:id/sendemail", (req, res) => {
+    knex
+     .select("creator_user_id")
+     .from("tournaments")
+     .where({id: req.params.id})
+     .then((creatorID) => {
+      //Checking if the user is the owner
+      if(creatorID[0].creator_user_id !== req.session.userID){
+        res.sendStatus(403);
+      } else {
+        //Grabbing the emails for all team members
+        getTeamEmails(req.params.id, req.body.teams)
+        .then(function(results) {
+          for(let i = 0; i < results.length; i++){
+            const data = {
+              from: 'Admin <mailer@tourneywatch.org>',
+              to: results[i].email,
+              subject: '[TourneyWatch] Message from Admin for tournament: ' + results[0].name,
+              text: req.body.emailBody + "\n\n <THIS IS AN AUTOMATIC MESSAGE DO NOT REPLY>"
+            };
+            //Sending the email via mailgun-js
+            mailGun.messages().send(data, function (error,body) {
+              //Logging error/send messages
+              console.log(body);
+            })
+          }
+          res.redirect("/tournaments/" + req.params.id + "/");
+        });
+      }
+     });
+  });
 
   return router;
 };

@@ -94,17 +94,17 @@ $(document).ready(function () {
 
   //TO DO: make this look....  nicer.
   // Get the modal
-  const modal = document.getElementById('swap-players-modal');
+  const modalSwap = document.getElementById('swap-players-modal');
   // Get the button that opens the modal
-  const btn = document.getElementById("swap-modal-button");
+  const btnSwap = document.getElementById("swap-modal-button");
   // When the user clicks on the button, open the modal
-  btn.onclick = function() {
+  btnSwap.onclick = function() {
 
     if($('.selected').length < 2){
       alert('must select 2!');
       return;
     }
-    modal.style.display = "block";
+    modalSwap.style.display = "block";
 
     //Grabbing player data for each selected player
     const selectedPlayers = $(".selected").text().split(' ');
@@ -140,14 +140,40 @@ $(document).ready(function () {
     });
   }
 
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalEmail = document.getElementById('send-email-modal');
+  // Get the button that opens the modal
+  const btnEmail = document.getElementById("email-notifications-button");
+  // When the user clicks on the button, open the modal
+  btnEmail.onclick = function() {
+    modalEmail.style.display = "block";
+    $.ajax({
+      url: '/enrollments/' + tournamentID + '/teamnames.json',
+      method: 'GET'
+    }).done((teamNames) => {
+      console.log(teamNames);
+      console.log(teamNames.length);
+      for(let i = 0; i < teamNames.length; i ++){
+        // console.log(teamNames[i].team_id);
+        $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_id}</option>`)
+      }
+    });
+  }
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    if (event.target == modal) {
+    console.log('clicked!')
+    if (event.target == modalSwap) {
       //Empties the modal container
       $('.swap-players-container').empty();
       //Unselects all players to reset the cards
       $('span').removeClass('selected');
-      modal.style.display = "none";
+      modalSwap.style.display = "none";
+    }
+    if (event.target == modalEmail){
+      $('#team-ids').empty();
+      modalEmail.style.display = "none";
     }
   }
 
