@@ -288,29 +288,50 @@ $(document).ready(function () {
               <thead class="list">
                 <tr>
                   <th>Highlight Name</th>
-                  <th>Thumbnail</th>
+                  <th>Preview</th>
                   <th>Delete?</th>
                 </tr>
               </thead>
-              <tbody class="tournament-details">
-                <tr>
-                  <td>test</td>
-                  <td>test</td>
-                  <td><a href="/tournaments/admin"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                </tr>
+              <tbody class="highlight-details">
+
               </tbody>
             </table>
           </div>
         </div>
       </div>`)
+
+      for(let i = 0; i < highlights.length; i++){
+        $('.highlight-details').append(
+          `<tr>
+            <td>${highlights[i].name}</td>
+            <td>
+              <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${highlights[i].url}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
+</span>
+            </td>
+              <td>
+            </td>
+          </tr>`)
+      }
+
+    $('span[data-toggle="tooltip"]').tooltip({
+        animated: 'fade',
+        placement: 'right',
+        html: true
+      })
+
+
       modalManageHighlights.style.display = "block";
     });
   }
 
 
+
+    $('span').onclick = function(event){
+      console.log('delete!');
+    }
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    console.log('clicked!')
     if (event.target == modalSwap) {
       //Empties the modal container
       $('.swap-players-container').empty();
@@ -327,15 +348,12 @@ $(document).ready(function () {
       modalRole.style.display = "none";
     }
     if (event.target == modalHighlights){
-      console.log('clicked!');
       $('.highlights-container').empty();
       modalHighlights.style.display = "none";
     }
     if (event.target == modalManageHighlights){
-      console.log('clicked!');
       $('.manage-highlights-container').empty();
       modalManageHighlights.style.display = "none";
     }
   }
-
 });

@@ -19,7 +19,7 @@ module.exports = (knex) => {
 
   router.get("/:id/", (req, res) => {
     knex
-      .select('name', 'url')
+      .select('id', 'name', 'url')
       .from("highlights")
       .where({tournament_id : req.params.id})
       .then((results) => {
