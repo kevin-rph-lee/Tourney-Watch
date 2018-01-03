@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _, env) => {
+module.exports = (knex, _, env, mailGun) => {
 
   /**
    * This assigns each player to a team based off their skill level
@@ -57,6 +57,26 @@ module.exports = (knex, _, env) => {
       }
       // TO DO: possible refactor?
       (key[roleChoice] === "support") ? count++ : 0;
+    });
+    return count;
+  }
+
+
+  /**
+   * Counts how many support type players
+   *
+   * @param {array} data result of overwatch api
+   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @returns
+   */
+  function countRole(data, role, firstOrSecondRole) {
+    let count = 0;
+    data.forEach((key) => {
+      if (key[firstOrSecondRole] === role) {
+        return count ++;
+      }
+      // TO DO: possible refactor?
+      (key[firstOrSecondRole] === role) ? count++ : 0;
     });
     return count;
   }
@@ -117,6 +137,22 @@ module.exports = (knex, _, env) => {
        return _.groupBy(playerStats, "team_id");
      });
   }
+
+
+  function getTeamEmails(tournamentID, teamID){
+    return knex
+     .select("tournaments.name", "users.email", 'users.battlenet_id')
+     .from("enrollments")
+     .innerJoin("users", "users.id", "enrollments.user_id")
+     .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+     .where({tournament_id: tournamentID, team_id: teamID})
+     .orderBy("team_id", "ascd")
+     .then((playerEmails) => {
+       return playerEmails;
+     });
+  }
+
+
 
   /**
    * Gets a list of all players enrolled in an tournament
@@ -213,6 +249,43 @@ module.exports = (knex, _, env) => {
         res.json(results[0]);
       });
   });
+
+
+  router.get("/roles.json", (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    const roles = ['offense', 'defense', 'tank', 'suport'];
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
+    // Gets player stats for each team in a specific tournament
+    knex
+      .select("users.battlenet_id", "team_id", "level", "games_won","first_role", "second_role")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .where({tournament_id: tournamentID})
+      .orderBy("team_id", "ascd")
+      .then((playerStats) => {
+        let teamRoles = {};
+        const teamRoster = _.groupBy(playerStats, "team_id");
+        for(let team in teamRoster){
+          //TO - DO : DRY this up....
+          teamRoles[team] = {
+            offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
+            offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
+            defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
+            defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
+            tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
+            tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
+            supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
+            supportSecond: countRole(teamRoster[team], 'support', 'second_role')
+          }
+        }
+        res.send(teamRoles);
+      });
+  });
+
 
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
@@ -421,13 +494,44 @@ module.exports = (knex, _, env) => {
                 // STRETCH: Show 'Not Ready' error page
                 res.sendStatus(400);
               }
-              
+
             });
         }
       });
   });
 
-
+  // Sends emails to team members in a tournament
+  router.post("/:id/sendemail", (req, res) => {
+    knex
+     .select("creator_user_id")
+     .from("tournaments")
+     .where({id: req.params.id})
+     .then((creatorID) => {
+      //Checking if the user is the owner
+      if(creatorID[0].creator_user_id !== req.session.userID){
+        res.sendStatus(403);
+      } else {
+        //Grabbing the emails for all team members
+        getTeamEmails(req.params.id, req.body.teams)
+        .then(function(results) {
+          for(let i = 0; i < results.length; i++){
+            const data = {
+              from: 'Admin <mailer@tourneywatch.org>',
+              to: results[i].email,
+              subject: '[TourneyWatch] Message from Admin for tournament: ' + results[0].name,
+              text: req.body.emailBody + "\n\n <THIS IS AN AUTOMATIC MESSAGE DO NOT REPLY>"
+            };
+            //Sending the email via mailgun-js
+            mailGun.messages().send(data, function (error,body) {
+              //Logging error/send messages
+              console.log(body);
+            })
+          }
+          res.redirect("/tournaments/" + req.params.id + "/");
+        });
+      }
+     });
+  });
 
   return router;
 };
