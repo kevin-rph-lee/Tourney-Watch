@@ -15,7 +15,7 @@ $(document).ready(function () {
           $(".player-table-stats").append(`
           <tr data-player-id="${playerRoster[i][p].battlenet_id}">
             <td scope="row">${count++}</td>
-            <td>${playerRoster[i][p].battlenet_id}</td>
+            <td><img src="${playerRoster[i][p].avatar}" class="img-fluid"> ${playerRoster[i][p].battlenet_id}</td>
             <td>${playerRoster[i][p].level}</td>
             <td>${playerRoster[i][p].games_won}</td>
           </tr>
@@ -28,7 +28,7 @@ $(document).ready(function () {
           $(".player-table-stats").append(`
             <tr data-player-id="${playerNames[i].battlenet_id}">
               <td scope="row">${Number([i]) + 1}</td>
-              <td>${playerNames[i].battlenet_id}</td>
+              <td><img src="${playerNames[i].avatar}" class="avatar"> ${playerNames[i].battlenet_id}</td>
               <td>${playerNames[i].level}</td>
               <td>${playerNames[i].games_won}</td>
             </tr>

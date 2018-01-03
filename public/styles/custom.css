@@ -16,7 +16,7 @@ main {
   margin: auto;
   padding-right:20px;
   padding-left:20px;
-  padding-top: 50px;
+  padding-top: 67px;
   padding-bottom: 140px;
   background-color: rgba(36, 41, 45, 0.9);
   border-left: solid 1px #F7931D;
@@ -68,34 +68,35 @@ p {
     border-color: #C0C1C2;
   }
 
-  /* Nav Bar Buttons */
+/* Nav Bar Buttons */
 
-  #nav-bar {
-    background: #191E21;
-    color: #F7931D;
-    text-align: center;
-    font-size: 30px;
-    position: fixed;
-    width: 100%;
-  }
+#nav-bar {
+  background: #191E21;
+  color: #F7931D;
+  text-align: center;
+  font-size: 30px;
+  position: fixed;
+  width: 100%;
+}
 
-  nav.navbar.navbar-dark{
-    position: fixed;
-    width:100%;
-    z-index: 1;
-  }
+nav.navbar.navbar-dark{
+  position: fixed;
+  width:100%;
+  z-index: 1;
+}
 
-  nav.navbar.navbar-dark img{
-    height:50px;
-    margin: auto;
-  }
+nav.navbar.navbar-dark img{
+  max-height: 50px;
+  max-width: 80%;
+  margin: 0 auto;
+}
 
-  nav p{
-    font-size: 12px;
-    color: white;
-    float: left;
-    padding-top: 20px;
-  }
+nav p{
+  font-size: 12px;
+  color: white;
+  float: left;
+  padding-top: 20px;
+}
 
   /* Tournament Cards */
 
@@ -123,6 +124,7 @@ div.row{
 }
 
 /* Enroll Button */
+
 div.enroll-now{
   text-align: center;
 }
@@ -143,10 +145,26 @@ div.enroll-now button:active {
 
 }
 
-/* Twitch Video Player Centering */
+/* Twitch Video Player & Chat Embeds */
 
-div.twitch-display{
-  text-align: center;
+.container-fluid, .embeds {
+  height: 100% !important;
+}
+
+iframe{
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100%;
+}
+
+iframe#video{
+  margin: 0 auto;
+}
+
+@media (max-width: 992px){
+  #chat{
+    display: none;
+  }
 }
 
 /* Tournament Listing for Individual Users */
@@ -185,6 +203,8 @@ a.active {
 thead.list{
   font-size:20px
 }
+
+/* tournament_view buttons */
 
 .staging-buttons{
   text-align: center;
@@ -231,6 +251,8 @@ button.start-tournament:hover {
   cursor: pointer;
 }
 
+/* share button on tournament_view */
+
 #share {
   -webkit-transition: width 0.65s ease;
   -moz-transition: width 0.65s ease;
@@ -245,17 +267,32 @@ button.start-tournament:hover {
   height: 45px;
 
   width: 0px;
+  
 }
 
 #share.in {
-  width: 220px;
+  width: 333px;
 }
 
-#share i{
+#share > * {
+  position: relative;
+  margin-left: 3px;
+}
+
+#share > i,  #share > a{
   font-size: 30px;
   color: #F7931D;
-  margin-top: -3px;
-  margin: 7px 5px 7px 6px;
+  top: calc(50% - 17px);
+}
+
+#share > a {
+  text-decoration: none;
+}
+
+#share input{
+  width: 150px;
+  height: 35px;
+  text-align: center;
 }
 
 #share i:hover{
@@ -266,6 +303,42 @@ div.share-button {
   text-align: center;
 }
 
-div > span.selected {
+/* swap players */
+
+div.container.player > span.selected {
   background-color:#F7931D;
+}
+
+/* Admin Options */
+
+.admin-options{
+  text-align: center;
+}
+
+div.admin-options > button{
+  color: #fff;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  margin: 0 5px;
+}
+
+div.admin-options > button > i{
+  font-size: 45px;
+  padding: 2px;
+}
+
+div.admin-options > button:hover{
+  background-color: #191E21;
+  color: #F7931D;
+}
+
+/* Avatar image on Tournaments_view */
+img.avatar {
+  height: 30px;
+  width: 30px;
+  margin-right: 6px;
+  border-radius: 3px;
 }

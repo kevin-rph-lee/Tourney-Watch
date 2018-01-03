@@ -115,14 +115,16 @@ app.get('/', async (req, res) => {
   }
 });
 
+// shortened link to redirect to tournaments pages
+app.get("/t/:id", (req,res) => {
+  const tournamentID = req.params.id
+  res.redirect(`/tournaments/${tournamentID}`)
+})
+
 app.get("/faq", (req, res) => {
 
   res.render("faq", {email: req.session.email})
 });
-
-app.get('/json', (req, res) => {
-  res.json(['Joel', 'Mel']);
-})
 
 app.use(express.static(__dirname + '/public'));
 

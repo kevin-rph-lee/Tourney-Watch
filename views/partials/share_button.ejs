@@ -2,7 +2,8 @@
 <div id="share" class="">
 <!-- fix share url once we put on heroku or something. 
 Twitter works right now, reddit might work, facebook does not work -->
-  <i class="fa fa-clipboard" aria-hidden="true" title="Copy to Clipboard"></i>
+  <input class="copy-link" type="text" name="link-addy" placeholder="localhost:8080/t/<%=tournamentID%>" value="localhost:8080/t/<%=tournamentID%>" title="Tournament URL">
+  <i class="fa fa-clipboard" aria-hidden="true" data-link="localhost:8080/t/<%=tournamentID%>" title="Copy to Clipboard"></i>
   <i class="fa fa-envelope-o" aria-hidden="true" title="Send via Email"></i>
   
   <a href="http://reddit.com/submit?url=example.org" target="_blank">
