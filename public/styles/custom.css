@@ -315,6 +315,9 @@ div.container.player > span {
   padding-right:  2px;
 }
 
+.swap-table{
+  margin: 0 auto;
+}
 /* Admin Options */
 
 .admin-options{
@@ -368,3 +371,4 @@ img.player-class{
 tbody > tr, thead > tr{
   text-align: center;
 }
+

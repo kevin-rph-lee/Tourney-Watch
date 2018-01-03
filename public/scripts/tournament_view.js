@@ -126,26 +126,33 @@ $(document).ready(function () {
       const player2 = results[1];
       //Appending user data to the modal window
       $('.swap-players-container').append(`
-        <table>
-          <tr>
-            <th>Battlenet ID</th>
-            <th>Primary Class</th>
-            <th>Secondary Class</th>
-            <th>Level</th>
-          </tr>
-          <tr>
-            <td>${player1.battlenet_id}</td>
-            <td>${player1.first_role}</td>
-            <td>${player1.second_role}</td>
-            <td>${player1.level}</td>
-          </tr>
-          <tr>
-            <td>${player2.battlenet_id}</td>
-            <td>${player2.first_role}</td>
-            <td>${player2.second_role}</td>
-            <td>${player2.level}</td>
-          </tr>
-        </table>
+        <h3> Swap ${player1.battlenet_id} and ${player2.battlenet_id}?</h3>
+        <div class="table-responsive col-md-6 swap-table">
+          <table id="swap-players-table" class="table table-striped table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Battlenet ID</th>
+                <th scope="col">Primary Class</th>
+                <th scope="col">Secondary Class</th>
+                <th scope="col">Level</th>
+              </tr>
+            </thead>
+            <tbody class="player-table-stats">
+              <tr>
+                <td>${player1.battlenet_id}</td>
+                <td>${player1.first_role}</td>
+                <td>${player1.second_role}</td>
+                <td>${player1.level}</td>
+              </tr>
+              <tr>
+                <td>${player2.battlenet_id}</td>
+                <td>${player2.first_role}</td>
+                <td>${player2.second_role}</td>
+                <td>${player2.level}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       `);
     });
   }
