@@ -173,18 +173,28 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((playerRoles) => {
+      let firstRoleString = '';
       for(let i in playerRoles){
-        console.log(i);
+        firstRoleString +=
+        `<tr>
+          <th>${i}</th>
+          <th>${playerRoles[i].offenseFirst}</th>
+          <th>${playerRoles[i].defenseFirst}</th>
+          <th>${playerRoles[i].tankFirst}</th>
+          <th>${playerRoles[i].supportFirst}</th>
+        </tr>`
       }
 
       $('.role-summary-container').append(`
         <table>
           <tr>
+            <th>Team</th>
             <th>Offense</th>
             <th>Defense</th>
             <th>Tank</th>
             <th>Support</th>
           </tr>
+          ${firstRoleString}
         </table>
 
         `)
