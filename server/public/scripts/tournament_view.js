@@ -228,6 +228,46 @@ $(document).ready(function () {
 
 
 
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalHighlights = document.getElementById('highlights-modal');
+  // Get the button that opens the modal
+  const btnHighlights = document.getElementById("highlights-button");
+  // When the user clicks on the button, open the modal
+  btnHighlights.onclick = function() {
+    $('.highlights-container').append(`
+      <div class = 'highlights'>
+        <div>
+          <div class = 'wrapper'>
+            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=BP_4cJo3BPU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></ifram
+          </div>
+        </div>
+        <div>
+          <div class = 'wrapper'>
+            <iframe id="ytplayer" type="text/html" width="640" height="360"
+  src="https://youtu.be/BP_4cJo3BPU?autoplay=0&origin=http://example.com"
+  frameborder="0"></iframe>
+          </div>
+        </div>
+
+        <div>
+          <div class = 'wrapper'>
+            <iframe id="ytplayer" type="text/html" width="640" height="360"
+  src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
+  frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+      `)
+
+    $('.highlights').slick();
+    modalHighlights.style.display = "block";
+
+  }
+
+
+
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     console.log('clicked!')
@@ -245,6 +285,11 @@ $(document).ready(function () {
     if (event.target == modalRole){
       $('.role-summary-container').empty();
       modalRole.style.display = "none";
+    }
+    if (event.target == modalHighlights){
+      console.log('clicked!');
+      $('.highlights-container').empty();
+      modalHighlights.style.display = "none";
     }
   }
 
