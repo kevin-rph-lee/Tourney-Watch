@@ -24,10 +24,10 @@
       <main class="container">
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
-
         </div>
         
         <div class="share-button">
+          <button id="highlights-button" class="start-tournament">Highlights</button>
           <% include partials/share_button %>
         </div>
         <% if (twitchName !== null) { %>
@@ -54,11 +54,10 @@
 
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <container>
-                  <center>
-                  <div id="save" style="display: inline-block;">
-
-                  </div>
-              </center>
+            <center>
+              <div id="save" style="display: inline-block;">
+              </div>
+            </center>
           </container>
 
           <% if (isOwner)  {%>
@@ -69,63 +68,56 @@
 
           
           <div class="container">
-              <div class="row team-cards">
-              <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
-              </div>
-        <!-- Swap players button -->
+            <div class="row team-cards">
+            <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
+            </div>
+            <% if (isOwner)  { %>
+            <div class = 'admin-options'>
+              <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
+              <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Email Players"></i></button>
+              <button id="role-summary-button"><i class="fa fa-users" aria-hidden="true" title="Team Summary"></i></button>
+            </div>
 
-        <button id="highlights-button">Highlights</button>
-
-        <% if (isOwner)  {%>
-          <div class = 'admin-options'>
-            <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
-            <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Alert Players"></i></button>
-            <button id="role-summary-button">Team Role Summary</button>
-          </div>
-
-          <!-- Swap players Modal -->
-          <div id="swap-players-modal" class="modal">
-            <div class="modal-content">
-              <h1>Swap Players?</h1>
-              <div class="swap-players-container">
+            <!-- Swap players Modal -->
+            <div id="swap-players-modal" class="modal">
+              <div class="modal-content">
+                <h1>Swap Players?</h1>
+                <div class="swap-players-container">
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Send Email Modal -->
-          <div id="send-email-modal" class="modal">
-            <div class="modal-content">
+            <!-- Send Email Modal -->
+            <div id="send-email-modal" class="modal">
+              <div class="modal-content">
 
-              <h1>Send email to team</h1>
-              <form id= 'email-form' action= 'sendemail' method="POST">
-                <label for = 'teams'> Choose team </label>
-                <select name="teams" id = 'team-ids'>
-                </select>
-                <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
-                <input type="submit">
-              </form>
-            </div>
-          </div>
-
-          <!-- Role Summary Modal -->
-          <div id="role-summary-modal" class="modal">
-            <div class="modal-content">
-              <h1>Placeholder</h1>
-              <div class="role-summary-container">
+                <h1>Send email to team</h1>
+                <form id= 'email-form' action= 'sendemail' method="POST">
+                  <label for = 'teams'> Choose team </label>
+                  <select name="teams" id = 'team-ids'>
+                  </select>
+                  <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
+                  <input type="submit">
+                </form>
               </div>
             </div>
-          </div>
 
-                    <!-- Role Summary Modal -->
-          <div id="highlights-modal" class="modal">
-            <div class="modal-content">
-              <h1>Highlights</h1>
-              <div class="highlights-container">
+            <!-- Role Summary Modal -->
+            <div id="role-summary-modal" class="modal">
+              <div class="modal-content">
+                <h1>Placeholder</h1>
+                <div class="role-summary-container">
+                </div>
               </div>
-          </div>
-
-
-        <% } %>
+            </div>
+                      <!-- Role Summary Modal -->
+            <div id="highlights-modal" class="modal">
+              <div class="modal-content">
+                <h1>Highlights</h1>
+                <div class="highlights-container">
+                </div>
+            </div>
+            <% } %>
           </div>
       </main>
   </body>
