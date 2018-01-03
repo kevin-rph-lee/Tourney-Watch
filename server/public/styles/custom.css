@@ -309,7 +309,7 @@ div.share-button {
 
 /* swap players */
 
-span.selected {
+div.container.player > span.selected {
   background-color:#F7931D;
 }
 
