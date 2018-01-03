@@ -46,7 +46,7 @@ module.exports = (knex, _, env) => {
    * Counts how many support type players
    *
    * @param {array} data result of overwatch api
-   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @param {string} roleChoice can either 'first_role' or 'second_role'
    * @returns
    */
   function countSupport(data, roleChoice) {

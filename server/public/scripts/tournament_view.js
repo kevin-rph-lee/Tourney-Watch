@@ -95,6 +95,16 @@ $(document).ready(function () {
     $(selector).toggleClass('in');
   });
 
+  $(".fa-clipboard").click(function() {
+    const link = $(this).data("link")
+    const $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(this).data("link")).select();
+    document.execCommand("copy");
+    $temp.remove();
+    alert(`${link} has been copied!`)
+  });
+
   //TESTING
 
     // Get the modal

@@ -265,17 +265,37 @@ button.start-tournament:hover {
   height: 45px;
 
   width: 0px;
+  
 }
 
 #share.in {
-  width: 220px;
+  width: 333px;
 }
 
-#share i{
+/* #share i{
   font-size: 30px;
   color: #F7931D;
-  margin-top: -3px;
   margin: 7px 5px 7px 6px;
+} */
+#share > * {
+  position: relative;
+  margin-left: 3px;
+}
+
+#share > i,  #share > a{
+  font-size: 30px;
+  color: #F7931D;
+  top: calc(50% - 17px);
+}
+
+#share > a {
+  text-decoration: none;
+}
+
+#share input{
+  width: 150px;
+  height: 35px;
+  text-align: center;
 }
 
 #share i:hover{
