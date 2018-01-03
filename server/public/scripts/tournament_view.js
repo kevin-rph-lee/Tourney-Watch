@@ -168,7 +168,30 @@ $(document).ready(function () {
   const btnRole = document.getElementById("role-summary-button");
   // When the user clicks on the button, open the modal
   btnRole.onclick = function() {
+    $.ajax({
+      url: '/tournaments/roles.json',
+      data: {tournamentID: tournamentID},
+      method: 'GET'
+    }).done((playerRoles) => {
+      for(let i in playerRoles){
+        console.log(i);
+      }
+
+      $('.role-summary-container').append(`
+        <table>
+          <tr>
+            <th>Offense</th>
+            <th>Defense</th>
+            <th>Tank</th>
+            <th>Support</th>
+          </tr>
+        </table>
+
+        `)
+    });
+
     modalRole.style.display = "block";
+
   }
 
 
@@ -188,7 +211,7 @@ $(document).ready(function () {
       modalEmail.style.display = "none";
     }
     if (event.target == modalRole){
-
+      $('.role-summary-container').empty();
       modalRole.style.display = "none";
     }
   }
