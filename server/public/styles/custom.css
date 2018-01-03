@@ -303,7 +303,6 @@ div.share-button {
   text-align: center;
 }
 
-<<<<<<< HEAD
 /* swap players */
 
 div.container.player > span.selected {
@@ -342,8 +341,4 @@ img.avatar {
   width: 30px;
   margin-right: 6px;
   border-radius: 3px;
-=======
-div > span.selected {
-  background-color:#F7931D;
->>>>>>> master
 }
