@@ -174,6 +174,8 @@ $(document).ready(function () {
       method: 'GET'
     }).done((playerRoles) => {
       let firstRoleString = '';
+      let secondRoleString = '';
+
       for(let i in playerRoles){
         firstRoleString +=
         `<tr>
@@ -183,9 +185,19 @@ $(document).ready(function () {
           <th>${playerRoles[i].tankFirst}</th>
           <th>${playerRoles[i].supportFirst}</th>
         </tr>`
+
+        secondRoleString +=
+        `<tr>
+          <th>${i}</th>
+          <th>${playerRoles[i].offenseSecond}</th>
+          <th>${playerRoles[i].defenseSecond}</th>
+          <th>${playerRoles[i].tankSecond}</th>
+          <th>${playerRoles[i].supportSecond}</th>
+        </tr>`
       }
 
       $('.role-summary-container').append(`
+        <h2>Primary Role</h2>
         <table>
           <tr>
             <th>Team</th>
@@ -196,7 +208,17 @@ $(document).ready(function () {
           </tr>
           ${firstRoleString}
         </table>
-
+        <h2>Secondary Role</h2>
+        <table>
+          <tr>
+            <th>Team</th>
+            <th>Offense</th>
+            <th>Defense</th>
+            <th>Tank</th>
+            <th>Support</th>
+          </tr>
+          ${secondRoleString}
+        </table>
         `)
     });
 
