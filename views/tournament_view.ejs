@@ -95,12 +95,17 @@
               <div class="modal-content">
 
                 <h1>Send email to team</h1>
-                <form id= 'email-form' action= 'sendemail' method="POST">
-                  <label for = 'teams'> Choose team </label>
-                  <select name="teams" id = 'team-ids'>
-                  </select>
-                  <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
-                  <input type="submit">
+                <form id="email-form" action= "sendemail" method="POST">
+                  <div class="form-row">
+                    <label class="form-label" for="teams"> Choose team: </label>
+                    <select name="teams" id="team-ids">
+                    </select>
+                  </div>
+                  <div class="form-row">
+                    <label class="form-label" for="eamilBody">Message:</label>
+                    <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
+                    <input type="submit">
+                  </div>
                 </form>
               </div>
             </div>

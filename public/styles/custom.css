@@ -372,3 +372,12 @@ tbody > tr, thead > tr{
   text-align: center;
 }
 
+/* Email Alert Players */
+
+form#email-form{
+  margin: 0 auto;
+}
+
+form#email-form > input {
+  text-align: center;
+}
