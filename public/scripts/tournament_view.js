@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
   function renderTeamCards(teamRoster) {
@@ -111,7 +110,7 @@ $(document).ready(function () {
   btnSwap.onclick = function() {
 
     if($('.selected').length < 2){
-      alert('must select 2!');
+      alert('Please select two players to be swapped');
       return;
     }
     modalSwap.style.display = "block";
@@ -307,9 +306,6 @@ $(document).ready(function () {
     $('.highlights').slick();
     modalHighlights.style.display = "block";
   }
-
-
-
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
