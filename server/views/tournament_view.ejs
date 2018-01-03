@@ -15,6 +15,12 @@
       <script src="/vendor/jquery.bracket.min.js"></script>
       <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" h/>
       <link href="/styles/tournament_view.css" rel="stylesheet" type="text/css" h/>
+      <link rel="stylesheet" type="text/css" href="/styles/slick.css"/>
+      // Add the new slick-theme.css if you want the default styling
+      <link rel="stylesheet" type="text/css" href="/styles/slick-theme.css"/>
+      <script type="text/javascript" src="/scripts/slick.min.js"></script>
+
+
       <main class="container">
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
@@ -54,11 +60,13 @@
           </div>
         <!-- Swap players button -->
 
+        <button id="highlights-button">Highlights</button>
 
         <% if (isOwner)  {%>
           <div class = 'owner-buttons'>
             <button id="swap-modal-button">Swap players</button>
             <button id="email-notifications-button">Send E-mail Notification</button>
+            <button id="role-summary-button">Team Role Summary</button>
           </div>
 
           <!-- Swap players Modal -->
@@ -84,6 +92,23 @@
                 <input type="submit">
               </form>
             </div>
+          </div>
+
+          <!-- Role Summary Modal -->
+          <div id="role-summary-modal" class="modal">
+            <div class="modal-content">
+              <h1>Placeholder</h1>
+              <div class="role-summary-container">
+              </div>
+            </div>
+          </div>
+
+                    <!-- Role Summary Modal -->
+          <div id="highlights-modal" class="modal">
+            <div class="modal-content">
+              <h1>Highlights</h1>
+              <div class="highlights-container">
+              </div>
           </div>
 
 

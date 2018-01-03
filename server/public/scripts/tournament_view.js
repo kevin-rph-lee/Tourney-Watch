@@ -161,6 +161,113 @@ $(document).ready(function () {
     });
   }
 
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalRole = document.getElementById('role-summary-modal');
+  // Get the button that opens the modal
+  const btnRole = document.getElementById("role-summary-button");
+  // When the user clicks on the button, open the modal
+  btnRole.onclick = function() {
+    $.ajax({
+      url: '/tournaments/roles.json',
+      data: {tournamentID: tournamentID},
+      method: 'GET'
+    }).done((playerRoles) => {
+      let firstRoleString = '';
+      let secondRoleString = '';
+
+      for(let i in playerRoles){
+        firstRoleString +=
+        `<tr>
+          <th>${i}</th>
+          <th>${playerRoles[i].offenseFirst}</th>
+          <th>${playerRoles[i].defenseFirst}</th>
+          <th>${playerRoles[i].tankFirst}</th>
+          <th>${playerRoles[i].supportFirst}</th>
+        </tr>`
+
+        secondRoleString +=
+        `<tr>
+          <th>${i}</th>
+          <th>${playerRoles[i].offenseSecond}</th>
+          <th>${playerRoles[i].defenseSecond}</th>
+          <th>${playerRoles[i].tankSecond}</th>
+          <th>${playerRoles[i].supportSecond}</th>
+        </tr>`
+      }
+
+      $('.role-summary-container').append(`
+        <h2>Primary Role</h2>
+        <table>
+          <tr>
+            <th>Team</th>
+            <th>Offense</th>
+            <th>Defense</th>
+            <th>Tank</th>
+            <th>Support</th>
+          </tr>
+          ${firstRoleString}
+        </table>
+        <h2>Secondary Role</h2>
+        <table>
+          <tr>
+            <th>Team</th>
+            <th>Offense</th>
+            <th>Defense</th>
+            <th>Tank</th>
+            <th>Support</th>
+          </tr>
+          ${secondRoleString}
+        </table>
+        `)
+    });
+
+    modalRole.style.display = "block";
+
+  }
+
+
+
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalHighlights = document.getElementById('highlights-modal');
+  // Get the button that opens the modal
+  const btnHighlights = document.getElementById("highlights-button");
+  // When the user clicks on the button, open the modal
+  btnHighlights.onclick = function() {
+    $('.highlights-container').append(`
+      <div class = 'highlights'>
+        <div>
+          <div class = 'wrapper'>
+            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=BP_4cJo3BPU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></ifram
+          </div>
+        </div>
+        <div>
+          <div class = 'wrapper'>
+            <iframe id="ytplayer" type="text/html" width="640" height="360"
+  src="https://youtu.be/BP_4cJo3BPU?autoplay=0&origin=http://example.com"
+  frameborder="0"></iframe>
+          </div>
+        </div>
+
+        <div>
+          <div class = 'wrapper'>
+            <iframe id="ytplayer" type="text/html" width="640" height="360"
+  src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
+  frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+      `)
+
+    $('.highlights').slick();
+    modalHighlights.style.display = "block";
+
+  }
+
+
+
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     console.log('clicked!')
@@ -174,6 +281,15 @@ $(document).ready(function () {
     if (event.target == modalEmail){
       $('#team-ids').empty();
       modalEmail.style.display = "none";
+    }
+    if (event.target == modalRole){
+      $('.role-summary-container').empty();
+      modalRole.style.display = "none";
+    }
+    if (event.target == modalHighlights){
+      console.log('clicked!');
+      $('.highlights-container').empty();
+      modalHighlights.style.display = "none";
     }
   }
 

@@ -61,6 +61,26 @@ module.exports = (knex, _, env, mailGun) => {
     return count;
   }
 
+
+  /**
+   * Counts how many support type players
+   *
+   * @param {array} data result of overwatch api
+   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @returns
+   */
+  function countRole(data, role, firstOrSecondRole) {
+    let count = 0;
+    data.forEach((key) => {
+      if (key[firstOrSecondRole] === role) {
+        return count ++;
+      }
+      // TO DO: possible refactor?
+      (key[firstOrSecondRole] === role) ? count++ : 0;
+    });
+    return count;
+  }
+
   /**
    * This updates database to show team assignments
    *
@@ -223,6 +243,43 @@ module.exports = (knex, _, env, mailGun) => {
         res.json(results[0]);
       });
   });
+
+
+  router.get("/roles.json", (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    const roles = ['offense', 'defense', 'tank', 'suport'];
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
+    // Gets player stats for each team in a specific tournament
+    knex
+      .select("users.battlenet_id", "team_id", "level", "games_won","first_role", "second_role")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .where({tournament_id: tournamentID})
+      .orderBy("team_id", "ascd")
+      .then((playerStats) => {
+        let teamRoles = {};
+        const teamRoster = _.groupBy(playerStats, "team_id");
+        for(let team in teamRoster){
+          //TO - DO : DRY this up....
+          teamRoles[team] = {
+            offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
+            offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
+            defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
+            defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
+            tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
+            tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
+            supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
+            supportSecond: countRole(teamRoster[team], 'support', 'second_role')
+          }
+        }
+        res.send(teamRoles);
+      });
+  });
+
 
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
