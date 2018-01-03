@@ -71,6 +71,8 @@ $(document).ready(function () {
 
   loadCards();
 
+  
+
   // Share button functionality
   $("[data-toggle='toggle']").click(function() {
     const selector = $(this).data("target");
@@ -206,42 +208,57 @@ $(document).ready(function () {
 
       $('.role-summary-container').append(`
       <div class="row">
-      <div class="table-responsive col-md-6">
-      <h3>Primary Roles</h3>
-      <table class="table table-striped table-dark">
-        <thead>
-          <tr>
-            <th scope="col">Team #</th>
-            <th scope="col">Offense</th>
-            <th scope="col">Defense</th>
-            <th scope="col">Tank</th>
-            <th scope="col">Support</th>
-          </tr>
-        </thead>
-        <tbody class="player-table-stats">
-          ${firstRoleString}
-        </tbody>
-      </table>
-      </div>
-      <div class="table-responsive col-md-6">
-      <h3>Secondary Roles</h3>
-      <table class="table table-striped table-dark">
-        <thead>
-          <tr>
-            <th scope="col">Team #</th>
-            <th scope="col">Offense</th>
-            <th scope="col">Defense</th>
-            <th scope="col">Tank</th>
-            <th scope="col">Support</th>
-          </tr>
-        </thead>
-        <tbody class="player-table-stats">
-          ${secondRoleString}
-        </tbody>
-      </table>
-      </div>
+        <div class="table-responsive col-md-6">
+        <h3>Primary Roles</h3>
+          <table id="primary-role-summary" class="table table-striped table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Team #</th>
+                <th scope="col">Offense</th>
+                <th scope="col">Defense</th>
+                <th scope="col">Tank</th>
+                <th scope="col">Support</th>
+              </tr>
+            </thead>
+            <tbody class="player-table-stats">
+              ${firstRoleString}
+            </tbody>
+          </table>
+          </div>
+          <div class="table-responsive col-md-6">
+          <h3>Secondary Roles</h3>
+          <table id="secondary-role-summary" class="table table-striped table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Team #</th>
+                <th scope="col">Offense</th>
+                <th scope="col">Defense</th>
+                <th scope="col">Tank</th>
+                <th scope="col">Support</th>
+              </tr>
+            </thead>
+            <tbody class="player-table-stats">
+              ${secondRoleString}
+            </tbody>
+          </table>
+        </div>
       </div>
       `)
+
+      $("#primary-role-summary").DataTable({
+        "paging": false,
+        "searching": false,
+        "autoWidth": true,
+        "info": false,
+        "scrollCollapse": false,
+      });
+      $("#secondary-role-summary").DataTable({
+        "paging": false,
+        "searching": false,
+        "autoWidth": true,
+        "info": false,
+        "scrollCollapse": false,
+      });
     });
   modalRole.style.display = "block";
   }
