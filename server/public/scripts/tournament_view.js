@@ -235,34 +235,27 @@ $(document).ready(function () {
   const btnHighlights = document.getElementById("highlights-button");
   // When the user clicks on the button, open the modal
   btnHighlights.onclick = function() {
-    $('.highlights-container').append(`
-      <div class = 'highlights'>
-        <div>
-          <div class = 'wrapper'>
-            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=BP_4cJo3BPU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></ifram
-          </div>
-        </div>
-        <div>
-          <div class = 'wrapper'>
-            <iframe id="ytplayer" type="text/html" width="640" height="360"
-  src="https://youtu.be/BP_4cJo3BPU?autoplay=0&origin=http://example.com"
-  frameborder="0"></iframe>
-          </div>
-        </div>
+    let highlightsString = "<div class = 'highlights'>";
+    $.ajax({
+      url: '/highlights/' + tournamentID,
+      method: 'GET'
+    }).done((highlights) => {
 
-        <div>
+      for(let i = 0; i < highlights.length; i++){
+
+        highlightsString +=
+        `<div>
           <div class = 'wrapper'>
-            <iframe id="ytplayer" type="text/html" width="640" height="360"
-  src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
-  frameborder="0"></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
           </div>
-        </div>
-      </div>
-      `)
-
-    $('.highlights').slick();
-    modalHighlights.style.display = "block";
-
+        </div>`
+      }
+      highlightsString += '</div>'
+      $('.highlights-container').append(highlightsString);
+      console.log(highlightsString)
+      $('.highlights').slick();
+      modalHighlights.style.display = "block";
+    });
   }
 
 
