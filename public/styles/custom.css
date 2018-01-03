@@ -362,3 +362,9 @@ img.player-class{
   width: 25px;
   margin-right: 2px;
 }
+
+/* Team Summary */
+
+tbody > tr, thead > tr{
+  text-align: center;
+}
