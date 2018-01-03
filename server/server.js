@@ -15,7 +15,9 @@ const knexLogger = require('knex-logger');
 const cookieSession = require('cookie-session');
 const owjs = require('overwatch-js');
 const bcrypt = require('bcrypt');
-const _ = require('lodash')
+const _ = require('lodash');
+const mailGun = require('mailgun-js')({apiKey: process.env.MAILGUN_API, domain: process.env.MAILGUN_DOMAIN});
+
 
 // // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
@@ -43,9 +45,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount all resource routes
-app.use('/users', usersRoutes(knex, bcrypt));
+app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs));
-app.use('/tournaments', tournamentsRoutes(knex, _, env));
+app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun));
 // app.use('/games', gamesRoutes(knex));
 // app.use('/teams', teamsRoutes(knex));
 
@@ -103,13 +105,13 @@ app.get('/', async (req, res) => {
           }
 
           res.render('index', {
-            email: req.session.email, 
-            asPlayerList: asPlayerList, 
+            email: req.session.email,
+            asPlayerList: asPlayerList,
             asOwnerList: asOwnerList
           });
-        }); 
+        });
       })
-  }  
+  }
 });
 
 // shortened link to redirect to tournaments pages
