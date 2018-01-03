@@ -281,7 +281,28 @@ $(document).ready(function () {
       url: '/highlights/' + tournamentID,
       method: 'GET'
     }).done((highlights) => {
-
+      $('.manage-highlights-container').append(`
+          <div class="table-responsive">
+          <h3 class="sub-header"> Delete Highlights </h3>
+            <table class="table table-striped table-dark">
+              <thead class="list">
+                <tr>
+                  <th>Highlight Name</th>
+                  <th>Thumbnail</th>
+                  <th>Delete?</th>
+                </tr>
+              </thead>
+              <tbody class="tournament-details">
+                <tr>
+                  <td>test</td>
+                  <td>test</td>
+                  <td><a href="/tournaments/admin"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`)
       modalManageHighlights.style.display = "block";
     });
   }

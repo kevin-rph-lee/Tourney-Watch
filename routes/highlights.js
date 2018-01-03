@@ -11,7 +11,7 @@ module.exports = (knex) => {
    * @return {[STRING]}     youtube ID
    */
   function getYoutubeID(url){
-
+    //TO DO - get a better function
     const VID_REGEX = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
 
     return (url.match(VID_REGEX)[1]);
@@ -29,7 +29,11 @@ module.exports = (knex) => {
   });
 
   router.post("/:id/new", (req, res) => {
-
+    //TO-DO-Refactor to a promise chain
+    //error checking
+    if(!req.body.name || !req.body.url){
+      return res.sendStatus(400);
+    }
     knex
       .select('id')
       .from("tournaments")
@@ -39,12 +43,22 @@ module.exports = (knex) => {
           res.sendStatus(404);
         } else {
           knex
-            .insert({name: req.body.name, url: getYoutubeID(req.body.url), tournament_id: req.params.id})
-            .into('highlights')
-            .returning('id')
+            .select('name')
+            .from('highlights')
+            .where({name:req.body.name, tournament_id:req.params.id})
             .then((results)=>{
-              res.redirect("/tournaments/" + req.params.id + "/");
-            });
+              if(results.length === 0){
+                console.log(req.body);
+                knex
+                  .insert({name: req.body.name, url: getYoutubeID(req.body.url), tournament_id: req.params.id})
+                  .into('highlights')
+                  .then(()=>{
+                    res.redirect("/tournaments/" + req.params.id + "/");
+                  });
+                } else{
+                  res.sendStatus(400);
+                }
+            })
         }
       });
   });

@@ -132,9 +132,9 @@
               <h1>Manage Highlights</h1>
               <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
                 <label for = 'name'> Highlight Name  </label>
-                <input type="text" name="name"><br>
+                <input type="text" name="name" required=""><br>
                 <label for = 'url'> Highlight Youtube URL </label>
-                <input type="text" name="url"><br>
+                <input type="text" name="url" required=""><br>
                 <input type="submit">
               </form>
               <div class="manage-highlights-container">
