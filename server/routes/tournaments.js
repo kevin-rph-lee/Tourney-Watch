@@ -61,6 +61,26 @@ module.exports = (knex, _, env, mailGun) => {
     return count;
   }
 
+
+  /**
+   * Counts how many support type players
+   *
+   * @param {array} data result of overwatch api
+   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @returns
+   */
+  function countRole(data, role, firstOrSecondRole) {
+    let count = 0;
+    data.forEach((key) => {
+      if (key[firstOrSecondRole] === role) {
+        return count ++;
+      }
+      // TO DO: possible refactor?
+      (key[firstOrSecondRole] === role) ? count++ : 0;
+    });
+    return count;
+  }
+
   /**
    * This updates database to show team assignments
    *
@@ -227,6 +247,7 @@ module.exports = (knex, _, env, mailGun) => {
 
   router.get("/roles.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
+    const roles = ['offense', 'defense', 'tank', 'suport'];
     // if(req.session.email !== process.env.ADMIN_EMAIL) {
     //   // STRETCH: "Forbidden" error page
     //   res.sendStatus(403);
@@ -243,11 +264,17 @@ module.exports = (knex, _, env, mailGun) => {
         let teamRoles = {};
         const teamRoster = _.groupBy(playerStats, "team_id");
         for(let team in teamRoster){
+          //TO - DO : DRY this up....
           teamRoles[team] = {
-            healerPrime: countSupport(teamRoster[team], 'first_role')
+            offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
+            offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
+            defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
+            defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
+            tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
+            tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
+            supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
+            supportSecond: countRole(teamRoster[team], 'support', 'second_role')
           }
-          console.log(teamRoster[team]);
-          console.log('-------')
         }
         res.send(teamRoles);
       });
