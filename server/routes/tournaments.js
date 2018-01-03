@@ -224,6 +224,36 @@ module.exports = (knex, _, env, mailGun) => {
       });
   });
 
+
+  router.get("/roles.json", (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
+    // Gets player stats for each team in a specific tournament
+    knex
+      .select("users.battlenet_id", "team_id", "level", "games_won","first_role", "second_role")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .where({tournament_id: tournamentID})
+      .orderBy("team_id", "ascd")
+      .then((playerStats) => {
+        let teamRoles = {};
+        const teamRoster = _.groupBy(playerStats, "team_id");
+        for(let team in teamRoster){
+          teamRoles[team] = {
+            healerPrime: countSupport(teamRoster[team], 'first_role')
+          }
+          console.log(teamRoster[team]);
+          console.log('-------')
+        }
+        res.send(teamRoles);
+      });
+  });
+
+
   router.get("/cards.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
     // if(req.session.email !== process.env.ADMIN_EMAIL) {

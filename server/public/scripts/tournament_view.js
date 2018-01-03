@@ -161,6 +161,18 @@ $(document).ready(function () {
     });
   }
 
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalRole = document.getElementById('role-summary-modal');
+  // Get the button that opens the modal
+  const btnRole = document.getElementById("role-summary-button");
+  // When the user clicks on the button, open the modal
+  btnRole.onclick = function() {
+    modalRole.style.display = "block";
+  }
+
+
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     console.log('clicked!')
@@ -174,6 +186,10 @@ $(document).ready(function () {
     if (event.target == modalEmail){
       $('#team-ids').empty();
       modalEmail.style.display = "none";
+    }
+    if (event.target == modalRole){
+
+      modalRole.style.display = "none";
     }
   }
 
