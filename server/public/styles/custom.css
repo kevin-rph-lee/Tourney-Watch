@@ -145,17 +145,7 @@ div.enroll-now button:active {
 
 }
 
-/* Twitch Video Player Centering */
-
-/* div.twitch-display{
-  text-align: center;
-}
-
-.embed-responsive{
-  max-width: 620px;
-  margin: 0 auto;
-}
-*/
+/* Twitch Video Player & Chat Embeds */
 
 iframe{
   padding: 0 !important;
@@ -165,6 +155,17 @@ iframe{
 .container-fluid, .embeds {
   height: 100% !important;
 }
+
+iframe#video{
+  margin: 0 auto;
+}
+
+@media (max-width: 992px){
+  #chat{
+    display: none;
+  }
+}
+
 /* Tournament Listing for Individual Users */
 
 .tourney-list{
