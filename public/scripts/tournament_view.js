@@ -278,38 +278,100 @@ $(document).ready(function () {
   const btnHighlights = document.getElementById("highlights-button");
   // When the user clicks on the button, open the modal
   btnHighlights.onclick = function() {
-    $('.highlights-container').append(`
-      <div class = 'highlights'>
-        <div>
-          <div class = 'wrapper'>
-            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=BP_4cJo3BPU" 
-            frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div>
-          <div class = 'wrapper'>
-            <iframe id="ytplayer" type="text/html" width="640" height="360"
-            src="https://youtu.be/BP_4cJo3BPU?autoplay=0&origin=http://example.com"
-            frameborder="0"></iframe>
-          </div>
-        </div>
+    let highlightsString = "<div class = 'highlights'>";
+    $.ajax({
+      url: '/highlights/' + tournamentID,
+      method: 'GET'
+    }).done((highlights) => {
 
-        <div>
+      for(let i = 0; i < highlights.length; i++){
+
+        highlightsString +=
+        `<div>
           <div class = 'wrapper'>
-            <iframe id="ytplayer" type="text/html" width="640" height="360"
-            src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
-            frameborder="0"></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>`
+      }
+      highlightsString += '</div>'
+      $('.highlights-container').append(highlightsString);
+      console.log(highlightsString)
+      $('.highlights').slick();
+      modalHighlights.style.display = "block";
+    });
+  }
+
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalManageHighlights = document.getElementById('manage-highlights-modal');
+  // Get the button that opens the modal
+  const btnManageHighlights = document.getElementById("manage-highlights-button");
+  // When the user clicks on the button, open the modal
+  btnManageHighlights.onclick = function() {
+    $.ajax({
+      url: '/highlights/' + tournamentID,
+      method: 'GET'
+    }).done((highlights) => {
+      $('.manage-highlights-container').append(`
+          <div class="table-responsive">
+          <h3 class="sub-header"> Delete Highlights </h3>
+            <table class="table table-striped table-dark">
+              <thead class="list">
+                <tr>
+                  <th>Highlight Name</th>
+                  <th>Preview</th>
+                  <th>Delete?</th>
+                </tr>
+              </thead>
+              <tbody class="highlight-details">
+
+              </tbody>
+            </table>
           </div>
         </div>
+<<<<<<< HEAD
       </div>
       `)
     $('.highlights').slick();
     modalHighlights.style.display = "block";
   }
 
+=======
+      </div>`)
+
+      for(let i = 0; i < highlights.length; i++){
+        $('.highlight-details').append(
+          `<tr>
+            <td>${highlights[i].name}</td>
+            <td>
+              <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${highlights[i].url}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
+</span>
+            </td>
+              <td>
+            </td>
+          </tr>`)
+      }
+
+    $('span[data-toggle="tooltip"]').tooltip({
+        animated: 'fade',
+        placement: 'right',
+        html: true
+      })
+
+
+      modalManageHighlights.style.display = "block";
+    });
+  }
+
+
+
+    $('span').onclick = function(event){
+      console.log('delete!');
+    }
+
+>>>>>>> 25a10d0b1472703938cb996b1922aa1d7b31215f
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    console.log('clicked!')
     if (event.target == modalSwap) {
       //Empties the modal container
       $('.swap-players-container').empty();
@@ -326,10 +388,12 @@ $(document).ready(function () {
       modalRole.style.display = "none";
     }
     if (event.target == modalHighlights){
-      console.log('clicked!');
       $('.highlights-container').empty();
       modalHighlights.style.display = "none";
     }
+    if (event.target == modalManageHighlights){
+      $('.manage-highlights-container').empty();
+      modalManageHighlights.style.display = "none";
+    }
   }
-
 });
