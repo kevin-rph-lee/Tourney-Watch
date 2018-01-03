@@ -329,14 +329,6 @@ $(document).ready(function () {
             </table>
           </div>
         </div>
-<<<<<<< HEAD
-      </div>
-      `)
-    $('.highlights').slick();
-    modalHighlights.style.display = "block";
-  }
-
-=======
       </div>`)
 
       for(let i = 0; i < highlights.length; i++){
@@ -345,7 +337,7 @@ $(document).ready(function () {
             <td>${highlights[i].name}</td>
             <td>
               <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${highlights[i].url}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
-</span>
+              </span>
             </td>
               <td>
             </td>
@@ -369,7 +361,6 @@ $(document).ready(function () {
       console.log('delete!');
     }
 
->>>>>>> 25a10d0b1472703938cb996b1922aa1d7b31215f
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     if (event.target == modalSwap) {
