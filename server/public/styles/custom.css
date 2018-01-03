@@ -307,6 +307,12 @@ div.share-button {
 
 div.container.player > span.selected {
   background-color:#F7931D;
+  border-radius: 2px
+}
+
+div.container.player > span {
+  padding-left:  2px;
+  padding-right:  2px;
 }
 
 /* Admin Options */
