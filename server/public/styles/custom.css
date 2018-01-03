@@ -147,13 +147,14 @@ div.enroll-now button:active {
 
 /* Twitch Video Player & Chat Embeds */
 
+.container-fluid, .embeds {
+  height: 100% !important;
+}
+
 iframe{
   padding: 0 !important;
   height: 100% !important;
   width: 100%;
-}
-.container-fluid, .embeds {
-  height: 100% !important;
 }
 
 iframe#video{
@@ -273,11 +274,6 @@ button.start-tournament:hover {
   width: 333px;
 }
 
-/* #share i{
-  font-size: 30px;
-  color: #F7931D;
-  margin: 7px 5px 7px 6px;
-} */
 #share > * {
   position: relative;
   margin-left: 3px;
