@@ -145,6 +145,7 @@ module.exports = (knex, owjs) => {
             'user_id': userID,
             'team_id': null,
             'tournament_id': tournamentID,
+            'avatar': data.profile.avatar,
             'level': data.profile.level,
             'first_role': roleRanks[0].role,
             'first_role_time_played': roleRanks[0].time,
@@ -303,9 +304,8 @@ module.exports = (knex, owjs) => {
           console.log(results[0].battlenet_id);
 
           await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
-          // THIS RESPONSE DOES NOT WORK. NEITHER RENDER OR REDIRECT WORKS
-          // User's info is inserted to enrollments though
-          res.render("index", {email: req.session.email})
+
+          res.redirect(`/tournaments/${tournamentID}`);
         }
       });
   });

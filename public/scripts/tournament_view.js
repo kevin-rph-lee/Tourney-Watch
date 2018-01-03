@@ -7,7 +7,7 @@ $(document).ready(function () {
     <h1>${teamRoster["1"]["0"]["name"]}</h1>
     `)
     Object.keys(teamNames).forEach((t) => {
-        $(".row").append(`
+        $(".team-cards").append(`
         <div class="card mb-3" style="min-width: 15rem">
           <div class="card-header">${teamNames[t]}</div>
             <div class="card-body" data-team-id="${teamNames[t]}">
@@ -91,6 +91,18 @@ $(document).ready(function () {
     const selector = $(this).data("target");
     $(selector).toggleClass('in');
   });
+
+  $(".fa-clipboard").click(function() {
+    const link = $(this).data("link")
+    const $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(this).data("link")).select();
+    document.execCommand("copy");
+    $temp.remove();
+    alert(`${link} has been copied!`)
+  });
+
+  //TESTING
 
   //TO DO: make this look....  nicer.
   // Get the modal
@@ -239,22 +251,23 @@ $(document).ready(function () {
       <div class = 'highlights'>
         <div>
           <div class = 'wrapper'>
-            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=BP_4cJo3BPU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></ifram
+            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=BP_4cJo3BPU" 
+            frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
           </div>
         </div>
         <div>
           <div class = 'wrapper'>
             <iframe id="ytplayer" type="text/html" width="640" height="360"
-  src="https://youtu.be/BP_4cJo3BPU?autoplay=0&origin=http://example.com"
-  frameborder="0"></iframe>
+            src="https://youtu.be/BP_4cJo3BPU?autoplay=0&origin=http://example.com"
+            frameborder="0"></iframe>
           </div>
         </div>
 
         <div>
           <div class = 'wrapper'>
             <iframe id="ytplayer" type="text/html" width="640" height="360"
-  src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
-  frameborder="0"></iframe>
+            src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
+            frameborder="0"></iframe>
           </div>
         </div>
       </div>

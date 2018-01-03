@@ -46,7 +46,7 @@ module.exports = (knex, _, env, mailGun) => {
    * Counts how many support type players
    *
    * @param {array} data result of overwatch api
-   * @param {string} roleChoiceNo can either 'first_role' or 'second_role'
+   * @param {string} roleChoice can either 'first_role' or 'second_role'
    * @returns
    */
   function countSupport(data, roleChoice) {
@@ -126,7 +126,7 @@ module.exports = (knex, _, env, mailGun) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id")
+     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "avatar")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -162,7 +162,7 @@ module.exports = (knex, _, env, mailGun) => {
    */
   function playersEnrolled(tournamentID){
     return knex
-      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
+      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
@@ -199,8 +199,14 @@ module.exports = (knex, _, env, mailGun) => {
     console.log(req.body);
 
     //
-    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
+    if(!name || !description || checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name)){
       // STRETCH: Show 'That name has been taken' error page
+      console.log(`something is wrong`)
+      console.log(!name)
+      console.log(!description)
+      console.log(!checkInvalidCharacters(twitchChannel))
+      console.log(!checkInvalidCharacters(description))
+      console.log(!checkInvalidCharacters(name))
       res.sendStatus(400);
       return;
     }
@@ -289,7 +295,7 @@ module.exports = (knex, _, env, mailGun) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -356,11 +362,10 @@ module.exports = (knex, _, env, mailGun) => {
           const teamCount = results[0].no_of_teams;
           const started = results[0].is_started;
           const isReady = (enrolledPlayers.length === teamCount * 6);
-          const twitchChannel = `<iframe src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>`;
+          const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
+          const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
           const twitchName = results[0].twitch_channel;
-
           if (isReady && started) {
-
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
@@ -370,11 +375,10 @@ module.exports = (knex, _, env, mailGun) => {
               email: req.session.email,
               started: started,
               twitchChannel: twitchChannel,
+              twitchChat: twitchChat,
               twitchName: twitchName,
               isOwner: isOwner})
           } else {
-            console.log('HEEEEY')
-            console.log()
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
               teamCount: results[0].no_of_teams,
@@ -410,7 +414,8 @@ module.exports = (knex, _, env, mailGun) => {
         const creatorUserID = results[0].creator_user_id;
         const isReady = (enrolledPlayers.length === teamCount * 6);
         const isOwner = (req.session.userID === creatorUserID);
-        const twitchChannel = `<iframe src="https://player.twitch.tv/?channel=${results[0].twitch_channel}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>`;
+        const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
+        const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
         const twitchName = results[0].twitch_channel;
         console.log('This should be the results: ', results)
         if(isOwner) {
@@ -428,6 +433,7 @@ module.exports = (knex, _, env, mailGun) => {
             tournamentID: tournamentID,
             isOwner: isOwner,
             twitchChannel: twitchChannel,
+            twitchChat: twitchChat,
             twitchName: twitchName
           })
         } else {
