@@ -270,7 +270,21 @@ $(document).ready(function () {
     });
   }
 
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalManageHighlights = document.getElementById('manage-highlights-modal');
+  // Get the button that opens the modal
+  const btnManageHighlights = document.getElementById("manage-highlights-button");
+  // When the user clicks on the button, open the modal
+  btnManageHighlights.onclick = function() {
+    $.ajax({
+      url: '/highlights/' + tournamentID,
+      method: 'GET'
+    }).done((highlights) => {
 
+      modalManageHighlights.style.display = "block";
+    });
+  }
 
 
   // When the user clicks anywhere outside of the modal, close it
@@ -295,6 +309,11 @@ $(document).ready(function () {
       console.log('clicked!');
       $('.highlights-container').empty();
       modalHighlights.style.display = "none";
+    }
+    if (event.target == modalManageHighlights){
+      console.log('clicked!');
+      $('.manage-highlights-container').empty();
+      modalManageHighlights.style.display = "none";
     }
   }
 

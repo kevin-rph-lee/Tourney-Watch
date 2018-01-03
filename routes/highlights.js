@@ -43,7 +43,7 @@ module.exports = (knex) => {
             .into('highlights')
             .returning('id')
             .then((results)=>{
-              res.sendStatus(200);
+              res.redirect("/tournaments/" + req.params.id + "/");
             });
         }
       });
