@@ -136,8 +136,19 @@ exports.seed = async function(knex, promise){
       {user_id:users[47].id,tournament_id,level:78,first_role:'tank',first_role_time_played:521495469,second_role:'defense',second_role_time_played:309593581,medal_gold:909,medal_silver:1280,medal_bronze:1891,games_won:1030},
     ]);
   })();
+  const highlightsTask = (async () => {
+    const [tournament] = await tournamentTask;
+    const tournament_id = tournament.id;
+    await knex('highlights').del();
+    return knex('highlights').insert([
+      {tournament_id, name: 'Video 1', url: 'eWbroN1QORk'},
+      {tournament_id, name: 'Video 2', url: '2X4IRPnKAGk'},
+      {tournament_id, name: 'Video 3', url: 'jRC9RxqwPJ0'},
+    ]);
+  })();
   await usersTask;
   await teamsTask;
   await tournamentTask;
   await tournament_enrollmentTask;
+  await highlightsTask;
 };
