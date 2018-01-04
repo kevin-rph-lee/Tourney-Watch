@@ -70,7 +70,7 @@ $(document).ready(function () {
 
   loadCards();
 
-  
+
 
   // Share button functionality
   $("[data-toggle='toggle']").click(function() {
@@ -266,7 +266,7 @@ $(document).ready(function () {
         "scrollCollapse": false,
       });
     });
-    
+
     console.log(modalRole.style.display);
     modalRole.style.display = "block";
   }
@@ -365,6 +365,13 @@ $(document).ready(function () {
         //removing the row DOM element
         $(e.target).closest("tr" ).remove()
       });
+    });
+
+    $( '.add-highlight' ).click(function(e) {
+      console.log($('.highlight-name').val());
+      console.log($('.highlight-url').val());
+
+
     });
       modalManageHighlights.style.display = "block";
     });
