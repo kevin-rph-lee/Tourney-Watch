@@ -44,7 +44,6 @@ $(document).ready(function () {
   }
 
   function loadCards() {
-    console.log('i am in load cards', tournamentID);
     $.ajax({
       url: '/tournaments/cards.json',
       data: {tournamentID: tournamentID},
