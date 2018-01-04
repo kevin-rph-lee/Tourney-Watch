@@ -13,145 +13,135 @@
       <script src="/scripts/tournament_view.js"></script>
       <script src="/scripts/bracketgenerator.js"></script>
       <script src="/vendor/jquery.bracket.min.js"></script>
+      <script type="text/javascript" src="/scripts/slick.min.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/r-2.2.1/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
       <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" h/>
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/r-2.2.1/sc-1.4.3/sl-1.2.4/datatables.min.css"/>
       <link href="/styles/tournament_view.css" rel="stylesheet" type="text/css" h/>
       <link rel="stylesheet" type="text/css" href="/styles/slick.css"/>
       // Add the new slick-theme.css if you want the default styling
       <link rel="stylesheet" type="text/css" href="/styles/slick-theme.css"/>
-      <script type="text/javascript" src="/scripts/slick.min.js"></script>
+      
 
 
       <main class="container">
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
-
         </div>
 
         <div class="share-button">
+          <button id="highlights-button" class="start-tournament">Highlights</button>
           <% include partials/share_button %>
         </div>
         <% if (twitchName !== null) { %>
-        <h3> <%= twitchName %> </h3>
-
-       <div class="container-fluid">
-        <div class="row embeds">
-          <iframe
-            class="col-md-8 embed-responsive embed-responsive-16by9"
-            src="<%- twitchChannel %>"
-            frameborder="0"
-            allowfullscreen
-            id="video">
-          </iframe>
-          <iframe
-            frameborder="0"
-            scrolling="no"
-            src= "<%- twitchChat %>"
-            // class="col-md-4"
-            id="chat">
-          </iframe>
+        <div class="container-fluid">
+          <div class="row embeds">
+            <iframe
+              class="col-md-8 embed-responsive embed-responsive-16by9"
+              src="<%- twitchChannel %>"
+              frameborder="0"
+              allowfullscreen
+              id="video">
+            </iframe>
+            <iframe
+              frameborder="0"
+              scrolling="no"
+              src= "<%- twitchChat %>"
+              // class="col-md-4"
+              id="chat">
+            </iframe>
+          </div>
         </div>
-      </div>
-
-
-
         <% } %>
-
-
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <container>
-                  <center>
-                  <div id="save" style="display: inline-block;">
-
-                  </div>
-              </center>
+            <center>
+              <div id="save" style="display: inline-block;">
+              </div>
+            </center>
           </container>
 
-        <% if (isOwner)  {%>
+          <% if (isOwner)  {%>
           <div style="text-align: center">
             <button id="target" class="save button">Save</button>
           </div>
-        <% } %>
+          <% } %>
 
 
           <div class="container">
-              <div class="row team-cards">
-              <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
-              </div>
-        <!-- Swap players button -->
-
-        <button id="highlights-button">Highlights</button>
-
-        <% if (isOwner)  {%>
-          <div class = 'admin-options'>
-            <button id="manage-highlights-button"><i class="fa fa-file-video-o" aria-hidden="true" title="Manage Highlights"></i></button>
-            <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
-            <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Alert Players"></i></button>
-            <button id="role-summary-button">Team Role Summary</button>
-          </div>
-
-          <!-- Swap players Modal -->
-          <div id="swap-players-modal" class="modal">
-            <div class="modal-content">
-              <h1>Swap Players?</h1>
-              <div class="swap-players-container">
-              </div>
-              <button id="swap-players-button">Confirm!</button>
-
+            <div class="row team-cards">
+            <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
             </div>
-          </div>
-
-          <!-- Send Email Modal -->
-          <div id="send-email-modal" class="modal">
-            <div class="modal-content">
-
-              <h1>Send email to team</h1>
-              <form id= 'email-form' action= 'sendemail' method="POST">
-                <label for = 'teams'> Choose team </label>
-                <select name="teams" id = 'team-ids'>
-                </select>
-                <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
-                <input type="submit">
-              </form>
+            <% if (isOwner)  { %>
+            <div class = 'admin-options'>
+              <button id="manage-highlights-button"><i class="fa fa-file-video-o" aria-hidden="true" title="Manage Highlights"></i></button>
+              <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
+              <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Email Players"></i></button>
+              <button id="role-summary-button"><i class="fa fa-users" aria-hidden="true" title="Team Summary"></i></button>
             </div>
-          </div>
 
-          <!-- Role Summary Modal -->
-          <div id="role-summary-modal" class="modal">
-            <div class="modal-content">
-              <h1>Placeholder</h1>
-              <div class="role-summary-container">
+            <!-- Swap players Modal -->
+            <div id="swap-players-modal" class="modal">
+              <div class="modal-content">
+                <div class="swap-players-container">
+                </div>
+                  <button id="swap-players-button" >Confirm!</button>
               </div>
             </div>
-          </div>
 
+            <!-- Send Email Modal -->
+            <div id="send-email-modal" class="modal">
+              <div class="modal-content">
 
+                <h1>Send email to team</h1>
+                <form id="email-form" action= "sendemail" method="POST">
+                  <div class="form-row">
+                    <label class="form-label" for="teams"> Choose team: </label>
+                    <select name="teams" id="team-ids">
+                    </select>
+                  </div>
+                  <div class="form-row">
+                    <label class="form-label" for="eamilBody">Message:</label>
+                    <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
+                    <input type="submit">
+                  </div>
+                </form>
+              </div>
+            </div>
 
           <!-- Manage highlights button -->
           <div id="manage-highlights-modal" class="modal">
             <div class="modal-content">
               <h1>Manage Highlights</h1>
               <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
-                <label for = 'name'> Highlight Name  </label>
-                <input type="text" name="name" required=""><br>
-                <label for = 'url'> Highlight Youtube URL </label>
-                <input type="text" name="url" required=""><br>
+                <label for="name" class="form-label"> Highlight Name  </label>
+                <input class="form-box" type="text" name="name" required=""><br>
+                <label for ="url" class="form-label"> Highlight Youtube URL </label>
+                <input class="form-box" type="text" name="url" required=""><br>
                 <input type="submit">
               </form>
               <div class="manage-highlights-container">
               </div>
             </div>
           </div>
+          
+          <!-- Role Summary Modal -->
+          <div id="role-summary-modal" class="modal">
+            <div class="modal-content">
+              <h1>Team Summary</h1>
+              <div class="role-summary-container">
+              </div>
+            </div>
+          </div>
+            <% } %>
 
-                    <!-- Role Summary Modal -->
+          <!-- Role Summary Modal -->
           <div id="highlights-modal" class="modal">
             <div class="modal-content">
               <h1>Highlights</h1>
               <div class="highlights-container">
               </div>
-          </div>
-
-
-        <% } %>
+            </div>
           </div>
       </main>
   </body>

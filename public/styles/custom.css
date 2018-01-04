@@ -41,7 +41,7 @@ p {
     padding:20px;
   }
 
-  div img{
+  div img.banner{
     max-width: 100%;
     max-height: 100%;
     border: solid 1px #F7931D;
@@ -271,7 +271,7 @@ button.start-tournament:hover {
 }
 
 #share.in {
-  width: 333px;
+  width: 298px;
 }
 
 #share > * {
@@ -307,8 +307,17 @@ div.share-button {
 
 div.container.player > span.selected {
   background-color:#F7931D;
+  border-radius: 2px
 }
 
+div.container.player > span {
+  padding-left:  2px;
+  padding-right:  2px;
+}
+
+.swap-table{
+  margin: 0 auto;
+}
 /* Admin Options */
 
 .admin-options{
@@ -341,4 +350,34 @@ img.avatar {
   width: 30px;
   margin-right: 6px;
   border-radius: 3px;
+}
+
+/* Class Icons */
+
+div.container.player > span{
+  top: 3px;
+  font-size: 18px;
+}
+
+img.player-class{
+  border: none;
+  height: 25px;
+  width: 25px;
+  margin-right: 2px;
+}
+
+/* Team Summary */
+
+tbody.player-class > tr, thead.player-class > tr{
+  text-align: center;
+}
+
+/* Email Alert Players */
+
+form#email-form{
+  margin: 0 auto;
+}
+
+#highlight-form > *{
+  margin: 5px;
 }
