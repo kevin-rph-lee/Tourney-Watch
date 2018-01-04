@@ -23,6 +23,7 @@ const mailGun = require('mailgun-js')({apiKey: process.env.MAILGUN_API, domain: 
 const usersRoutes = require('./routes/users');
 const enrollmentsRoutes = require('./routes/enrollments');
 const tournamentsRoutes = require('./routes/tournaments');
+const highlightsRoutes = require('./routes/highlights');
 // const gamesRoutes = require('./routes/games');
 // const teamsRoutes = require('./routes/teams');
 
@@ -48,8 +49,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs));
 app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun));
-// app.use('/games', gamesRoutes(knex));
-// app.use('/teams', teamsRoutes(knex));
+app.use('/highlights', highlightsRoutes(knex));
+
 
 function playersEnrolled(tournamentID){
   return knex
