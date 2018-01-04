@@ -266,7 +266,9 @@ $(document).ready(function () {
         "scrollCollapse": false,
       });
     });
-  modalRole.style.display = "block";
+    
+    console.log(modalRole.style.display);
+    modalRole.style.display = "block";
   }
 
 
@@ -349,8 +351,6 @@ $(document).ready(function () {
         placement: 'right',
         html: true
       })
-
-
       modalManageHighlights.style.display = "block";
     });
   }
