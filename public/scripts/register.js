@@ -1,4 +1,8 @@
 $(document).ready(function () {
+  $(".form-label").on("click", function(event) {
+    console.log($(this));
+  })
+
   $("#registration-form").on('submit', function (event) {
     event.preventDefault();
     var formData = {

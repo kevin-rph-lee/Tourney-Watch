@@ -48,7 +48,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs));
-app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun));
+app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun, owjs));
 app.use('/highlights', highlightsRoutes(knex));
 
 

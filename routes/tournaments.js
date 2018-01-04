@@ -3,7 +3,13 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _, env, mailGun) => {
+module.exports = (knex, _, env, mailGun, owjs) => {
+
+  // overwatch api insists on all lowercase
+  const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
+  const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
+  const tankHeroes = ['d.va', 'orisa', 'reinhardt', 'roadhog', 'winston', 'zarya'];
+  const supportHeroes = ['ana', 'lúcio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
 
   /**
    * This assigns each player to a team based off their skill level
@@ -152,8 +158,6 @@ module.exports = (knex, _, env, mailGun) => {
      });
   }
 
-
-
   /**
    * Gets a list of all players enrolled in an tournament
    *
@@ -260,29 +264,45 @@ module.exports = (knex, _, env, mailGun) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("users.battlenet_id", "team_id", "level", "games_won","first_role", "second_role")
+      .select("users.battlenet_id", "team_id", "level")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
-      .then((playerStats) => {
-        let teamRoles = {};
-        const teamRoster = _.groupBy(playerStats, "team_id");
-        for(let team in teamRoster){
-          //TO - DO : DRY this up....
-          teamRoles[team] = {
-            offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
-            offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
-            defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
-            defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
-            tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
-            tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
-            supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
-            supportSecond: countRole(teamRoster[team], 'support', 'second_role')
-          }
+      .then( async (teamRoster) => {
+        let teamSummary = {};
+        // const teamRoster = _.groupBy(playerStats, "team_id");
+        // const teamIDs = Object.keys(teamRoster)
+        for (let p = 0; p < teamRoster.length; p++) {
+          classSummary(teamRoster[p].battlenet_id)
+          .then(async(results) => {
+            console.log(await sortTimePlayed(results));
+          })
         }
-        res.send(teamRoles);
+
+        // for (let t = 0; t < teamIDs.length; t++) {
+        //   for (let p =0; p < 6; p++) {
+        //     player = teamRoster[teamIDs[t]][p];
+        //     bnetID = player.battlenet_id;
+
+            
+        //   }
+        // }
+        // const teamRoster = _.groupBy(playerStats, "team_id");
+        // for(let team in teamRoster){
+        //   //TO - DO : DRY this up....
+        //   teamRoles[team] = {
+        //     offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
+        //     offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
+        //     defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
+        //     defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
+        //     tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
+        //     tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
+        //     supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
+        //     supportSecond: countRole(teamRoster[team], 'support', 'second_role')
+        //   }
+        // }
       });
   });
 

@@ -341,8 +341,7 @@ $(document).ready(function () {
               </span>
             </td>
               <td>
-              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i>
-</span>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i></span>
             </td>
           </tr>`)
       }
@@ -387,9 +386,8 @@ $(document).ready(function () {
               <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${results.youtubeID}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
               </span>
             </td>
-              <td>
-              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i>
-</span>
+            <td>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i></span>
             </td>
           </tr>
           `)
@@ -406,17 +404,17 @@ $(document).ready(function () {
           const highlightID = $(e.target).data().id
           //Deleting highlight from the DB
           $.ajax({
-            url: '/highlights/' + tournamentID +  '/delete/',
+            url: "/highlights/" + tournamentID +  "/delete/",
             data: {id: highlightID},
             method: 'POST'
           }).done(() => {
             //removing the row DOM element
-            $(e.target).closest("tr" ).remove()
+            $(e.target).closest("tr").remove()
           });
         });
       }).catch((err)=>{
         //TO-DO user flash message somehow....
-        alert('Invalid youtube URL!');
+        alert("Invalid youtube URL!");
       });
     });
       modalManageHighlights.style.display = "block";

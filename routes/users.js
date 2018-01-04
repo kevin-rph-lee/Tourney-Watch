@@ -47,13 +47,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //user registers
   router.post("/new", (req, res) => {
-
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
-    const battlenetID = req.body.battlenet.trim();
+    const battlenetID = req.body.battlenet_id.trim();
 
     //Converting bnet ID into a format that owjs can take
-
 
     if(checkInvalidCharacters(battlenetID)){
       return res.sendStatus(400);
