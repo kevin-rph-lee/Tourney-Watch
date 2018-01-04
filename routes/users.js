@@ -47,7 +47,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //user registers
   router.post("/new", (req, res) => {
-
+    console.log(req.body);
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
     const battlenetID = req.body.battlenet.trim();
