@@ -26,13 +26,13 @@
           <!-- Tournament Name gets appended here from App.js -->
 
         </div>
-        
+
         <div class="share-button">
           <% include partials/share_button %>
         </div>
         <% if (twitchName !== null) { %>
         <h3> <%= twitchName %> </h3>
-        
+
        <div class="container-fluid">
         <div class="row embeds">
           <iframe
@@ -52,8 +52,8 @@
         </div>
       </div>
 
-        
-        
+
+
         <% } %>
 
 
@@ -72,7 +72,7 @@
           </div>
         <% } %>
 
-          
+
           <div class="container">
               <div class="row team-cards">
               <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
@@ -83,6 +83,7 @@
 
         <% if (isOwner)  {%>
           <div class = 'admin-options'>
+            <button id="manage-highlights-button"><i class="fa fa-file-video-o" aria-hidden="true" title="Manage Highlights"></i></button>
             <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
             <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Alert Players"></i></button>
             <button id="role-summary-button">Team Role Summary</button>
@@ -95,7 +96,7 @@
               <div class="swap-players-container">
               </div>
               <button id="swap-players-button">Confirm!</button>
-              
+
             </div>
           </div>
 
@@ -119,6 +120,24 @@
             <div class="modal-content">
               <h1>Placeholder</h1>
               <div class="role-summary-container">
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Manage highlights button -->
+          <div id="manage-highlights-modal" class="modal">
+            <div class="modal-content">
+              <h1>Manage Highlights</h1>
+              <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
+                <label for = 'name'> Highlight Name  </label>
+                <input type="text" name="name" required=""><br>
+                <label for = 'url'> Highlight Youtube URL </label>
+                <input type="text" name="url" required=""><br>
+                <input type="submit">
+              </form>
+              <div class="manage-highlights-container">
               </div>
             </div>
           </div>
