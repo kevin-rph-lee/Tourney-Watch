@@ -117,6 +117,10 @@ app.get("/faq", (req, res) => {
   res.render("faq", {email: req.session.email})
 });
 
+app.get("/page-not-found", (req,res) => {
+  res.render("404", {email: req.session.email})
+});
+
 app.get('/json', (req, res) => {
   res.json(['Joel', 'Mel']);
 })
