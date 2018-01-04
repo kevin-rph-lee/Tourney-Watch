@@ -293,13 +293,12 @@ $(document).ready(function () {
                 </tr>
               </thead>
               <tbody class="highlight-details">
-
               </tbody>
             </table>
           </div>
         </div>
       </div>`)
-
+      //Appending rows for each highlight in the DB
       for(let i = 0; i < highlights.length; i++){
         $('.highlight-details').append(
           `<tr>
@@ -309,39 +308,34 @@ $(document).ready(function () {
 </span>
             </td>
               <td>
-              <span class="btn btn-secondary delete-highlight" data-id=${highlights[i].id}><i class="fa fa-trash-o" aria-hidden="true"></i>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i>
 </span>
             </td>
           </tr>`)
       }
-
+    //enabling tooltips to show thumbnail preview
     $('span[data-toggle="tooltip"]').tooltip({
         animated: 'fade',
         placement: 'right',
         html: true
       })
 
+    //Ceating event listener to remove deleted items from the DOM
     $( '.delete-highlight' ).click(function(e) {
       const highlightID = $(e.target).data().id
+      //Deleting highlight from the DB
       $.ajax({
         url: '/highlights/' + tournamentID +  '/delete/',
         data: {id: highlightID},
         method: 'POST'
       }).done(() => {
-
+        //removing the row DOM element
+        $(e.target).closest("tr" ).remove()
       });
     });
-
-
       modalManageHighlights.style.display = "block";
     });
   }
-
-
-
-    $('span').onclick = function(event){
-      console.log('delete!');
-    }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
