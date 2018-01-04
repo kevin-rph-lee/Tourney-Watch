@@ -352,8 +352,6 @@ $(document).ready(function () {
         placement: 'right',
         html: true
       })
-<<<<<<< HEAD
-=======
 
     //Ceating event listener to remove deleted items from the DOM
     $( '.delete-highlight' ).click(function(e) {
@@ -368,7 +366,6 @@ $(document).ready(function () {
         $(e.target).closest("tr" ).remove()
       });
     });
->>>>>>> master
       modalManageHighlights.style.display = "block";
     });
   }
