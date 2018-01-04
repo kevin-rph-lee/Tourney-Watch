@@ -1,18 +1,18 @@
 $(document).ready(function () {
-  $("#registration-form").on('submit', function (event) {
-    event.preventDefault();
-    var formData = {
-      'email': $('input[id=entry-email]').val(),
-      'battlenet_id': $('input[id=entry-battlenet]').val(),
-      'password': $('input[id=entry-password]').val(),
-    };
+  // console.log('I am ready');
+  $('.submit').click(function(e){
     $.ajax({
-      type: "POST",
-      url: "/users/new",
-      data: formData,
-      success: function () {
-        $("#registration-form").html("You have successfully registered!");
-      }
-    })
-  })
+      url: '/users/new',
+      data: {email: $('#entry-email').val(), password:$('#entry-password').val(), battlenet: $('#entry-battlenet').val() },
+      method: 'POST'
+    }).done(() => {
+      //Redirects to the index
+      window.location.replace('/');
+    }).catch((err) => {
+      //TO DO: make look nice
+      alert('error!');
+      console.log(err.status);
+    });
+  });
+
 });
