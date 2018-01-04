@@ -21,7 +21,7 @@
       <link rel="stylesheet" type="text/css" href="/styles/slick.css"/>
       // Add the new slick-theme.css if you want the default styling
       <link rel="stylesheet" type="text/css" href="/styles/slick-theme.css"/>
-      
+
 
 
       <main class="container">
@@ -115,16 +115,16 @@
               <h1>Manage Highlights</h1>
               <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
                 <label for="name" class="form-label"> Highlight Name  </label>
-                <input class="form-box" type="text" name="name" required=""><br>
+                <input class="highlight-name" type="text" name="name" required=""><br>
                 <label for ="url" class="form-label"> Highlight Youtube URL </label>
-                <input class="form-box" type="text" name="url" required=""><br>
-                <input type="submit">
+                <input class="highlight-url" type="text" name="url" required=""><br>
+                <button type="button" class="btn btn-primary btn-md add-highlight">Add highlight!</button>
               </form>
               <div class="manage-highlights-container">
               </div>
             </div>
           </div>
-          
+
           <!-- Role Summary Modal -->
           <div id="role-summary-modal" class="modal">
             <div class="modal-content">

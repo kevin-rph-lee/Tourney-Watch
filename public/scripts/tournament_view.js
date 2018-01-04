@@ -70,7 +70,7 @@ $(document).ready(function () {
 
   loadCards();
 
-  
+
 
   // Share button functionality
   $("[data-toggle='toggle']").click(function() {
@@ -266,7 +266,7 @@ $(document).ready(function () {
         "scrollCollapse": false,
       });
     });
-    
+
     console.log(modalRole.style.display);
     modalRole.style.display = "block";
   }
@@ -366,6 +366,55 @@ $(document).ready(function () {
         $(e.target).closest("tr" ).remove()
       });
     });
+
+    $( '.add-highlight' ).click(function(e) {
+      const highlightName = $('.highlight-name').val();
+      const highlightURL = $('.highlight-url').val();
+      $.ajax({
+        url: '/highlights/' + tournamentID +  '/new/',
+        data: {name: highlightName, url: highlightURL},
+        method: 'POST'
+      }).done((results) => {
+        //clearing text boxes after the new highlight is created
+        $('.highlight-name').val('');
+        $('.highlight-url').val('');
+
+        $('.highlight-details').append(`
+          <tr>
+            <td>${highlightName}</td>
+            <td>
+              <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${results.youtubeID}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
+              </span>
+            </td>
+              <td>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i>
+</span>
+            </td>
+          </tr>
+          `)
+
+        //Recreating event listener for new DOM element
+        $('span[data-toggle="tooltip"]').tooltip({
+          animated: 'fade',
+          placement: 'right',
+          html: true
+        })
+
+        //Recreating event listener for new DOM element
+        $( '.delete-highlight' ).click(function(e) {
+          const highlightID = $(e.target).data().id
+          //Deleting highlight from the DB
+          $.ajax({
+            url: '/highlights/' + tournamentID +  '/delete/',
+            data: {id: highlightID},
+            method: 'POST'
+          }).done(() => {
+            //removing the row DOM element
+            $(e.target).closest("tr" ).remove()
+          });
+        });
+      });
+    });
       modalManageHighlights.style.display = "block";
     });
   }
@@ -373,7 +422,7 @@ $(document).ready(function () {
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     if (event.target == modalSwap) {
-      //Empties the modal container
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.swap-players-container').empty();
       //Unselects all players to reset the cards
       $('span').removeClass('selected');
@@ -384,15 +433,21 @@ $(document).ready(function () {
       modalEmail.style.display = "none";
     }
     if (event.target == modalRole){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.role-summary-container').empty();
       modalRole.style.display = "none";
     }
     if (event.target == modalHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.highlights-container').empty();
       modalHighlights.style.display = "none";
     }
     if (event.target == modalManageHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.manage-highlights-container').empty();
+      //clearing text boxes after the modal is closed
+      $('.highlight-name').val('');
+      $('.highlight-url').val('');
       modalManageHighlights.style.display = "none";
     }
   }

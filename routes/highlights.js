@@ -50,12 +50,14 @@ module.exports = (knex) => {
             .where({name:req.body.name, tournament_id:req.params.id})
             .then((results)=>{
               if(results.length === 0){
+                const youtubeID = getYoutubeID(req.body.url)
                 console.log(req.body);
                 knex
-                  .insert({name: req.body.name, url: getYoutubeID(req.body.url), tournament_id: req.params.id})
+                  .insert({name: req.body.name, url: youtubeID, tournament_id: req.params.id})
                   .into('highlights')
-                  .then(()=>{
-                    res.redirect("/tournaments/" + req.params.id + "/");
+                  .returning('id')
+                  .then((id)=>{
+                    res.json({id:id[0], youtubeID:youtubeID});
                   });
                 } else{
                   res.sendStatus(400);
