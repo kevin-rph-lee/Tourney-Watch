@@ -415,7 +415,8 @@ $(document).ready(function () {
           });
         });
       }).catch((err)=>{
-        console.log('err: ', err);
+        //TO-DO user flash message somehow....
+        alert('Invalid youtube URL!');
       });
     });
       modalManageHighlights.style.display = "block";
