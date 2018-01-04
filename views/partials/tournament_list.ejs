@@ -1,0 +1,78 @@
+<ul class="nav nav-tabs">
+  <li><a data-toggle="tab" href="#asManager" >as Manager</a></li>
+  <li><a data-toggle="tab" href="#asPlayer" class="active">as Player</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div id="asManager" class="tab-pane fade">
+    <div class="tourney-list">
+      <div class="table-responsive">
+      <h3 class="sub-header"> You are running these tournaments </h3>
+        <table class="table table-striped table-dark">
+          <thead class="list">
+            <tr>
+              <th>Tournament Name</th>
+              <th>Roster</th>
+              <th>Status</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody class="tournament-details">
+            <% if (asOwnerList.length > 0) { %>
+              <% for (let t = 0; t < asOwnerList.length; t++) { %>
+                <tr>
+                  <td><%= asOwnerList[t].name %></td>
+                  <td><%= asOwnerList[t].enrolledPlayers %> players</td>
+                  <td><%= asOwnerList[t].status %></td>
+                  <td><a href="/tournaments/<%= asOwnerList[t].id %>/admin"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></td>
+                </tr>
+              <% } %>
+            <% }  else { %>
+              <tr>
+                <td> You have no tournaments </td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div> 
+  </div>
+  
+  <div id="asPlayer" class="tab-pane active">
+    <div class="tourney-list">
+      <div class="table-responsive">
+      <h3 class="sub-header"> You are playing in these tournaments </h3>
+        <table class="table table-striped table-dark">
+          <thead class="list">
+            <tr>
+              <th>Tournament Name</th>
+              <th>Status</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody class="tournament-details">
+            <% if (asPlayerList.length > 0) { %>
+              <% for (let t = 0; t < asPlayerList.length; t++) { %>
+                <tr>
+                  <td><%= asPlayerList[t].name %></td>
+                  <td><%= asPlayerList[t].is_started ? "In Progress" : "Waiting" %></td>
+                  <td><a href="/tournaments/<%= asPlayerList[t].tournament_id %>"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></td>
+                </tr>
+              <% } %>
+            <% }  else { %>
+              <tr>
+                <td> You're not enrolled in any tournaments </td>
+                <td></td>
+                <td></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div> 
+  </div>
+</div>
