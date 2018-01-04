@@ -375,9 +375,10 @@ $(document).ready(function () {
         data: {name: highlightName, url: highlightURL},
         method: 'POST'
       }).done((results) => {
-        //cleaing text boxes
+        //clearing text boxes after the new highlight is created
         $('.highlight-name').val('');
         $('.highlight-url').val('');
+
         $('.highlight-details').append(`
           <tr>
             <td>${highlightName}</td>
@@ -421,7 +422,7 @@ $(document).ready(function () {
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     if (event.target == modalSwap) {
-      //Empties the modal container
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.swap-players-container').empty();
       //Unselects all players to reset the cards
       $('span').removeClass('selected');
@@ -432,15 +433,21 @@ $(document).ready(function () {
       modalEmail.style.display = "none";
     }
     if (event.target == modalRole){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.role-summary-container').empty();
       modalRole.style.display = "none";
     }
     if (event.target == modalHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.highlights-container').empty();
       modalHighlights.style.display = "none";
     }
     if (event.target == modalManageHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.manage-highlights-container').empty();
+      //clearing text boxes after the modal is closed
+      $('.highlight-name').val('');
+      $('.highlight-url').val('');
       modalManageHighlights.style.display = "none";
     }
   }
