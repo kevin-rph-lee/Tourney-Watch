@@ -375,6 +375,7 @@ $(document).ready(function () {
         data: {name: highlightName, url: highlightURL},
         method: 'POST'
       }).done((results) => {
+        console.log('results: ', results);
         //clearing text boxes after the new highlight is created
         $('.highlight-name').val('');
         $('.highlight-url').val('');
@@ -413,6 +414,9 @@ $(document).ready(function () {
             $(e.target).closest("tr" ).remove()
           });
         });
+      }).catch((err)=>{
+        //TO-DO user flash message somehow....
+        alert('Invalid youtube URL!');
       });
     });
       modalManageHighlights.style.display = "block";
