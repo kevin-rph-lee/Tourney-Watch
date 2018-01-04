@@ -368,9 +368,17 @@ $(document).ready(function () {
     });
 
     $( '.add-highlight' ).click(function(e) {
-      console.log($('.highlight-name').val());
-      console.log($('.highlight-url').val());
-
+      const highlightName = $('.highlight-name').val();
+      const highlightURL = $('.highlight-url').val();
+      $.ajax({
+        url: '/highlights/' + tournamentID +  '/new/',
+        data: {name: highlightName, url: highlightURL},
+        method: 'POST'
+      }).done(() => {
+        //removing the row DOM element
+        $('.highlight-name').val('');
+        $('.highlight-url').val('');
+      });
 
     });
       modalManageHighlights.style.display = "block";
