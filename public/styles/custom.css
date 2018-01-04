@@ -381,3 +381,8 @@ form#email-form{
 #highlight-form > *{
   margin: 5px;
 }
+
+/* 404 Page */
+div.image-404{
+  text-align:center;
+}

@@ -187,7 +187,7 @@ module.exports = (knex, owjs) => {
           .where({id: currUserID})
           .then((results) => {
             if (results.length > 0 ) {
-              // STRETCH: "You've already enrolled to this tournament"
+              // Flash Message: "You've already enrolled to this tournament"
               res.sendStatus(400)
             } else {
               knex
@@ -206,7 +206,7 @@ module.exports = (knex, owjs) => {
                 const isReady = (enrolledPlayers.length === teamCount * 6);
 
                 if (currBattlenetID === tournamentCreator) {
-                  // STRETCH: "You cannot play in a tournament you've made"
+                  // Flash Message: "You cannot play in a tournament you've made"
                   res.sendStatus(400);
                 } else {
                   res.render("tournament_enroll", {
@@ -274,14 +274,12 @@ module.exports = (knex, owjs) => {
 
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0) {
-          // STRETCH: Show 'No tournament of that name found' error page
           res.sendStatus(404);
         } else {
           await swapTeams(bnetID1, bnetID2,res);
 
         }
       });
-    console.log('i should redirect...');
     res.sendStatus(200);
   });
 
@@ -298,7 +296,6 @@ module.exports = (knex, owjs) => {
       .where({id: currUserID})
       .then( async (results) => {
         if(results.length === 0){
-          // STRETCH: Show 'Invalid Battlenet ID' error page
           res.sendStatus(404);
         } else{
           console.log(results[0].battlenet_id);

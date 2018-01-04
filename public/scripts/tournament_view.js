@@ -415,8 +415,16 @@ $(document).ready(function () {
           });
         });
       }).catch((err)=>{
-        //TO-DO user flash message somehow....
-        alert('Invalid youtube URL!');
+        // //TO-DO user flash message somehow....
+        // alert('Invalid youtube URL!');
+        $('.youtube-alert').append(`
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>That URL is invalid!</strong> Make sure you place in the right URL...
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        `)
       });
     });
       modalManageHighlights.style.display = "block";
