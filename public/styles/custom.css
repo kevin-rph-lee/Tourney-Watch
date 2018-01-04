@@ -381,3 +381,16 @@ form#email-form{
 #highlight-form > *{
   margin: 5px;
 }
+
+/* 404 Page */
+div.image-404{
+  text-align:center;
+}
+
+/* Flash Alert */
+div.alert.alert-warning{
+  color: #fff;
+  background-color: #474D57;
+  border-color: #191E21;
+  border-width:3px;
+}
