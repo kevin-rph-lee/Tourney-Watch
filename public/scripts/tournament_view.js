@@ -309,6 +309,8 @@ $(document).ready(function () {
 </span>
             </td>
               <td>
+              <span class="btn btn-secondary delete-highlight" data-id=${highlights[i].id}><i class="fa fa-trash-o" aria-hidden="true"></i>
+</span>
             </td>
           </tr>`)
       }
@@ -318,6 +320,17 @@ $(document).ready(function () {
         placement: 'right',
         html: true
       })
+
+    $( '.delete-highlight' ).click(function(e) {
+      const highlightID = $(e.target).data().id
+      $.ajax({
+        url: '/highlights/' + tournamentID +  '/delete/',
+        data: {id: highlightID},
+        method: 'POST'
+      }).done(() => {
+
+      });
+    });
 
 
       modalManageHighlights.style.display = "block";

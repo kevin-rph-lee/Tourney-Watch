@@ -74,7 +74,7 @@ module.exports = (knex) => {
           res.sendStatus(404);
         } else {
           knex('highlights')
-            .where({name: req.body.name})
+            .where({id: req.body.id})
             .del()
             .then(()=>{
               res.sendStatus(200);
