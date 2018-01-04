@@ -44,23 +44,21 @@ module.exports = (knex) => {
         } else if (results[0].creator_user_id !== req.session.userID) {
           res.sendStatus(403);
         } else {
+          //converst the full URL to a youtube ID. If invalid, throws and error and sends a 400 status back
+          try{
+            getYoutubeID(req.body.url);
+          } catch(err){
+            return res.sendStatus(400);
+          }
+          console.log(req.body);
+          const youtubeID = getYoutubeID(req.body.url)
           knex
-            .select('name')
-            .from('highlights')
-            .where({name:req.body.name, tournament_id:req.params.id})
-            .then((results)=>{
-              if(results.length === 0){
-                console.log(req.body);
-                knex
-                  .insert({name: req.body.name, url: getYoutubeID(req.body.url), tournament_id: req.params.id})
-                  .into('highlights')
-                  .then(()=>{
-                    res.redirect("/tournaments/" + req.params.id + "/");
-                  });
-                } else{
-                  res.sendStatus(400);
-                }
-            })
+            .insert({name: req.body.name, url: youtubeID, tournament_id: req.params.id})
+            .into('highlights')
+            .returning('id')
+            .then((id)=>{
+              res.json({id:id[0], youtubeID:youtubeID});
+            });
         }
       });
   });
