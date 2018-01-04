@@ -35,12 +35,14 @@ module.exports = (knex) => {
       return res.sendStatus(400);
     }
     knex
-      .select('id')
+      .select('id', 'creator_user_id')
       .from("tournaments")
       .where({id : req.params.id})
       .then((results) => {
         if(results.length === 0){
           res.sendStatus(404);
+        } else if (results[0].creator_user_id !== req.session.userID) {
+          res.sendStatus(403);
         } else {
           knex
             .select('name')
@@ -66,15 +68,18 @@ module.exports = (knex) => {
 
   router.post("/:id/delete", (req, res) => {
     knex
-      .select('id')
+      .select('id', 'creator_user_id')
       .from("tournaments")
       .where({id : req.params.id})
       .then((results) => {
         if(results.length === 0){
           res.sendStatus(404);
+        //Ensuring that only the owner can delete highlights
+        } else if (results[0].creator_user_id !== req.session.userID){
+          res.sendStatus(403);
         } else {
           knex('highlights')
-            .where({name: req.body.name})
+            .where({id: req.body.id})
             .del()
             .then(()=>{
               res.sendStatus(200);
