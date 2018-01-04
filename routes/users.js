@@ -85,7 +85,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
               res.sendStatus(400);
             })
           //stuff tha relies on it
-        } else{
+        } else {
           res.sendStatus(400);
         }
     });
