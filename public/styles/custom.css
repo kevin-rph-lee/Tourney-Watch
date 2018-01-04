@@ -368,7 +368,7 @@ img.player-class{
 
 /* Team Summary */
 
-tbody > tr, thead > tr{
+tbody.player-class > tr, thead.player-class > tr{
   text-align: center;
 }
 
@@ -376,4 +376,8 @@ tbody > tr, thead > tr{
 
 form#email-form{
   margin: 0 auto;
+}
+
+#highlight-form > *{
+  margin: 5px;
 }

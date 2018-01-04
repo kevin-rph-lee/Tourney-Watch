@@ -226,7 +226,7 @@ $(document).ready(function () {
                 <th scope="col">Support</th>
               </tr>
             </thead>
-            <tbody class="player-table-stats">
+            <tbody class="player-table-stats player-class">
               ${firstRoleString}
             </tbody>
           </table>
