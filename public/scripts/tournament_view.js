@@ -374,12 +374,45 @@ $(document).ready(function () {
         url: '/highlights/' + tournamentID +  '/new/',
         data: {name: highlightName, url: highlightURL},
         method: 'POST'
-      }).done(() => {
-        //removing the row DOM element
+      }).done((results) => {
+        //cleaing text boxes
         $('.highlight-name').val('');
         $('.highlight-url').val('');
-      });
+        $('.highlight-details').append(`
+          <tr>
+            <td>${highlightName}</td>
+            <td>
+              <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${results.youtubeID}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
+              </span>
+            </td>
+              <td>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i>
+</span>
+            </td>
+          </tr>
+          `)
 
+        //Recreating event listener for new DOM element
+        $('span[data-toggle="tooltip"]').tooltip({
+          animated: 'fade',
+          placement: 'right',
+          html: true
+        })
+
+        //Recreating event listener for new DOM element
+        $( '.delete-highlight' ).click(function(e) {
+          const highlightID = $(e.target).data().id
+          //Deleting highlight from the DB
+          $.ajax({
+            url: '/highlights/' + tournamentID +  '/delete/',
+            data: {id: highlightID},
+            method: 'POST'
+          }).done(() => {
+            //removing the row DOM element
+            $(e.target).closest("tr" ).remove()
+          });
+        });
+      });
     });
       modalManageHighlights.style.display = "block";
     });
