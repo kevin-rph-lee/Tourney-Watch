@@ -28,7 +28,7 @@
         <div class="tournamentheader">
           <!-- Tournament Name gets appended here from App.js -->
         </div>
-        
+
         <div class="share-button">
           <button id="highlights-button" class="start-tournament">Highlights</button>
           <% include partials/share_button %>
@@ -69,13 +69,14 @@
           </div>
           <% } %>
 
-          
+
           <div class="container">
             <div class="row team-cards">
             <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
             </div>
             <% if (isOwner)  { %>
             <div class = 'admin-options'>
+              <button id="manage-highlights-button"><i class="fa fa-file-video-o" aria-hidden="true" title="Manage Highlights"></i></button>
               <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
               <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Email Players"></i></button>
               <button id="role-summary-button"><i class="fa fa-users" aria-hidden="true" title="Team Summary"></i></button>
@@ -110,15 +111,30 @@
               </div>
             </div>
 
-            <!-- Role Summary Modal -->
-            <div id="role-summary-modal" class="modal">
-              <div class="modal-content">
-                <h1>Team Summary by Class</h1>
-                <div class="role-summary-container">
-                </div>
+          <!-- Manage highlights button -->
+          <div id="manage-highlights-modal" class="modal">
+            <div class="modal-content">
+              <h1>Manage Highlights</h1>
+              <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
+                <label for = 'name'> Highlight Name  </label>
+                <input type="text" name="name" required=""><br>
+                <label for = 'url'> Highlight Youtube URL </label>
+                <input type="text" name="url" required=""><br>
+                <input type="submit">
+              </form>
+              <div class="manage-highlights-container">
               </div>
             </div>
-                      <!-- Role Summary Modal -->
+          </div>
+
+          <!-- Role Summary Modal -->
+          <div id="highlights-modal" class="modal">
+            <div class="modal-content">
+              <h1>Highlights</h1>
+              <div class="highlights-container">
+              </div>
+            </div>
+            <!-- Role Summary Modal -->
             <div id="highlights-modal" class="modal">
               <div class="modal-content">
                 <h1>Highlights</h1>
