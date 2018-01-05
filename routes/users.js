@@ -8,7 +8,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   /**
    * Checks a string for special characters. Returns false if one is found
    * @param  {string} string string to be checked
-   * @return {boolean}        returns false if invalid characters found
+   * @return {boolean}        returns true if invalid characters found
    */
   function checkInvalidCharacters(string) {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
@@ -103,7 +103,8 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
     const battlenetID = req.body.battlenet.trim();
-
+    const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
+    console.log(battlenetIDLower);
     //Converting bnet ID into a format that owjs can take
 
 
@@ -111,10 +112,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       return res.sendStatus(400);
     }
 
-    knex
+    knex('users')
       .select("email")
       .from("users")
-      .where({ email: email })
+      .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
+      .orWhere({email:email})
       .then((results) => {
         console.log(results);
         if (results.length === 0) {
@@ -228,6 +230,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
               getUserIconAndbnetID(req.params.id)
                 .then((results) => {
+                  console.log(results);
                   //isUser is true if the user logged in is looking at their own profile
                   let isUser = false;
                   if(parseInt(req.session.userID) === parseInt(req.params.id)){
