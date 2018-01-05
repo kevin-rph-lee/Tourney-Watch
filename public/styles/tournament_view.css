@@ -110,9 +110,15 @@ div.add-highlight{
 /* Team Levels div */
 
 div.avg-team-levels{
+    position: relative;
     display: none;
     height: 300px;
     margin: 15px;
     background-color: #dee4e7;
     border-radius: 5px;
+}
+
+div.avg-team-levels > .chart-wrapper{
+    top: 20%;
+    position: relative;
 }

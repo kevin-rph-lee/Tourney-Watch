@@ -14,6 +14,7 @@
       <script src="/scripts/bracketgenerator.js"></script>
       <script src="/vendor/jquery.bracket.min.js"></script>
       <script type="text/javascript" src="/scripts/slick.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/r-2.2.1/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
       <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" />
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/r-2.2.1/sc-1.4.3/sl-1.2.4/datatables.min.css"/>
@@ -80,7 +81,16 @@
 
             <!-- Avg Team Levels Slide Down -->
             <div class="avg-team-levels">
-              <p class="div-header"> Select two players to swap them </p>
+
+            <div class="chart-wrapper">
+              <canvas id="myChart" height="100%"></canvas>
+            </div>
+
+
+
+
+
+
             </div>
 
             <!-- Swap players Modal -->
