@@ -3,7 +3,7 @@ $(document).ready(function () {
   // console.log('I am ready');
   //
 
-
+    console.log('trying ajx')
     $.ajax({
       url: '/users/' + userID + '/profileinfo.json',
       method: 'GET'
@@ -56,7 +56,13 @@ $(document).ready(function () {
   $('.submit').click(function(e){
 
     const password = $('#entry-password').val();
+    const passwordConfirm = $('#entry-password-confirm').val();
     const battlenet = $('#entry-battlenet').val()
+
+    if(password !== passwordConfirm){
+      alert('Passswords do not match!');
+      return;
+    }
 
     console.log(password + battlenet);
     console.log(userID);
