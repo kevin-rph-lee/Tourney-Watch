@@ -24,6 +24,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       })
   }
 
+  function getPlayerInfo(bnetID){
+    return owjs.getAll('pc', 'us', convertBnetID(bnetID))
+  }
+
   /**
    * Converts a BNET ID into a string that Overwatch-js can handle
    * @param  {String} bnetID the BNET ID to convert
@@ -40,6 +44,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   router.get('/new', (req, res) => {
     res.render('register', {email: req.session.email});
   });
+
   //Goes to login page
   router.get('/login', (req, res) => {
     res.render('login',{email: req.session.email});
@@ -128,6 +133,24 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       req.session = null;
       res.send({result:true});
   });
+
+
+     //Goes to registration page
+  router.get('/:id/profileinfo.json', (req, res) => {
+    knex
+    .select('battlenet_id')
+    .from('users')
+    .where({id:req.params.id})
+    .then((results) => {
+      getPlayerInfo(results[0].battlenet_id)
+      .then((results) => {
+        const profileInfo = {avatar:results.profile.avatar}
+        res.json(profileInfo);
+
+      })
+    })
+  });
+
 
   return router;
 }
