@@ -368,8 +368,40 @@ img.player-class{
 
 /* Team Summary */
 
-tbody.player-class > tr, thead.player-class > tr{
+/* tbody.player-class > tr, thead.player-class > tr{
   text-align: center;
+} */
+
+div.link-to-teams{
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+div.link-to-teams > a{
+  font-size: 15px;
+  color:white;
+  margin-left: 5px;
+}
+
+div.role-summary-container{
+  margin: 0 auto;
+  overflow: auto;
+  height: 600px;
+  background-color: #191E21;
+  padding: 10px;
+  border: 1px #dee4e7 solid;
+}
+
+#team-summary {
+  table-layout: fixed;
+}
+
+.center{
+  text-align: center
+}
+
+.link-to-team{
+
 }
 
 /* Email Alert Players */

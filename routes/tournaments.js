@@ -264,45 +264,18 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("users.battlenet_id", "team_id", "level")
+      .select("users.battlenet_id", "team_id", "level", "role_summary")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
       .then( async (teamRoster) => {
-        let teamSummary = {};
-        // const teamRoster = _.groupBy(playerStats, "team_id");
-        // const teamIDs = Object.keys(teamRoster)
-        for (let p = 0; p < teamRoster.length; p++) {
-          classSummary(teamRoster[p].battlenet_id)
-          .then(async(results) => {
-            console.log(await sortTimePlayed(results));
-          })
+        for (let t = 0; t < teamRoster.length; t++) {
+          teamRoster[t].role_summary = JSON.parse(teamRoster[t].role_summary)
         }
-
-        // for (let t = 0; t < teamIDs.length; t++) {
-        //   for (let p =0; p < 6; p++) {
-        //     player = teamRoster[teamIDs[t]][p];
-        //     bnetID = player.battlenet_id;
-
-            
-        //   }
-        // }
-        // const teamRoster = _.groupBy(playerStats, "team_id");
-        // for(let team in teamRoster){
-        //   //TO - DO : DRY this up....
-        //   teamRoles[team] = {
-        //     offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
-        //     offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
-        //     defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
-        //     defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
-        //     tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
-        //     tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
-        //     supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
-        //     supportSecond: countRole(teamRoster[team], 'support', 'second_role')
-        //   }
-        // }
+        const teamSummary = _.groupBy(teamRoster, "team_id");
+        res.send(teamSummary);
       });
   });
 
