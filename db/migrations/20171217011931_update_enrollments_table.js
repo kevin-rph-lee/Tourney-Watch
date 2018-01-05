@@ -1,11 +1,11 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.table('tournament_enrollments', function (table) {
-    table.integer('level');              
+    table.integer('level');
     table.string('first_role');
-    table.integer('first_role_time_played');
+    table.float('first_role_time_played');
     table.string('second_role');
-    table.integer('second_role_time_played');
+    table.float('second_role_time_played');
     table.integer('medal_gold');
     table.integer('medal_silver');
     table.integer( 'medal_bronze');
