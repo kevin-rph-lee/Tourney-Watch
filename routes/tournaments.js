@@ -295,7 +295,7 @@ module.exports = (knex, _, env, mailGun) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -303,7 +303,7 @@ module.exports = (knex, _, env, mailGun) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
-        // console.log('roster ',teamRoster);
+        console.log('roster ',teamRoster);
         res.send(teamRoster);
       });
   });
