@@ -358,6 +358,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
             res.render("tournament_view", {
               teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
+              maxPlayers: teamCount * 6,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
               tournamentID: tournamentID,
@@ -441,6 +442,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           res.render("tournament_notready", {
             tournamentName: results[0].name,
             playerCount: enrolledPlayers.length,
+            maxPlayers: teamCount * 6,
             teamCount: results[0].no_of_teams,
             email: req.session.email,
             userID: req.session.userID,

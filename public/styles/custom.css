@@ -53,12 +53,20 @@ p {
   }
 
   a.btn.btn-default{
+    background-color: #F7931D;
+    color:white;
+    border-color: #C0C1C2;
+  }
+
+  a.btn.btn-default.index-page{
     float: left;
     margin-left: 25%;
     background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
+
+
 
   div button.how-it-works{
     float: right;
