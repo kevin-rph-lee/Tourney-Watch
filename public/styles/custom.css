@@ -369,7 +369,7 @@ img.player-class{
 /* Team Summary */
 
 #role-summary-modal > .modal-content{
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -60%);
   position: fixed;
   height: 85%;
   top: 30%;
@@ -391,7 +391,7 @@ div.link-to-teams > a{
 div.role-summary-container{
   margin: 0 auto;
   overflow: auto;
-  height: 600px;
+  height: 80%;
   background-color: #191E21;
   padding: 10px;
   border: 1px #dee4e7 solid;
