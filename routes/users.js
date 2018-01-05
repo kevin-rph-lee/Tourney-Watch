@@ -56,7 +56,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     .from('users')
     .where({id:req.params.id})
     .then((results) => {
-
       getPlayerInfo(results[0].battlenet_id)
       .then((results) => {
         knex('users')
