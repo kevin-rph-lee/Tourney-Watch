@@ -111,7 +111,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     if (checkInvalidCharacters(battlenetID)) {
       return res.sendStatus(400);
     }
-
+    //checking to prevent BNET/Email dupes
     knex('users')
       .select("email")
       .from("users")
@@ -261,6 +261,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
       const password = req.body.password.trim();
       const battlenetID = req.body.battlenet.trim();
+      const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
 
       //Converting bnet ID into a format that owjs can take
 
@@ -268,22 +269,36 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         console.log('Invalid')
         return res.sendStatus(200);
       }
+      //checking to prevent BNET/Email dupes
+      knex('users')
+        .select("email")
+        .from("users")
+        .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
+        .then((results) => {
+          if(results.length === 0){
+            owjs.getAll('pc', 'us', convertBnetID(battlenetID))
+              .then(() => {
+                knex("users")
+                .where({id:req.session.userID})
+                .update({battlenet_id:battlenetID, password: bcrypt.hashSync(password, 10) })
+                .then(() => {
+                  console.log('this shouldve worked');
+                    req.session.battlenetID = battlenetID;
+                    res.sendStatus(200);
+                  });
+              }).catch((err) => {
+                console.log('OWJS fails')
+                res.sendStatus(400);
+              })
+          } else {
+            return res.sendStatus(400)
+          }
 
-      owjs.getAll('pc', 'us', convertBnetID(battlenetID))
-        .then(() => {
-          knex("users")
-          .where({id:req.session.userID})
-          .update({battlenet_id:battlenetID, password: bcrypt.hashSync(password, 10) })
-          .then(() => {
-            console.log('this shouldve worked');
-              req.session.battlenetID = battlenetID;
-              res.sendStatus(200);
-            });
-        })
-        .catch((err) => {
-          console.log('OWJS fails')
-          res.sendStatus(400);
-        })
+        });
+
+
+
+
 
 
     });
