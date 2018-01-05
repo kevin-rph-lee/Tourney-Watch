@@ -55,7 +55,7 @@ p {
   a.btn.btn-default{
     float: left;
     margin-left: 25%;
-    background-color: #474D57;
+    background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
@@ -63,7 +63,7 @@ p {
   div button.how-it-works{
     float: right;
     margin-right: 20%;
-    background-color: #474D57;
+    background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
@@ -115,6 +115,38 @@ div.card.mb-3 div.card-header {
 
 div.row{
   padding-top: 20px;
+}
+
+input.make-new{
+  color: #fff;
+  margin: auto 0;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1em;
+  width: 135px;
+  height: 45px;
+}
+
+/* Login Page */
+
+button.submit{
+  color: #fff;
+  margin: auto 0;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1em;
+  width: 135px;
+  height: 45px;
+}
+
+div.submit-button{
+  text-align: center;
 }
 
 /* Bootstrap Table */
@@ -418,3 +450,18 @@ form#email-form{
 #highlight-form > *{
   margin: 5px;
 }
+
+/* 404 Page */
+div.image-404{
+  text-align:center;
+}
+
+/* Flash Alert */
+div.alert.alert-warning{
+  padding-top: 20px;
+  color: #fff;
+  background-color: #474D57;
+  border-color: #F7931D;
+  border-width:3px;
+}
+

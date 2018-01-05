@@ -1,20 +1,20 @@
+
 $(document).ready(function () {
   // console.log('I am ready');
   $('.submit').click(function(e){
 
-    const email = $('#entry-email').val();
     const password = $('#entry-password').val();
     const battlenet = $('#entry-battlenet').val()
 
-    console.log(email);
-    console.log(battlenet);
+    console.log(password + battlenet);
+    console.log(userID);
     $.ajax({
-      url: '/users/new',
-      data: {email: email, password: password, battlenet: battlenet },
+      url: '/users/' + userID + '/edit/',
+      data: {password: password, battlenet: battlenet },
       method: 'POST'
     }).done(() => {
       //Redirects to the index
-      window.location.replace('/');
+      window.location.reload();
     }).catch((err) => {
       //TO DO: make look nice with a flash message or something
       alert('error!');
@@ -23,6 +23,8 @@ $(document).ready(function () {
     //empty the DOM and insert a loader
     $('.container').empty();
     $('.container').append('<div class="loader"></div>');
+  
+  
   });
 
 });

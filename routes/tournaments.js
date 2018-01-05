@@ -132,7 +132,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "avatar", "first_role", "second_role")
+     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -166,7 +166,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
    */
   function playersEnrolled(tournamentID){
     return knex
-      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "avatar")
+      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
@@ -289,7 +289,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "avatar")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -297,7 +297,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
         const teamRoster = _.groupBy(playerStats, "team_id");
-        // console.log('roster ',teamRoster);
+        console.log('roster ',teamRoster);
         res.send(teamRoster);
       });
   });
@@ -338,11 +338,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
   router.get("/:id/admin", (req, res) => {
     const tournamentID = parseInt(req.params.id);
-
-    // if(!Number.isInteger(tournamentID)) {
-    //   console.log('not a vaid id')
-    //   return res.sendStatus(404);
-    // }
 
     knex
       .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
@@ -391,10 +386,18 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
   router.get("/:id", (req, res) => {
     const tournamentID = parseInt(req.params.id);
+    const email = req.session.email
     // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
-    if (!Number.isInteger(tournamentID)) {
-      console.log('not a valid id')
-      return res.sendStatus(404);
+    if (tournamentID) {
+      knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) =>{
+        if (results.length === 0){
+          res.render("404", {email: email})
+        }
+      })
     }
 
     return knex
