@@ -389,9 +389,10 @@ div.image-404{
 
 /* Flash Alert */
 div.alert.alert-warning{
+  padding-top: 20px;
   color: #fff;
   background-color: #474D57;
-  border-color: #191E21;
+  border-color: #F7931D;
   border-width:3px;
 }
 
