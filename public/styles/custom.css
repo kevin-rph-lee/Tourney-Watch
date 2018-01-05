@@ -362,6 +362,7 @@ div.container.player > span {
 
 .admin-options{
   text-align: center;
+  margin-top: 20px;
 }
 
 div.admin-options > button{

@@ -106,3 +106,13 @@ div.add-highlight{
       0% { opacity: 0; -moz-transform: translateY(-100%); }
     100% { opacity: 1; -moz-transform: translateY(0); }
 }
+
+/* Team Levels div */
+
+div.avg-team-levels{
+    display: none;
+    height: 300px;
+    margin: 15px;
+    background-color: #dee4e7;
+    border-radius: 5px;
+}

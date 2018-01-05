@@ -26,7 +26,7 @@ $(document).ready(function () {
 
   //If they're the owner, creates event listener to select users to swap
   if(isOwner){
-      $('span').click(function(e){
+      $('span.player').click(function(e){
         //TO DO make selector more specific ex. select span within div with team id of #
         //TO DO fix conditionals to make looks nicer
         if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
@@ -102,6 +102,7 @@ $(document).ready(function () {
       data: {bnetID1: selectedPlayers[0], bnetID2: selectedPlayers[1]},
       method: 'post'
     }).done(() => {
+
       location.reload();
     });
   });
@@ -395,6 +396,22 @@ $(document).ready(function () {
       modalManageHighlights.style.display = "block";
     });
   }
+
+
+  // Avg team div sliding functionality
+  let showChart = false;
+  $(".fa-bar-chart").click(function() {
+    if (!showChart) {
+      console.log('show char');
+      showChart = true;
+      $(".avg-team-levels").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showChart =false
+      $(".avg-team-levels").css({"display": "none"});
+    }
+  });
+
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
