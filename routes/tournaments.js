@@ -126,7 +126,7 @@ module.exports = (knex, _, env, mailGun) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "avatar", "first_role", "second_role")
+     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -162,7 +162,7 @@ module.exports = (knex, _, env, mailGun) => {
    */
   function playersEnrolled(tournamentID){
     return knex
-      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "avatar")
+      .select("users.battlenet_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .where({tournament_id: tournamentID})
@@ -295,7 +295,7 @@ module.exports = (knex, _, env, mailGun) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "avatar")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
