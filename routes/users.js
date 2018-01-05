@@ -96,9 +96,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         console.log(results);
         if(results.length === 0){
           owjs.getAll('pc', 'us', convertBnetID(battlenetID))
-            .then(() => {
+            .then((results) => {
+              console.log(results.profile.avatar);
               knex
-                .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID})
+                .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID, avatar: results.profile.avatar})
                 .into('users')
                 .returning('id')
                 .then((results)=>{
