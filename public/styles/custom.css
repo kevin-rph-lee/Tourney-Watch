@@ -53,12 +53,20 @@ p {
   }
 
   a.btn.btn-default{
+    background-color: #F7931D;
+    color:white;
+    border-color: #C0C1C2;
+  }
+
+  a.btn.btn-default.index-page{
     float: left;
     margin-left: 25%;
     background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
+
+
 
   div button.how-it-works{
     float: right;
@@ -462,6 +470,28 @@ div.alert.alert-warning{
   color: #fff;
   background-color: #474D57;
   border-color: #F7931D;
-  border-width:3px;
+  
+  border-width:2px;
+  width: 70%;
+  margin: 0 auto;
 }
+
+/* header for login and register */
+#ui-header > h2{
+  margin-bottom: 0;
+}
+
+#ui-header > p{
+  float: right;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  margin-right: 5%;
+  margin-top: -20px;
+}
+
+#ui-header > p > a{
+  color: #F7931D;
+}
+
+
 

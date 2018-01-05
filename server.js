@@ -109,6 +109,7 @@ app.get('/', async (req, res) => {
 
           res.render('index', {
             email: req.session.email,
+            userID: req.session.userID,
             asPlayerList: asPlayerList,
             asOwnerList: asOwnerList
           });
@@ -125,7 +126,7 @@ app.get("/t/:id", (req,res) => {
 
 app.get("/faq", (req, res) => {
 
-  res.render("faq", {email: req.session.email})
+  res.render("faq", {email: req.session.email, userID: req.session.email})
 });
 
 app.use(express.static(__dirname + '/public'));
