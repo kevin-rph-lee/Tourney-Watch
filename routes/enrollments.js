@@ -146,6 +146,7 @@ module.exports = (knex, owjs) => {
             'team_id': null,
             'tournament_id': tournamentID,
             'level': data.profile.level,
+            'role_summary': JSON.stringify(roleRanks),
             'first_role': roleRanks[0].role,
             'first_role_time_played': roleRanks[0].time,
             'second_role': roleRanks[1].role,

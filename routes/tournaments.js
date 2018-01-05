@@ -3,7 +3,13 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, _, env, mailGun) => {
+module.exports = (knex, _, env, mailGun, owjs) => {
+
+  // overwatch api insists on all lowercase
+  const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
+  const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
+  const tankHeroes = ['d.va', 'orisa', 'reinhardt', 'roadhog', 'winston', 'zarya'];
+  const supportHeroes = ['ana', 'lúcio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
 
   /**
    * This assigns each player to a team based off their skill level
@@ -152,8 +158,6 @@ module.exports = (knex, _, env, mailGun) => {
      });
   }
 
-
-
   /**
    * Gets a list of all players enrolled in an tournament
    *
@@ -199,7 +203,7 @@ module.exports = (knex, _, env, mailGun) => {
     console.log(req.body);
 
     //
-    if(!name || !description || checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name)){
+    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       // STRETCH: Show 'That name has been taken' error page
       console.log(`something is wrong`)
       console.log(!name)
@@ -260,29 +264,19 @@ module.exports = (knex, _, env, mailGun) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("users.battlenet_id", "team_id", "level", "games_won","first_role", "second_role")
+      .select("users.battlenet_id", "team_id", "level", "role_summary")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
       .where({tournament_id: tournamentID})
       .orderBy("team_id", "ascd")
-      .then((playerStats) => {
-        let teamRoles = {};
-        const teamRoster = _.groupBy(playerStats, "team_id");
-        for(let team in teamRoster){
-          //TO - DO : DRY this up....
-          teamRoles[team] = {
-            offenseFirst: countRole(teamRoster[team], 'offense', 'first_role'),
-            offenseSecond: countRole(teamRoster[team], 'offense', 'second_role'),
-            defenseFirst: countRole(teamRoster[team], 'defense', 'first_role'),
-            defenseSecond: countRole(teamRoster[team], 'defense', 'second_role'),
-            tankFirst: countRole(teamRoster[team], 'tank', 'first_role'),
-            tankSecond: countRole(teamRoster[team], 'tank', 'second_role'),
-            supportFirst: countRole(teamRoster[team], 'support', 'first_role'),
-            supportSecond: countRole(teamRoster[team], 'support', 'second_role')
-          }
+      .then( async (teamRoster) => {
+        for (let t = 0; t < teamRoster.length; t++) {
+          teamRoster[t].role_summary = JSON.parse(teamRoster[t].role_summary)
         }
-        res.send(teamRoles);
+        const teamSummary = _.groupBy(_.sortBy(teamRoster, "level").reverse(), 'team_id');    
+        res.send(teamSummary);
+
       });
   });
 
