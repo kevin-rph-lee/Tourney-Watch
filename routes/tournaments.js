@@ -345,11 +345,6 @@ module.exports = (knex, _, env, mailGun) => {
   router.get("/:id/admin", (req, res) => {
     const tournamentID = parseInt(req.params.id);
 
-    // if(!Number.isInteger(tournamentID)) {
-    //   console.log('not a vaid id')
-    //   return res.sendStatus(404);
-    // }
-
     knex
       .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
       .from("tournaments")
@@ -397,10 +392,18 @@ module.exports = (knex, _, env, mailGun) => {
 
   router.get("/:id", (req, res) => {
     const tournamentID = parseInt(req.params.id);
+    const email = req.session.email
     // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
-    if (!Number.isInteger(tournamentID)) {
-      console.log('not a valid id')
-      return res.sendStatus(404);
+    if (tournamentID) {
+      knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) =>{
+        if (results.length === 0){
+          res.render("404", {email: email})
+        }
+      })
     }
 
     return knex

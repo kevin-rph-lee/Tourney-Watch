@@ -140,6 +140,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       .where({email: email})
       .then((results) => {
         if(results.length === 0){
+          //flash message: id already exists
           res.sendStatus(404);
         } else if (bcrypt.compareSync(password, results[0].password)){
           req.session.email = email;
