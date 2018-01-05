@@ -10,6 +10,7 @@ $(document).ready(function () {
     }).done((results) => {
       console.log(results);
       $('.profile-card').empty();
+      $('.stats-container').empty();
       $('.profile-card').append(`
       <div class="profile-cover">
           <div class="profile-avatar">
@@ -22,17 +23,19 @@ $(document).ready(function () {
       <div class="profile-info">
           <h1>Level: ${results.level}</h1>
           <div class="info-area">
-            Stuff goes here
+            Bananas are the potatoes of fruit
           </div>
       </div>`)
 
       let statsTable = `<table>`;
 
       for(let hero in results.playTime){
+        const timePlayed = moment.duration(results.playTime[hero]);
+        console.log('time: ', timePlayed);
         statsTable += `
           <tr>
             <th>${hero}</th>
-            <th>${results.playTime[hero]}</th>
+            <th>${timePlayed.asMinutes()}</th>
           </tr>
         `
       }
