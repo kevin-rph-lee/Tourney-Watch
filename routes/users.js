@@ -182,8 +182,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   });
 
 
-<<<<<<< HEAD
-=======
+
   router.get("/:id", (req, res) => {
     const email = req.session.email
 
@@ -288,6 +287,5 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
 
 
->>>>>>> master
   return router;
 }
