@@ -4,11 +4,13 @@
 <head>
 		<script>
 				window.userID = <%= userID %>;
+        window.battlenetID = '<%= battlenetID %>';
 		</script>
 </head>
 
 <% include partials/navbar %>
-<script src="/scripts/update_profile.js"></script>
+<script src="/scripts/profile.js"></script>
+<script type="text/javascript" src="/vendor/moment.js"></script>
 
 
 	<body>
@@ -35,29 +37,18 @@
 				<div id="info" class="tab-pane active">
 					<br>
 					<div class="profile-card">
-							<div class="profile-cover">
-									<div class="profile-avatar">
-											<a href="#"><img src="/images/PI_Pachimari.png" ></a>
-									</div>
-									<div class="profile-details">
-											<h6> <%= battlenetID %> </h6>
-									</div>
-							</div>
-							<div class="profile-info">
-									<h1>Misc</h1>
-									<div class="info-area">
-										No idea what goes in me yet
-									</div>
-							</div>
-
-				</div>
+            <div class="loader"></div>
+				  </div>
 				</div>
 
 				<div id="stats" class="tab-pane fade">
 						<h3 class="sub-header"> Player Stats </h3>
+            <div class = 'stats-container'>
+              <div class="loader"></div>
+            </div>
 
 
-						
+
 					</div>
 
 				<div id="playing" class="tab-pane fade">
@@ -155,7 +146,7 @@
 				<div id="update" class="tab-pane fade">
 						<h3 class="sub-header"> Edit your user settings: </h3>
 						<form id="registration-form" style="margin:150px;">
-						
+
 							<div class="form-row">
 									<div class="form-label">
 											<label> Battle.net ID</label>
@@ -192,7 +183,7 @@
 					</form>
 					<button class="submit">Save Changes</button>
 
-				
+
 				</div>
 				<% } %>
 				<!-- @end #content -->

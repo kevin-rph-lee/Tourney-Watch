@@ -80,9 +80,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         .where({id:req.params.id})
         .update({avatar:results.profile.avatar})
         .then(()=>{
-          const profileInfo = {avatar:results.profile.avatar}
+          const level = results.profile.tier.toString() + results.profile.level.toString()
+          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:{}};
           for(let hero in results.quickplay.heroes){
-            profileInfo[hero+'timePlayed'] = results.quickplay.heroes[hero].time_played / 1000 / 60;
+            profileInfo.playTime[hero] = results.quickplay.heroes[hero].time_played;
           }
           res.json(profileInfo);
         })
