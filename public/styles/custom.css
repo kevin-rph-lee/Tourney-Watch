@@ -462,6 +462,11 @@ div.alert.alert-warning{
   color: #fff;
   background-color: #474D57;
   border-color: #F7931D;
-  border-width:3px;
+  
+  border-width:2px;
+  width: 70%;
+  margin: 0 auto;
 }
+
+
 
