@@ -103,3 +103,13 @@ h6 {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.character-icon{
+    width: 40px;
+    height:40px;
+    background: #ccc;
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+}
+

@@ -26,17 +26,35 @@ $(document).ready(function () {
             Bananas are the potatoes of fruit
           </div>
       </div>`)
+    function jsUcfirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1).replace("_", " ");
+    }
 
-      let statsTable = `<table>`;
+      let statsTable = `      
+      
+      <table class="table table-striped table-dark">
+      <thead>
+          <tr>
+            <th scope="col">Hero</th>
+            <th scope="col">Time Played (mins)</th>
+          </tr>
+        </thead>
+      `;
 
       for(let hero in results.playTime){
         const timePlayed = moment.duration(results.playTime[hero]);
         console.log('time: ', timePlayed);
         statsTable += `
+
+        <tbody class="tournament-details">
           <tr>
-            <th>${hero}</th>
-            <th>${timePlayed.asMinutes()}</th>
+            <td scope="row"> 
+                <img class="character-icon" src="/images/heroicons/${hero}.png">    
+              ${jsUcfirst(hero)}  
+            </td>
+            <td scope="row">${timePlayed.asMinutes()}</td>
           </tr>
+        </tbody>
         `
       }
       statsTable += `</table>`
