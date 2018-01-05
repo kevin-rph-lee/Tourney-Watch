@@ -145,7 +145,6 @@ module.exports = (knex, owjs) => {
             'user_id': userID,
             'team_id': null,
             'tournament_id': tournamentID,
-            'avatar': data.profile.avatar,
             'level': data.profile.level,
             'first_role': roleRanks[0].role,
             'first_role_time_played': roleRanks[0].time,
@@ -299,7 +298,7 @@ module.exports = (knex, owjs) => {
           res.sendStatus(404);
         } else{
           console.log(results[0].battlenet_id);
-
+          //TO DO rename
           await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
 
           res.redirect(`/tournaments/${tournamentID}`);
