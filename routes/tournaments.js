@@ -274,8 +274,9 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         for (let t = 0; t < teamRoster.length; t++) {
           teamRoster[t].role_summary = JSON.parse(teamRoster[t].role_summary)
         }
-        const teamSummary = _.groupBy(teamRoster, "team_id");
+        const teamSummary = _.groupBy(_.sortBy(teamRoster, "level").reverse(), 'team_id');    
         res.send(teamSummary);
+
       });
   });
 
