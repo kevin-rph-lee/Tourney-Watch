@@ -2,16 +2,13 @@
 <html lang="en">
 
 <head>
-
-
 </head>
 <% include partials/navbar %>
 <script src="/scripts/login.js"></script>
     <body>
-
         <main class="container">
-
             <h2> Login</h2>
+            <div class="login-alert"></div>
             <form id="login form" action="/users/login" method="POST" style="margin:150px;">
 
                 <div class="form-row">
@@ -36,11 +33,12 @@
                         <label></label>
                     </div>
                     <div class="form-box">
-                        <button class="submit butt0n" type="submit" value="Submit">Submit</button>
+
                     </div>
                 </div>
             </form>
-
+            <div class="submit-button">
+                <button class="submit" type="submit" value="Submit">Submit</button>
             </div>
 
 
