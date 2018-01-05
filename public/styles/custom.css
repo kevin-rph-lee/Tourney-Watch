@@ -368,9 +368,14 @@ img.player-class{
 
 /* Team Summary */
 
-/* tbody.player-class > tr, thead.player-class > tr{
-  text-align: center;
-} */
+#role-summary-modal > .modal-content{
+  transform: translate(-50%, -50%);
+  position: fixed;
+  height: 85%;
+  top: 30%;
+  left: 50%;
+  width: 60%;
+}
 
 div.link-to-teams{
   text-align: center;
