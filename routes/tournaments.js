@@ -203,7 +203,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     console.log(req.body);
 
     //
-    if(!name || !description || checkInvalidCharacters(twitchChannel) || checkInvalidCharacters(description) || checkInvalidCharacters(name)){
+    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       // STRETCH: Show 'That name has been taken' error page
       console.log(`something is wrong`)
       console.log(!name)

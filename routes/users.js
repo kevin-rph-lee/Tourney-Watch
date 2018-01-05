@@ -101,7 +101,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     console.log(req.body);
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
-    const battlenetID = req.body.battlenet_id.trim();
+    const battlenetID = req.body.battlenet.trim();
 
     //Converting bnet ID into a format that owjs can take
 
