@@ -193,13 +193,18 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
               getUserIconAndbnetID(req.params.id)
                 .then((results) => {
-                  console.log('results: ', results)
+                  //isUser is true if the user logged in is looking at their own profile
+                  let isUser = false;
+                  if(parseInt(req.session.userID) === parseInt(req.params.id)){
+                    isUser = true;
+                  }
                   res.render('profile', {
                     email: req.session.email,
                     asPlayerList: asPlayerList,
                     asOwnerList: asOwnerList,
                     battlenetID: results[0].battlenet_id,
-                    userID: req.params.id
+                    userID: req.params.id,
+                    isUser: isUser
                   });
                 })
             });
