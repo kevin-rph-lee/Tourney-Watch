@@ -49,21 +49,26 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
 
   //Gives back a JSON with player info (time & avatar) from OWJS
+  //Auto-updates the avatar (if the user has changed the avatar on BNET)
   router.get('/:id/profileinfo.json', (req, res) => {
     knex
     .select('battlenet_id')
     .from('users')
     .where({id:req.params.id})
     .then((results) => {
-      console.log(results);
+
       getPlayerInfo(results[0].battlenet_id)
       .then((results) => {
-        const profileInfo = {avatar:results.profile.avatar}
-        console.log(results.quickplay.global);
-        for(let hero in results.quickplay.heroes){
-          profileInfo[hero+'timePlayed'] = results.quickplay.heroes[hero].time_played / 1000 / 60;
-        }
-        res.json(profileInfo);
+        knex('users')
+        .where({id:req.params.id})
+        .update({avatar:results.profile.avatar})
+        .then(()=>{
+          const profileInfo = {avatar:results.profile.avatar}
+          for(let hero in results.quickplay.heroes){
+            profileInfo[hero+'timePlayed'] = results.quickplay.heroes[hero].time_played / 1000 / 60;
+          }
+          res.json(profileInfo);
+        })
       })
     })
   });
@@ -97,7 +102,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         if(results.length === 0){
           owjs.getAll('pc', 'us', convertBnetID(battlenetID))
             .then((results) => {
-              console.log(results.profile.avatar);
               knex
                 .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID, avatar: results.profile.avatar})
                 .into('users')
