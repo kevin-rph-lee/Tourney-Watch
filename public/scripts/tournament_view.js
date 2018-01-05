@@ -187,83 +187,44 @@ $(document).ready(function () {
       url: '/tournaments/roles.json',
       data: {tournamentID: tournamentID},
       method: 'GET'
-    }).done((playerRoles) => {
-      let firstRoleString = '';
-      let secondRoleString = '';
-
-      for(let i in playerRoles){
-        firstRoleString +=
-        `<tr>
-          <td>${i}</th>
-          <td>${playerRoles[i].offenseFirst}</td>
-          <td>${playerRoles[i].defenseFirst}</td>
-          <td>${playerRoles[i].tankFirst}</td>
-          <td>${playerRoles[i].supportFirst}</td>
-        </tr>`
-
-        secondRoleString +=
-        `<tr>
-          <td>${i}</td>
-          <td>${playerRoles[i].offenseSecond}</td>
-          <td>${playerRoles[i].defenseSecond}</td>
-          <td>${playerRoles[i].tankSecond}</td>
-          <td>${playerRoles[i].supportSecond}</td>
-        </tr>`
+    }).done((teamSummary) => {
+      const teamIDs = Object.keys(teamSummary);
+      
+      for (let t = 0 ; t < teamIDs.length; t++) {
+        $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
       }
 
-      $('.role-summary-container').append(`
-      <div class="row">
-        <div class="table-responsive col-md-6">
-        <h3>Primary Roles</h3>
-          <table id="primary-role-summary" class="table table-striped table-dark">
-            <thead>
-              <tr>
-                <th scope="col">Team #</th>
-                <th scope="col">Offense</th>
-                <th scope="col">Defense</th>
-                <th scope="col">Tank</th>
-                <th scope="col">Support</th>
-              </tr>
-            </thead>
-            <tbody class="player-table-stats player-class">
-              ${firstRoleString}
-            </tbody>
-          </table>
-          </div>
-          <div class="table-responsive col-md-6">
-          <h3>Secondary Roles</h3>
-          <table id="secondary-role-summary" class="table table-striped table-dark">
-            <thead>
-              <tr>
-                <th scope="col">Team #</th>
-                <th scope="col">Offense</th>
-                <th scope="col">Defense</th>
-                <th scope="col">Tank</th>
-                <th scope="col">Support</th>
-              </tr>
-            </thead>
-            <tbody class="player-table-stats">
-              ${secondRoleString}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      `)
-
-      $("#primary-role-summary").DataTable({
-        "paging": false,
-        "searching": false,
-        "autoWidth": true,
-        "info": false,
-        "scrollCollapse": false,
-      });
-      $("#secondary-role-summary").DataTable({
-        "paging": false,
-        "searching": false,
-        "autoWidth": true,
-        "info": false,
-        "scrollCollapse": false,
-      });
+      for (let t = 0 ; t < teamIDs.length; t++) {
+        $('.role-summary-container').append(`
+        <a name="Team${teamIDs[t]}"><h3>Team ${teamIDs[t]}</h3>
+        <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 170px;">Battlenet ID</th>
+              <th scope="col" class="center">Level</th>
+              <th scope="col" class="center">Most Played</th>
+              <th scope="col" class="center"></th>
+              <th scope="col" class="center"></th>
+              <th scope="col" class="center">Least Played</th>
+            </tr>
+          </thead>`)
+          for (let p = 0; p < 6; p++) {
+            let player = teamSummary[teamIDs[t]][p]
+            console.log(player.role_summary)
+            $(`[data-team-sum-id="${teamIDs[t]}"`).append(`
+              <tbody class="player-table-stats player-class">
+                <tr>
+                  <td>${player.battlenet_id}</th>
+                  <td class="center">${player.level}</th>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[0].role}.png" title="${player.role_summary[0].role}"></td>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[1].role}.png" title="${player.role_summary[1].role}"></td>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[2].role}.png" title="${player.role_summary[2].role}"></td>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[3].role}.png" title="${player.role_summary[3].role}"></td>
+                </tr>
+              </tbody>
+            </table>`)
+        }
+      }
     });
 
     console.log(modalRole.style.display);
@@ -340,8 +301,7 @@ $(document).ready(function () {
               </span>
             </td>
               <td>
-              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i>
-</span>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i></span>
             </td>
           </tr>`)
       }
@@ -386,9 +346,8 @@ $(document).ready(function () {
               <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${results.youtubeID}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
               </span>
             </td>
-              <td>
-              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i>
-</span>
+            <td>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i></span>
             </td>
           </tr>
           `)
@@ -405,12 +364,12 @@ $(document).ready(function () {
           const highlightID = $(e.target).data().id
           //Deleting highlight from the DB
           $.ajax({
-            url: '/highlights/' + tournamentID +  '/delete/',
+            url: "/highlights/" + tournamentID +  "/delete/",
             data: {id: highlightID},
             method: 'POST'
           }).done(() => {
             //removing the row DOM element
-            $(e.target).closest("tr" ).remove()
+            $(e.target).closest("tr").remove()
           });
         });
       }).catch((err)=>{
@@ -453,6 +412,7 @@ $(document).ready(function () {
     if (event.target == modalRole){
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.role-summary-container').empty();
+      $('.link-to-teams').empty();
       modalRole.style.display = "none";
     }
     if (event.target == modalHighlights){

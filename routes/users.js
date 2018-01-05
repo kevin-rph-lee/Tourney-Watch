@@ -31,6 +31,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       })
   }
 
+  function getPlayerInfo(bnetID){
+    return owjs.getAll('pc', 'us', convertBnetID(bnetID))
+  }
+
   /**
    * Converts a BNET ID into a string that Overwatch-js can handle
    * @param  {String} bnetID the BNET ID to convert
@@ -58,6 +62,36 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   router.get('/new', (req, res) => {
     res.render('register', { email: req.session.email });
   });
+
+
+
+
+  //Gives back a JSON with player info (time & avatar) from OWJS
+  //Auto-updates the avatar (if the user has changed the avatar on BNET)
+  router.get('/:id/profileinfo.json', (req, res) => {
+    knex
+    .select('battlenet_id')
+    .from('users')
+    .where({id:req.params.id})
+    .then((results) => {
+      getPlayerInfo(results[0].battlenet_id)
+      .then((results) => {
+        knex('users')
+        .where({id:req.params.id})
+        .update({avatar:results.profile.avatar})
+        .then(()=>{
+          const level = results.profile.tier.toString() + results.profile.level.toString()
+          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:{}};
+          for(let hero in results.quickplay.heroes){
+            profileInfo.playTime[hero] = results.quickplay.heroes[hero].time_played;
+          }
+          res.json(profileInfo);
+        })
+      })
+    })
+  });
+
+
   //Goes to login page
   router.get('/login', (req, res) => {
     res.render('login', { email: req.session.email });
@@ -85,9 +119,9 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         console.log(results);
         if (results.length === 0) {
           owjs.getAll('pc', 'us', convertBnetID(battlenetID))
-            .then(() => {
+            .then((results) => {
               knex
-                .insert({ email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID })
+                .insert({email: email, password: bcrypt.hashSync(password, 10), battlenet_id: battlenetID, avatar: results.profile.avatar})
                 .into('users')
                 .returning('id')
                 .then((results) => {
@@ -147,6 +181,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     req.session = null;
     res.send({ result: true });
   });
+
 
 
   router.get("/:id", (req, res) => {
@@ -215,7 +250,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   router.post("/:id/edit", (req, res) => {
     console.log('param: ', req.params.id);
     console.log('session: ',req.session.userID);
- 
+
     if (parseInt(req.params.id) !== parseInt(req.session.userID)) {
       console.log('invalid password');
       return res.sendStatus(400)
@@ -223,9 +258,9 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
       const password = req.body.password.trim();
       const battlenetID = req.body.battlenet.trim();
-  
+
       //Converting bnet ID into a format that owjs can take
-  
+
       if (checkInvalidCharacters(battlenetID)) {
         console.log('Invalid')
         return res.sendStatus(200);
@@ -246,10 +281,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
           console.log('OWJS fails')
           res.sendStatus(400);
         })
-      
-        
+
+
     });
- 
+
 
 
 
