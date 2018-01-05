@@ -45,6 +45,30 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     res.render('register', {email: req.session.email});
   });
 
+
+
+
+  //Gives back a JSON with player info (time & avatar) from OWJS
+  router.get('/:id/profileinfo.json', (req, res) => {
+    knex
+    .select('battlenet_id')
+    .from('users')
+    .where({id:req.params.id})
+    .then((results) => {
+      console.log(results);
+      getPlayerInfo(results[0].battlenet_id)
+      .then((results) => {
+        const profileInfo = {avatar:results.profile.avatar}
+        console.log(results.quickplay.global);
+        for(let hero in results.quickplay.heroes){
+          profileInfo[hero+'timePlayed'] = results.quickplay.heroes[hero].time_played / 1000 / 60;
+        }
+        res.json(profileInfo);
+      })
+    })
+  });
+
+
   //Goes to login page
   router.get('/login', (req, res) => {
     res.render('login',{email: req.session.email});
@@ -132,23 +156,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   router.post("/logout", (req, res) => {
       req.session = null;
       res.send({result:true});
-  });
-
-
-     //Goes to registration page
-  router.get('/:id/profileinfo.json', (req, res) => {
-    knex
-    .select('battlenet_id')
-    .from('users')
-    .where({id:req.params.id})
-    .then((results) => {
-      getPlayerInfo(results[0].battlenet_id)
-      .then((results) => {
-        const profileInfo = {avatar:results.profile.avatar}
-        res.json(profileInfo);
-
-      })
-    })
   });
 
 
