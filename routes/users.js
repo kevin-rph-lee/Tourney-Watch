@@ -65,7 +65,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //user registers
   router.post("/new", (req, res) => {
-
+    console.log(req.body);
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
     const battlenetID = req.body.battlenet.trim();
@@ -128,7 +128,12 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       .from("users")
       .where({ email: email })
       .then((results) => {
+<<<<<<< HEAD
         if (results.length === 0) {
+=======
+        if(results.length === 0){
+          //flash message: id already exists
+>>>>>>> 3fb177a23044e81b65337d69aa34370d3e3e5747
           res.sendStatus(404);
         } else if (bcrypt.compareSync(password, results[0].password)) {
           req.session.email = email;

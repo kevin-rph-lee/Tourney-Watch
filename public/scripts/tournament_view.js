@@ -7,7 +7,7 @@ $(document).ready(function () {
     `)
     Object.keys(teamNames).forEach((t) => {
       $(".team-cards").append(`
-      <div class="card mb-3" style="min-width: 15rem">
+      <div class="card mb-3" style="min-width: 17rem">
         <div class="card-header">${teamNames[t]}</div>
           <div class="card-body" data-team-id="${teamNames[t]}">
           </div>
@@ -44,7 +44,6 @@ $(document).ready(function () {
   }
 
   function loadCards() {
-    console.log('i am in load cards', tournamentID);
     $.ajax({
       url: '/tournaments/cards.json',
       data: {tournamentID: tournamentID},
@@ -415,10 +414,25 @@ $(document).ready(function () {
           });
         });
       }).catch((err)=>{
-        //TO-DO user flash message somehow....
-        alert('Invalid youtube URL!');
+        // //TO-DO user flash message somehow....
+        // alert('Invalid youtube URL!');
+        $('.youtube-alert').append(`
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>That URL is invalid!</strong> Make sure you place in the right URL...
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        `)
       });
     });
+
+  window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+  }, 5000);
+
       modalManageHighlights.style.display = "block";
     });
   }
