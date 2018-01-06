@@ -395,6 +395,21 @@ $(document).ready(function () {
     });
   }
 
+  // twitch  div sliding functionality
+  let showTwitch = false;
+  $("#twitch-button").click(function() {
+    if (!showTwitch) {
+      console.log('show twitch');
+      showTwitch = true;
+      $(".container-fluid").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showTwitch =false
+      $(".container-fluid").css({"display": "none"});
+    }
+  });
+
+
 
   // Avg team div sliding functionality
   let showChart = false;
@@ -410,43 +425,7 @@ $(document).ready(function () {
     }
   });
 
-  const ctx = document.getElementById("myChart");
-  const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: teamNames,
-      datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero:true
-              }
-          }]
-      }
-    }
-  });
+ 
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
