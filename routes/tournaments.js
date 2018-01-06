@@ -132,8 +132,8 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     let data = {"teams": [], "results":[]};
     for (let b = 0; b < teamArray.length; b+=2 ) {
       data.teams.push(
-        [{ name: teamArray[b].id    , flag: "in" },
-         { name: teamArray[b + 1].id, flag: "in" },]
+        [{ name: teamArray[b].team_name    , flag: "in" },
+         { name: teamArray[b + 1].team_name, flag: "in" },]
       );
       data.results.push(
         [0,0], [0, 0]
@@ -336,7 +336,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
-        console.log('i am in brackets.json', results[0]);
         res.json(results[0]);
       });
   });
@@ -518,7 +517,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
               if (playersArray.length === (results[0].no_of_teams * 6)) {
                 knex
-                .select("id")
+                .select("id","team_name")
                 .from("teams")
                 .where({tournament_id: tournamentID})
                 .then((teamArray) => {
