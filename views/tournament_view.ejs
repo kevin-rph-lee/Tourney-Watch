@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">
+  
   <script>
       window.tournamentID = <%=tournamentID%>;
       window.isOwner = <%= isOwner %>;
@@ -14,13 +14,14 @@
       <script src="/scripts/bracketgenerator.js"></script>
       <script src="/vendor/jquery.bracket.min.js"></script>
       <script type="text/javascript" src="/scripts/slick.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/r-2.2.1/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
-      <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" h/>
+      <link href="/vendor/jquery.bracket.min.css" rel="stylesheet" type="text/css" />
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/r-2.2.1/sc-1.4.3/sl-1.2.4/datatables.min.css"/>
-      <link href="/styles/tournament_view.css" rel="stylesheet" type="text/css" h/>
+      <link rel="stylesheet" type="text/css" href="/styles/tournament_view.css"/>
       <link rel="stylesheet" type="text/css" href="/styles/slick.css"/>
-      // Add the new slick-theme.css if you want the default styling
       <link rel="stylesheet" type="text/css" href="/styles/slick-theme.css"/>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">
 
 
 
@@ -69,15 +70,27 @@
 
 
           <div class="container">
-            <div class="row team-cards">
-            <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
-            </div>
             <% if (isOwner)  { %>
             <div class = 'admin-options'>
               <button id="manage-highlights-button"><i class="fa fa-file-video-o" aria-hidden="true" title="Manage Highlights"></i></button>
-              <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
               <button id="email-notifications-button"><i class="fa fa-bell-o" aria-hidden="true" title="Email Players"></i></button>
               <button id="role-summary-button"><i class="fa fa-users" aria-hidden="true" title="Team Summary"></i></button>
+              <button id="swap-modal-button"><i class="fa fa-exchange" aria-hidden="true" title="Swap Players"></i></button>
+              <button id="avg-level-button"><i class="fa fa-bar-chart" aria-hidden="true" title="Average Team Levels"></i></button>
+            </div>
+
+            <!-- Avg Team Levels Slide Down -->
+            <div class="avg-team-levels">
+
+            <div class="chart-wrapper">
+              <canvas id="myChart" height="100%"></canvas>
+            </div>
+
+
+
+
+
+
             </div>
 
             <!-- Swap players Modal -->
@@ -109,43 +122,49 @@
               </div>
             </div>
 
-          <!-- Manage highlights button -->
-          <div id="manage-highlights-modal" class="modal">
-            <div class="modal-content">
-              <h1>Manage Highlights</h1>
-              <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
-                <label for="name" class="form-label"> Highlight Name  </label>
-                <input class="highlight-name" type="text" name="name" required=""><br>
-                <label for ="url" class="form-label"> Highlight Youtube URL </label>
-                <input class="highlight-url" type="text" name="url" required=""><br>
-                <div class="add-highlight">
-                <button type="button" class="btn btn-primary btn-md add-highlight">Add highlight!</button>
+            <!-- Manage highlights button -->
+            <div id="manage-highlights-modal" class="modal">
+              <div class="modal-content">
+                <h1>Manage Highlights</h1>
+                <form id= 'highlight-form' action= "/highlights/<%=tournamentID%>/new" method="POST">
+                  <label for="name" class="form-label"> Highlight Name  </label>
+                  <input class="highlight-name" type="text" name="name" required=""><br>
+                  <label for ="url" class="form-label"> Highlight Youtube URL </label>
+                  <input class="highlight-url" type="text" name="url" required=""><br>
+                  <div class="add-highlight">
+                  <button type="button" class="btn btn-primary btn-md add-highlight">Add highlight!</button>
+                  </div>
+                </form>
+                <div class='youtube-alert'></div>
+                <div class="manage-highlights-container">
                 </div>
-              </form>
-              <div class='youtube-alert'></div>
-              <div class="manage-highlights-container">
               </div>
             </div>
-          </div>
 
-          <!-- Role Summary Modal -->
-          <div id="role-summary-modal" class="modal">
-            <div class="modal-content">
-              <h1>Team Summary</h1>
-              <div class="link-to-teams">Jump to: </div>
-              <div class="role-summary-container">
+            <!-- Role Summary Modal -->
+            <div id="role-summary-modal" class="modal">
+              <div class="modal-content">
+                <h1>Team Summary</h1>
+                <div class="link-to-teams">Jump to: </div>
+                <div class="role-summary-container">
+                </div>
               </div>
             </div>
-          </div>
-            <% } %>
+              <% } %>
 
-          <!-- Role Summary Modal -->
-          <div id="highlights-modal" class="modal">
-            <div class="modal-content">
-              <h1>Highlights</h1>
-              <div class="highlights-container">
+            <!-- Role Summary Modal -->
+            <div id="highlights-modal" class="modal">
+              <div class="modal-content">
+                <h1>Highlights</h1>
+                <div class="highlights-container">
+                </div>
               </div>
             </div>
+
+            <div class="row team-cards">
+              <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
+            </div>
+
           </div>
 
 

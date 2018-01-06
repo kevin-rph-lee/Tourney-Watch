@@ -14,14 +14,16 @@
             <h1><%= tournamentName %></h1>
         </div>
 
+        <p> <%=players%>/<%=teamCount * 6%> enrolled</p>
+
         <div style="text-align: center;">
 
-            <!-- BUTTON GO OFF -->
-            <!-- <button class="start-tournament">Start Tournament</button> -->
+            <% if (isReady) { %>
             <form method="POST" action="/tournaments/<%= tournamentID %>/start" class="start-tournament">
-            <button type="submit" value="Start Tournament">Start Tournament</button>
+                <button type="submit" value="Start Tournament">Start Tournament</button>
             </form>
-
+            <% } %>
+            
            <% include partials/share_button %>
 
             </form>

@@ -213,6 +213,7 @@ module.exports = (knex, owjs) => {
                 } else {
                   res.render("tournament_enroll", {
                     email: currEmail,
+                    userID: req.session.userID,
                     teamCount: teamCount,
                     tournamentID: tournamentID,
                     tournamentName: tournamentName,
@@ -258,9 +259,6 @@ module.exports = (knex, owjs) => {
         res.send(teamNames);
       });
   });
-
-
-
 
   router.post("/:id/swap", (req, res) => {
     console.log(req.body);

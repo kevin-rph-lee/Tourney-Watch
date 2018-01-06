@@ -5,11 +5,15 @@
 </head>
 <% include partials/navbar %>
 <script src="/scripts/login.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300i" rel="stylesheet">
     <body>
         <main class="container">
-            <h2> Login</h2>
+            <div id="ui-header">
+                <h2>Login</h2>
+                <p>Don't have an account? Create one <a href="/users/new">here</a></p>
+            </div>
             <div class="login-alert"></div>
-            <form id="login form" action="/users/login" method="POST" style="margin:150px;">
+            <form id="login form" action="/users/login" method="POST" style="margin:50px 150px 20px 150px;">
 
                 <div class="form-row">
                     <div class="form-label">

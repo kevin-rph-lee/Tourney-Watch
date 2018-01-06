@@ -271,11 +271,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       }
       //checking to prevent BNET/Email dupes
       knex('users')
-        .select("email")
+        .select("email", "id")
         .from("users")
         .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
         .then((results) => {
-          if(results.length === 0){
+          if((results.length === 0) || (Number(req.params.id) === Number(req.session.userID))){
             owjs.getAll('pc', 'us', convertBnetID(battlenetID))
               .then(() => {
                 knex("users")
@@ -291,6 +291,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                 res.sendStatus(400);
               })
           } else {
+            console.log('something else failse');
             return res.sendStatus(400)
           }
 

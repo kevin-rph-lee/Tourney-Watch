@@ -190,7 +190,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       // STRETCH: "Forbidden" error page
       res.sendStatus(403);
     }
-    res.render('tournament_new',{email: req.session.email});
+    res.render('tournament_new',{email: req.session.email, userID: req.session.userID});
   });
 
   // Creates new tournament
@@ -361,6 +361,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               tournamentName: results[0].name,
               tournamentID: tournamentID,
               email: req.session.email,
+              userID: req.session.userID,
               started: started,
               twitchChannel: twitchChannel,
               twitchChat: twitchChat,
@@ -369,11 +370,13 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           } else {
             res.render("tournament_staging", {
               playerCount: enrolledPlayers,
+              players: enrolledPlayers.length,
               teamCount: results[0].no_of_teams,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
               tournamentID: tournamentID,
               email: req.session.email,
+              userID: req.session.userID,
               isReady: isReady
             });
           }
@@ -394,7 +397,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .where({id: tournamentID})
       .then((results) =>{
         if (results.length === 0){
-          res.render("404", {email: email})
+          res.render("404", {email: email, userID: req.session.userID,})
         }
       })
     }
@@ -424,6 +427,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
             teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
             email: req.session.email,
+            userID: req.session.userID,
             started: started,
             tournamentName: results[0].name,
             tournamentID: tournamentID,
@@ -437,8 +441,10 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           res.render("tournament_notready", {
             tournamentName: results[0].name,
             playerCount: enrolledPlayers.length,
+            maxPlayers: teamCount * 6,
             teamCount: results[0].no_of_teams,
             email: req.session.email,
+            userID: req.session.userID,
             tournamentID: tournamentID
           })
         }
