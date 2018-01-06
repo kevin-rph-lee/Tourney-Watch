@@ -59,7 +59,7 @@ $(document).ready(function () {
                 <img class="character-icon" src="/images/heroicons/${hero}.png">
               ${jsUcfirst(hero)}
             </td>
-            <td scope="row">${timePlayed.asMinutes()}</td>
+            <td scope="row">${Math.floor(Number(timePlayed.asMinutes()))}</td>
           </tr>
         </tbody>
         `
