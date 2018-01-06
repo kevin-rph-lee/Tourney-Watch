@@ -41,6 +41,27 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
 
 
+  function capFirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function generateName(){
+    var name1 = ["afraid","ancient","angry","average","bad","big","bitter","black","blue","brave","breezy","bright","brown","calm","chatty","chilly","clever","cold","cowardly","cuddly","curly","curvy","dangerous","dry","dull","empty","evil","fast","fat","fluffy","foolish","fresh","friendly","funny","fuzzy","gentle","giant","good","great","green","grumpy","happy","hard","heavy","helpless","honest","horrible","hot","hungry","itchy","jolly","kind","lazy","light","little","loud","lovely","lucky","massive","mean","mighty","modern","moody","nasty","neat","nervous","new","nice","odd","old","orange","ordinary","perfect","pink","plastic","polite","popular","pretty","proud","purple","quick","quiet","rare","red","rotten","rude","selfish","serious","shaggy","sharp","short","shy","silent","silly","slimy","slippery","smart","smooth","soft","sour","spicy","splendid","spotty","stale","strange","strong","stupid","sweet","swift","tall","tame","tasty","tender","terrible","thin","tidy","tiny","tough","tricky","ugly","unlucky","warm","weak","wet","white","wicked","wise","witty","wonderful","yellow","young"]
+
+    var name2 = ["doomfist","genji","mccree","pharah","reaper","soldier: 76","sombra","tracer","bastion","hanzo","junkrat","mei","torbjörn","widowmaker","d.va","orisa","reinhardt","roadhog","winston","zarya","ana","lúcio","mercy","moira","symmetra","zenyatta","mondatta","pachimari","volskaya","snowball","ganymede","athena","oasis","nepal","hanamura","lijiang","numbani","ilios","gibraltar","junkertown","kings row","anubis","eichenwalde","dorado","hollywood","castillo","66","necropolis","antarctica","talon","blackwatch","omnics","helix","shimada","rikimaru","vishkar","shambali","hyde","lucheng","kofi aromo","lumériCo","goldshire","axiom","blizzard","sigma","meteor","adawe","izumi","calaveras","orca","slipstream","kelvin","bludger","hypertrain","sandcrawler","nulltrooper","slicer","eradicator","detonator","training bot","lacroix"]
+
+    var name = capFirst(name1[getRandomInt(0, name1.length + 1)]) + ' ' + capFirst(name2[getRandomInt(0, name2.length + 1)]);
+    return name;
+
+  }
+
+
+
+
   function setTournamentStarted(tournamentID){
     knex("tournaments")
         .where({"id": tournamentID})
@@ -227,8 +248,9 @@ module.exports = (knex, _, env, mailGun, owjs) => {
             .returning('id')
             .then((tournamentID)=> {
               for (let i = 0; i < teamCount; i++) {
+                const teamName = generateName();
                 knex("teams")
-                  .insert({"tournament_id": tournamentID[0]})
+                  .insert({"tournament_id": tournamentID[0], "team_name": teamName})
                   .then(() => {});
               }
               res.redirect(`/tournaments/${tournamentID[0]}`)
