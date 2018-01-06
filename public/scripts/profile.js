@@ -3,6 +3,15 @@ $(document).ready(function () {
   // console.log('I am ready');
   //
 
+    /**
+     * Removes underscores & replaces with space, along with capitalizes the first letter of each name
+     * @param  {[name]} string Name of hero
+     * @return {[String]}        Hero name with capitalized first letter along with underscore replaced with space
+     */
+    function jsUcfirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1).replace("_", " ");
+    }
+
     console.log('trying ajx')
     $.ajax({
       url: '/users/' + userID + '/profileinfo.json',
@@ -14,7 +23,7 @@ $(document).ready(function () {
       $('.profile-card').append(`
       <div class="profile-cover">
           <div class="profile-avatar">
-              <a href="#"><img src="/images/PI_Pachimari.png" ></a>
+              <a href="#"><img src="${results.avatar}" ></a>
           </div>
           <div class="profile-details">
               <h6> ${battlenetID} </h6>
@@ -26,12 +35,10 @@ $(document).ready(function () {
             Bananas are the potatoes of fruit
           </div>
       </div>`)
-    function jsUcfirst(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1).replace("_", " ");
-    }
 
-      let statsTable = `      
-      
+
+      let statsTable = `
+
       <table class="table table-striped table-dark">
       <thead>
           <tr>
@@ -48,11 +55,11 @@ $(document).ready(function () {
 
         <tbody class="tournament-details">
           <tr>
-            <td scope="row"> 
-                <img class="character-icon" src="/images/heroicons/${hero}.png">    
-              ${jsUcfirst(hero)}  
+            <td scope="row">
+                <img class="character-icon" src="/images/heroicons/${hero}.png">
+              ${jsUcfirst(hero)}
             </td>
-            <td scope="row">${timePlayed.asMinutes()}</td>
+            <td scope="row">${Math.floor(Number(timePlayed.asMinutes()))}</td>
           </tr>
         </tbody>
         `
