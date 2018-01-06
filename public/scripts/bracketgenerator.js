@@ -16,11 +16,10 @@ function saveFn(data) {
     $.ajax({
         type: "POST",
         url: "/tournaments/update/",
-        data: {bracketData: bracketData, tournamentID: tournamentID},
-        success: function () {
-            alert("Tournament Changes Saved!");
-        }
-    })
+        data: {bracketData: bracketData, tournamentID: tournamentID}
+     }).done(() => {
+        console.log('done!');
+     });
 }
 
 
