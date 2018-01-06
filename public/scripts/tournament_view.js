@@ -395,6 +395,21 @@ $(document).ready(function () {
     });
   }
 
+  // twitch  div sliding functionality
+  let showTwitch = false;
+  $("#twitch-button").click(function() {
+    if (!showTwitch) {
+      console.log('show twitch');
+      showTwitch = true;
+      $(".container-fluid").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showTwitch =false
+      $(".container-fluid").css({"display": "none"});
+    }
+  });
+
+
 
   // Avg team div sliding functionality
   let showChart = false;
@@ -495,7 +510,6 @@ $(document).ready(function () {
       $(".avg-team-levels").css({"display": "none"});
     }
   });
-
 
 
   // When the user clicks anywhere outside of the modal, close it

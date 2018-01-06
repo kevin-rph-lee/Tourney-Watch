@@ -123,3 +123,20 @@ div.avg-team-levels > .chart-wrapper{
     height: 100%;
     /*position: relative;*/
 }
+
+.container-fluid{
+display:none;
+
+}
+
+hr { 
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    background-color: #F7931D;
+
+} 
