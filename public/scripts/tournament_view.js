@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+  // EVERYBODY
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
     $(".tournamentheader").append(`
@@ -23,24 +24,6 @@ $(document).ready(function () {
         `)
       })
     })
-
-  //If they're the owner, creates event listener to select users to swap
-  if(isOwner){
-      $('span.player').click(function(e){
-        //TO DO make selector more specific ex. select span within div with team id of #
-        //TO DO fix conditionals to make looks nicer
-        if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
-          return;
-        }
-        if($('.selected').length < 3){
-          $(e.target).toggleClass('selected');
-        }
-        if($('.selected').length >= 3 && e.target.className.includes('selected')){
-          $(e.target).toggleClass('selected');
-        }
-      });
-    }
-
   }
 
   function loadCards() {
@@ -85,6 +68,76 @@ $(document).ready(function () {
     $temp.remove();
     alert(`${link} has been copied!`)
   });
+
+  // twitch  div sliding functionality
+  let showTwitch = false;
+  $("#twitch-button").click(function() {
+    if (!showTwitch) {
+      console.log('show twitch');
+      showTwitch = true;
+      $(".container-fluid").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showTwitch =false
+      $(".container-fluid").css({"display": "none"});
+    }
+  });
+
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalHighlights = document.getElementById('highlights-modal');
+  // Get the button that opens the modal
+  const btnHighlights = document.getElementById("highlights-button");
+  // When the user clicks on the button, open the modal
+  btnHighlights.onclick = function() {
+    let highlightsString = "<div class = 'highlights'>";
+    $.ajax({
+      url: '/highlights/' + tournamentID,
+      method: 'GET'
+    }).done((highlights) => {
+
+      for(let i = 0; i < highlights.length; i++){
+
+        highlightsString +=
+        `<div>
+          <div class = 'wrapper'>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>`
+      }
+      highlightsString += '</div>'
+      $('.highlights-container').append(highlightsString);
+      console.log(highlightsString)
+      $('.highlights').slick();
+      modalHighlights.style.display = "block";
+    });
+  }
+  
+
+  window.onclick = function(event) {
+    console.log("spectator clicks")
+    if (event.target == modalHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
+      $('.highlights-container').empty();
+      modalHighlights.style.display = "none";
+    }
+  }
+
+  if (isOwner) {
+    $('span.player').click(function(e){
+      //TO DO make selector more specific ex. select span within div with team id of #
+      //TO DO fix conditionals to make looks nicer
+      if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
+        return;
+      }
+      if($('.selected').length < 3){
+        $(e.target).toggleClass('selected');
+      }
+      if($('.selected').length >= 3 && e.target.className.includes('selected')){
+        $(e.target).toggleClass('selected');
+      }
+    });
+  
 
   //TO DO: make this look....  nicer.
   // Get the modal
@@ -234,36 +287,6 @@ $(document).ready(function () {
 
   //TO DO: make this look....  nicer.
   // Get the modal
-  const modalHighlights = document.getElementById('highlights-modal');
-  // Get the button that opens the modal
-  const btnHighlights = document.getElementById("highlights-button");
-  // When the user clicks on the button, open the modal
-  btnHighlights.onclick = function() {
-    let highlightsString = "<div class = 'highlights'>";
-    $.ajax({
-      url: '/highlights/' + tournamentID,
-      method: 'GET'
-    }).done((highlights) => {
-
-      for(let i = 0; i < highlights.length; i++){
-
-        highlightsString +=
-        `<div>
-          <div class = 'wrapper'>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-          </div>
-        </div>`
-      }
-      highlightsString += '</div>'
-      $('.highlights-container').append(highlightsString);
-      console.log(highlightsString)
-      $('.highlights').slick();
-      modalHighlights.style.display = "block";
-    });
-  }
-
-  //TO DO: make this look....  nicer.
-  // Get the modal
   const modalManageHighlights = document.getElementById('manage-highlights-modal');
   // Get the button that opens the modal
   const btnManageHighlights = document.getElementById("manage-highlights-button");
@@ -395,19 +418,6 @@ $(document).ready(function () {
     });
   }
 
-  // twitch  div sliding functionality
-  let showTwitch = false;
-  $("#twitch-button").click(function() {
-    if (!showTwitch) {
-      console.log('show twitch');
-      showTwitch = true;
-      $(".container-fluid").css({"display": "block"});
-    } else {
-      console.log('hide char');
-      showTwitch =false
-      $(".container-fluid").css({"display": "none"});
-    }
-  });
 
 
 
@@ -511,14 +521,15 @@ $(document).ready(function () {
     }
   });
 
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    console.log('heeeey')
+    console.log("is owner clicks");
     if (event.target == modalSwap) {
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.swap-players-container').empty();
       //Unselects all players to reset the cards
-      $('span.players').removeClass('selected');
+      $('span').removeClass('selected');
       modalSwap.style.display = "none";
     }
     if (event.target == modalEmail){
@@ -531,11 +542,6 @@ $(document).ready(function () {
       $('.link-to-teams').empty();
       modalRole.style.display = "none";
     }
-    if (event.target == modalHighlights){
-      //Empties the modal container to ensure old datas is not shown next time the modal is opened
-      $('.highlights-container').empty();
-      modalHighlights.style.display = "none";
-    }
     if (event.target == modalManageHighlights){
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.manage-highlights-container').empty();
@@ -544,5 +550,13 @@ $(document).ready(function () {
       $('.highlight-url').val('');
       modalManageHighlights.style.display = "none";
     }
+    if (event.target == modalHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
+      $('.highlights-container').empty();
+      modalHighlights.style.display = "none";
+    }
   }
+
+}
+
 });
