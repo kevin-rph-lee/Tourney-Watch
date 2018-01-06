@@ -188,7 +188,7 @@ $(document).ready(function () {
       method: 'GET'
     }).done((teamSummary) => {
       const teamIDs = Object.keys(teamSummary);
-      
+
       for (let t = 0 ; t < teamIDs.length; t++) {
         $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
       }
@@ -387,7 +387,7 @@ $(document).ready(function () {
 
   window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
+        $(this).remove();
     });
   }, 5000);
 
@@ -399,6 +399,92 @@ $(document).ready(function () {
   // Avg team div sliding functionality
   let showChart = false;
   $(".fa-bar-chart").click(function() {
+
+    $('.myChart').empty();
+
+    $.ajax({
+      url: '/tournaments/cards.json',
+      data: {tournamentID: tournamentID},
+      method: 'GET'
+    }).done((playerRoster) => {
+      const teams = [];
+      const averageLevels = [];
+      console.log(playerRoster);
+
+      for(let team in playerRoster){
+        let totalTeamLevel = 0;
+        for(let i = 0; i < playerRoster[team].length; i ++){
+          totalTeamLevel += playerRoster[team][i].level;
+        }
+        averageLevels.push(totalTeamLevel/6);
+        teams.push(team);
+
+      }
+
+
+      console.log(teams);
+      console.log(averageLevels);
+      const ctx = document.getElementById("myChart");
+      const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: teams,
+          datasets: [{
+              label: 'Average Level',
+              data: averageLevels,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)'
+              ],
+              borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+        }
+      });
+    });
+
+
     if (!showChart) {
       console.log('show char');
       showChart = true;
@@ -410,43 +496,7 @@ $(document).ready(function () {
     }
   });
 
-  const ctx = document.getElementById("myChart");
-  const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: teamNames,
-      datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero:true
-              }
-          }]
-      }
-    }
-  });
+
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
