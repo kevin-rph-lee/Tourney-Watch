@@ -145,7 +145,7 @@ module.exports = (knex, owjs) => {
             'user_id': userID,
             'team_id': null,
             'tournament_id': tournamentID,
-            'level': data.profile.level,
+            'level': Number(data.profile.tier.toString() + data.profile.level.toString()),
             'role_summary': JSON.stringify(roleRanks),
             'first_role': roleRanks[0].role,
             'first_role_time_played': roleRanks[0].time,
@@ -187,7 +187,7 @@ module.exports = (knex, owjs) => {
           .where({id: currUserID})
           .then((results) => {
             if (results.length > 0 ) {
-              // Flash Message: "You've already enrolled to this tournament"
+              console.log('cant find')
               res.sendStatus(400)
             } else {
               knex
@@ -206,6 +206,8 @@ module.exports = (knex, owjs) => {
                 const isReady = (enrolledPlayers.length === teamCount * 6);
 
                 if (currBattlenetID === tournamentCreator) {
+                  console.log(tournamentCreator);
+                  console.log('creator');
                   // Flash Message: "You cannot play in a tournament you've made"
                   res.sendStatus(400);
                 } else {
