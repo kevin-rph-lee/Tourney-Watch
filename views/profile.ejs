@@ -10,11 +10,13 @@
 
 <% include partials/navbar %>
 <script src="/scripts/profile.js"></script>
+
 <script type="text/javascript" src="/vendor/moment.js"></script>
 
 
 	<body>
 			<link rel="stylesheet" type="text/css" href="/styles/profile.css"/>
+
 
 		<main class="container">
 
@@ -37,15 +39,16 @@
 				<div id="info" class="tab-pane active">
 					<br>
 					<div class="profile-card">
-            <div class="loader"></div>
-				  </div>
+						
+							<% include partials/loader %>
+						</div>
 				</div>
 
 				<div id="stats" class="tab-pane fade">
 						<h3 class="sub-header"> Player Stats </h3>
             <div class = 'stats-container'>
-              <div class="loader"></div>
-            </div>
+					<% include partials/loader %>
+				</div>
 
 
 
