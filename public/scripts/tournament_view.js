@@ -124,21 +124,6 @@ $(document).ready(function () {
   }
 
   if (isOwner) {
-    $('span.player').click(function(e){
-      //TO DO make selector more specific ex. select span within div with team id of #
-      //TO DO fix conditionals to make looks nicer
-      if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
-        return;
-      }
-      if($('.selected').length < 3){
-        $(e.target).toggleClass('selected');
-      }
-      if($('.selected').length >= 3 && e.target.className.includes('selected')){
-        $(e.target).toggleClass('selected');
-      }
-    });
-  
-
   //TO DO: make this look....  nicer.
   // Get the modal
   const modalSwap = document.getElementById('swap-players-modal');
@@ -525,6 +510,17 @@ $(document).ready(function () {
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     console.log("is owner clicks");
+    if (event.target.className === "player" || event.target.className === "player selected"){
+      if(($('.selected').length == 1 && $(event.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(event.target).text()){
+        return;
+      }
+      if($('.selected').length < 3){
+        $(event.target).toggleClass('selected');
+      }
+      if($('.selected').length >= 3 && event.target.className.includes('selected')){
+        $(event.target).toggleClass('selected');
+      }
+    }
     if (event.target == modalSwap) {
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.swap-players-container').empty();
