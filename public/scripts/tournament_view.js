@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+  // EVERYBODY
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
     $(".tournamentheader").append(`
@@ -23,24 +24,6 @@ $(document).ready(function () {
         `)
       })
     })
-
-  //If they're the owner, creates event listener to select users to swap
-  if(isOwner){
-      $('span').click(function(e){
-        //TO DO make selector more specific ex. select span within div with team id of #
-        //TO DO fix conditionals to make looks nicer
-        if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
-          return;
-        }
-        if($('.selected').length < 3){
-          $(e.target).toggleClass('selected');
-        }
-        if($('.selected').length >= 3 && e.target.className.includes('selected')){
-          $(e.target).toggleClass('selected');
-        }
-      });
-    }
-
   }
 
   function loadCards() {
@@ -69,8 +52,6 @@ $(document).ready(function () {
 
   loadCards();
 
-
-
   // Share button functionality
   $("[data-toggle='toggle']").click(function() {
     const selector = $(this).data("target");
@@ -88,6 +69,61 @@ $(document).ready(function () {
     alert(`${link} has been copied!`)
   });
 
+  // twitch  div sliding functionality
+  let showTwitch = false;
+  $("#twitch-button").click(function() {
+    if (!showTwitch) {
+      console.log('show twitch');
+      showTwitch = true;
+      $(".container-fluid").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showTwitch =false
+      $(".container-fluid").css({"display": "none"});
+    }
+  });
+
+  //TO DO: make this look....  nicer.
+  // Get the modal
+  const modalHighlights = document.getElementById('highlights-modal');
+  // Get the button that opens the modal
+  const btnHighlights = document.getElementById("highlights-button");
+  // When the user clicks on the button, open the modal
+  btnHighlights.onclick = function() {
+    let highlightsString = "<div class = 'highlights'>";
+    $.ajax({
+      url: '/highlights/' + tournamentID,
+      method: 'GET'
+    }).done((highlights) => {
+
+      for(let i = 0; i < highlights.length; i++){
+
+        highlightsString +=
+        `<div>
+          <div class = 'wrapper'>
+            <iframe class="embed-responsive embed-responsive-16by9" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>`
+      }
+      highlightsString += '</div>'
+      $('.highlights-container').append(highlightsString);
+      console.log(highlightsString)
+      $('.highlights').slick();
+      modalHighlights.style.display = "block";
+    });
+  }
+  
+
+  window.onclick = function(event) {
+    console.log("spectator clicks")
+    if (event.target == modalHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
+      $('.highlights-container').empty();
+      modalHighlights.style.display = "none";
+    }
+  }
+
+  if (isOwner) {
   //TO DO: make this look....  nicer.
   // Get the modal
   const modalSwap = document.getElementById('swap-players-modal');
@@ -102,6 +138,7 @@ $(document).ready(function () {
       data: {bnetID1: selectedPlayers[0], bnetID2: selectedPlayers[1]},
       method: 'post'
     }).done(() => {
+
       location.reload();
     });
   });
@@ -187,83 +224,44 @@ $(document).ready(function () {
       url: '/tournaments/roles.json',
       data: {tournamentID: tournamentID},
       method: 'GET'
-    }).done((playerRoles) => {
-      let firstRoleString = '';
-      let secondRoleString = '';
+    }).done((teamSummary) => {
+      const teamIDs = Object.keys(teamSummary);
 
-      for(let i in playerRoles){
-        firstRoleString +=
-        `<tr>
-          <td>${i}</th>
-          <td>${playerRoles[i].offenseFirst}</td>
-          <td>${playerRoles[i].defenseFirst}</td>
-          <td>${playerRoles[i].tankFirst}</td>
-          <td>${playerRoles[i].supportFirst}</td>
-        </tr>`
-
-        secondRoleString +=
-        `<tr>
-          <td>${i}</td>
-          <td>${playerRoles[i].offenseSecond}</td>
-          <td>${playerRoles[i].defenseSecond}</td>
-          <td>${playerRoles[i].tankSecond}</td>
-          <td>${playerRoles[i].supportSecond}</td>
-        </tr>`
+      for (let t = 0 ; t < teamIDs.length; t++) {
+        $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
       }
 
-      $('.role-summary-container').append(`
-      <div class="row">
-        <div class="table-responsive col-md-6">
-        <h3>Primary Roles</h3>
-          <table id="primary-role-summary" class="table table-striped table-dark">
-            <thead>
-              <tr>
-                <th scope="col">Team #</th>
-                <th scope="col">Offense</th>
-                <th scope="col">Defense</th>
-                <th scope="col">Tank</th>
-                <th scope="col">Support</th>
-              </tr>
-            </thead>
-            <tbody class="player-table-stats player-class">
-              ${firstRoleString}
-            </tbody>
-          </table>
-          </div>
-          <div class="table-responsive col-md-6">
-          <h3>Secondary Roles</h3>
-          <table id="secondary-role-summary" class="table table-striped table-dark">
-            <thead>
-              <tr>
-                <th scope="col">Team #</th>
-                <th scope="col">Offense</th>
-                <th scope="col">Defense</th>
-                <th scope="col">Tank</th>
-                <th scope="col">Support</th>
-              </tr>
-            </thead>
-            <tbody class="player-table-stats">
-              ${secondRoleString}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      `)
-
-      $("#primary-role-summary").DataTable({
-        "paging": false,
-        "searching": false,
-        "autoWidth": true,
-        "info": false,
-        "scrollCollapse": false,
-      });
-      $("#secondary-role-summary").DataTable({
-        "paging": false,
-        "searching": false,
-        "autoWidth": true,
-        "info": false,
-        "scrollCollapse": false,
-      });
+      for (let t = 0 ; t < teamIDs.length; t++) {
+        $('.role-summary-container').append(`
+        <a name="Team${teamIDs[t]}"><h3>Team ${teamIDs[t]}</h3>
+        <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 170px;">Battlenet ID</th>
+              <th scope="col" class="center">Level</th>
+              <th scope="col" class="center">Most Played</th>
+              <th scope="col" class="center"></th>
+              <th scope="col" class="center"></th>
+              <th scope="col" class="center">Least Played</th>
+            </tr>
+          </thead>`)
+          for (let p = 0; p < 6; p++) {
+            let player = teamSummary[teamIDs[t]][p]
+            console.log(player.role_summary)
+            $(`[data-team-sum-id="${teamIDs[t]}"`).append(`
+              <tbody class="player-table-stats player-class">
+                <tr>
+                  <td>${player.battlenet_id}</th>
+                  <td class="center">${player.level}</th>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[0].role}.png" title="${player.role_summary[0].role}"></td>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[1].role}.png" title="${player.role_summary[1].role}"></td>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[2].role}.png" title="${player.role_summary[2].role}"></td>
+                  <td class="center"><img class="player-class" src="/images/icon-${player.role_summary[3].role}.png" title="${player.role_summary[3].role}"></td>
+                </tr>
+              </tbody>
+            </table>`)
+        }
+      }
     });
 
     console.log(modalRole.style.display);
@@ -271,36 +269,6 @@ $(document).ready(function () {
   }
 
 
-
-  //TO DO: make this look....  nicer.
-  // Get the modal
-  const modalHighlights = document.getElementById('highlights-modal');
-  // Get the button that opens the modal
-  const btnHighlights = document.getElementById("highlights-button");
-  // When the user clicks on the button, open the modal
-  btnHighlights.onclick = function() {
-    let highlightsString = "<div class = 'highlights'>";
-    $.ajax({
-      url: '/highlights/' + tournamentID,
-      method: 'GET'
-    }).done((highlights) => {
-
-      for(let i = 0; i < highlights.length; i++){
-
-        highlightsString +=
-        `<div>
-          <div class = 'wrapper'>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-          </div>
-        </div>`
-      }
-      highlightsString += '</div>'
-      $('.highlights-container').append(highlightsString);
-      console.log(highlightsString)
-      $('.highlights').slick();
-      modalHighlights.style.display = "block";
-    });
-  }
 
   //TO DO: make this look....  nicer.
   // Get the modal
@@ -340,8 +308,7 @@ $(document).ready(function () {
               </span>
             </td>
               <td>
-              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i>
-</span>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${highlights[i].id}></i></span>
             </td>
           </tr>`)
       }
@@ -386,9 +353,8 @@ $(document).ready(function () {
               <span class="btn btn-secondary" data-toggle="tooltip" title='<img src="http://img.youtube.com/vi/${results.youtubeID}/0.jpg">'><i class="fa fa-camera" aria-hidden="true"></i>
               </span>
             </td>
-              <td>
-              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i>
-</span>
+            <td>
+              <span class="btn btn-secondary"><i class="fa fa-trash-o delete-highlight" aria-hidden="true" data-id=${results.id}></i></span>
             </td>
           </tr>
           `)
@@ -405,12 +371,12 @@ $(document).ready(function () {
           const highlightID = $(e.target).data().id
           //Deleting highlight from the DB
           $.ajax({
-            url: '/highlights/' + tournamentID +  '/delete/',
+            url: "/highlights/" + tournamentID +  "/delete/",
             data: {id: highlightID},
             method: 'POST'
           }).done(() => {
             //removing the row DOM element
-            $(e.target).closest("tr" ).remove()
+            $(e.target).closest("tr").remove()
           });
         });
       }).catch((err)=>{
@@ -429,7 +395,7 @@ $(document).ready(function () {
 
   window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
+        $(this).remove();
     });
   }, 5000);
 
@@ -437,8 +403,124 @@ $(document).ready(function () {
     });
   }
 
+
+
+
+  // Avg team div sliding functionality
+  let showChart = false;
+  $(".fa-bar-chart").click(function() {
+
+    $('.myChart').empty();
+
+    $.ajax({
+      url: '/tournaments/cards.json',
+      data: {tournamentID: tournamentID},
+      method: 'GET'
+    }).done((playerRoster) => {
+      const teams = [];
+      const averageLevels = [];
+      console.log(playerRoster);
+
+      for(let team in playerRoster){
+        let totalTeamLevel = 0;
+        for(let i = 0; i < playerRoster[team].length; i ++){
+          totalTeamLevel += playerRoster[team][i].level;
+        }
+        averageLevels.push(totalTeamLevel/6);
+        teams.push(team);
+
+      }
+
+
+      console.log(teams);
+      console.log(averageLevels);
+      const ctx = document.getElementById("myChart");
+      const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: teams,
+          datasets: [{
+              label: 'Average Level',
+              data: averageLevels,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)'
+              ],
+              borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+        }
+      });
+    });
+
+
+    if (!showChart) {
+      console.log('show char');
+      showChart = true;
+      $(".avg-team-levels").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showChart =false
+      $(".avg-team-levels").css({"display": "none"});
+    }
+  });
+
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
+    console.log("is owner clicks");
+    if (event.target.className === "player" || event.target.className === "player selected"){
+      if(($('.selected').length == 1 && $(event.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(event.target).text()){
+        return;
+      }
+      if($('.selected').length < 3){
+        $(event.target).toggleClass('selected');
+      }
+      if($('.selected').length >= 3 && event.target.className.includes('selected')){
+        $(event.target).toggleClass('selected');
+      }
+    }
     if (event.target == modalSwap) {
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.swap-players-container').empty();
@@ -453,12 +535,8 @@ $(document).ready(function () {
     if (event.target == modalRole){
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
       $('.role-summary-container').empty();
+      $('.link-to-teams').empty();
       modalRole.style.display = "none";
-    }
-    if (event.target == modalHighlights){
-      //Empties the modal container to ensure old datas is not shown next time the modal is opened
-      $('.highlights-container').empty();
-      modalHighlights.style.display = "none";
     }
     if (event.target == modalManageHighlights){
       //Empties the modal container to ensure old datas is not shown next time the modal is opened
@@ -468,5 +546,13 @@ $(document).ready(function () {
       $('.highlight-url').val('');
       modalManageHighlights.style.display = "none";
     }
+    if (event.target == modalHighlights){
+      //Empties the modal container to ensure old datas is not shown next time the modal is opened
+      $('.highlights-container').empty();
+      modalHighlights.style.display = "none";
+    }
   }
+
+}
+
 });

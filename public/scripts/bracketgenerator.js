@@ -45,6 +45,7 @@ $(function () {
           matchMargin: 61,
           roundMargin: 71,
           centerConnectors: true,
+          skipConsolationRound: true,
           init: results.brackets,
           disableToolbar: true,
           disableTeamEdit: true,

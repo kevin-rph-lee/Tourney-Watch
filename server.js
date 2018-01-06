@@ -24,6 +24,7 @@ const usersRoutes = require('./routes/users');
 const enrollmentsRoutes = require('./routes/enrollments');
 const tournamentsRoutes = require('./routes/tournaments');
 const highlightsRoutes = require('./routes/highlights');
+
 // const gamesRoutes = require('./routes/games');
 // const teamsRoutes = require('./routes/teams');
 
@@ -48,8 +49,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Mount all resource routes
 app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs));
-app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun));
+app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun, owjs));
 app.use('/highlights', highlightsRoutes(knex));
+
 
 
 function playersEnrolled(tournamentID){
@@ -107,6 +109,7 @@ app.get('/', async (req, res) => {
 
           res.render('index', {
             email: req.session.email,
+            userID: req.session.userID,
             asPlayerList: asPlayerList,
             asOwnerList: asOwnerList
           });
@@ -123,7 +126,7 @@ app.get("/t/:id", (req,res) => {
 
 app.get("/faq", (req, res) => {
 
-  res.render("faq", {email: req.session.email})
+  res.render("faq", {email: req.session.email, userID: req.session.email})
 });
 
 app.use(express.static(__dirname + '/public'));

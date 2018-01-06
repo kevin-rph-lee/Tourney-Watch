@@ -49,6 +49,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <% if (email !== undefined) { %> 
               <a class="dropdown-item">Logged in as: <%= email %></a>
+              <a class="dropdown-item" href="/users/<%= userID %>">Profile</a>
               <a class="dropdown-item logout" href="javascript:void(0)" id="logout-btn">Log Out</a>
             <% } else { %>
               <a class="dropdown-item" href="/users/new">Register</a>

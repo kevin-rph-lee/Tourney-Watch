@@ -15,7 +15,7 @@ $(document).ready(function () {
           $(".player-table-stats").append(`
           <tr data-player-id="${playerRoster[i][p].battlenet_id}">
             <td scope="row">${count++}</td>
-            <td><img src="${playerRoster[i][p].avatar}" class="img-fluid"> ${playerRoster[i][p].battlenet_id}</td>
+            <td><img src="${playerNames[i].avatar}" class="avatar"> ${playerNames[i].battlenet_id}</td>
             <td>${playerRoster[i][p].level}</td>
             <td>${playerRoster[i][p].games_won}</td>
           </tr>
@@ -36,7 +36,9 @@ $(document).ready(function () {
       })
     }
   }
-  
+
+  //IMPORTANT <td><img src="${playerNames[i].avatar}" class="avatar"> ${playerNames[i].battlenet_id}</td>
+
   function loadTable() {
     $.ajax({
       url: `/tournaments/cards.json`,
@@ -60,7 +62,7 @@ $(document).ready(function () {
     // shareLink.select()
     // document.execCommand("Copy");
     // alert("copied!");
-    
+
   })
 
 });

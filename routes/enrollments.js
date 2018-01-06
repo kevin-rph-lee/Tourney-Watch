@@ -145,8 +145,8 @@ module.exports = (knex, owjs) => {
             'user_id': userID,
             'team_id': null,
             'tournament_id': tournamentID,
-            'avatar': data.profile.avatar,
-            'level': data.profile.level,
+            'level': Number(data.profile.tier.toString() + data.profile.level.toString()),
+            'role_summary': JSON.stringify(roleRanks),
             'first_role': roleRanks[0].role,
             'first_role_time_played': roleRanks[0].time,
             'second_role': roleRanks[1].role,
@@ -163,11 +163,22 @@ module.exports = (knex, owjs) => {
     });
   }
 
-
-
   router.get("/:id/enroll", (req, res) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
+    const email = req.session.email;
+
+    if (tournamentID) {
+      knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) =>{
+        if (results.length === 0){
+          res.render("404", {email: email, userID: currUserID})
+        }
+      })
+    }
 
     if (!currUserID) {
       // Figure out a better way to handle this.
@@ -187,7 +198,7 @@ module.exports = (knex, owjs) => {
           .where({id: currUserID})
           .then((results) => {
             if (results.length > 0 ) {
-              // Flash Message: "You've already enrolled to this tournament"
+              console.log('cant find')
               res.sendStatus(400)
             } else {
               knex
@@ -206,11 +217,14 @@ module.exports = (knex, owjs) => {
                 const isReady = (enrolledPlayers.length === teamCount * 6);
 
                 if (currBattlenetID === tournamentCreator) {
+                  console.log(tournamentCreator);
+                  console.log('creator');
                   // Flash Message: "You cannot play in a tournament you've made"
                   res.sendStatus(400);
                 } else {
                   res.render("tournament_enroll", {
                     email: currEmail,
+                    userID: req.session.userID,
                     teamCount: teamCount,
                     tournamentID: tournamentID,
                     tournamentName: tournamentName,
@@ -257,9 +271,6 @@ module.exports = (knex, owjs) => {
       });
   });
 
-
-
-
   router.post("/:id/swap", (req, res) => {
     console.log(req.body);
     const tournamentID = req.params.id
@@ -283,8 +294,6 @@ module.exports = (knex, owjs) => {
     res.sendStatus(200);
   });
 
-
-
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
   router.post("/:id/enroll/", (req, res) => {
@@ -299,7 +308,7 @@ module.exports = (knex, owjs) => {
           res.sendStatus(404);
         } else{
           console.log(results[0].battlenet_id);
-
+          //TO DO rename
           await getPlayersInfo(results[0].battlenet_id, tournamentID, currUserID)
 
           res.redirect(`/tournaments/${tournamentID}`);
