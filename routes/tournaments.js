@@ -153,14 +153,14 @@ module.exports = (knex, _, env, mailGun, owjs) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
+     .select("tournaments.name", "users.battlenet_id","teams.team_name", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-     .where({tournament_id: tournamentID})
+     .innerJoin("teams", "enrollments.team_id", "teams.id")
+     .where({"enrollments.tournament_id": tournamentID})
      .orderBy("team_id", "ascd")
      .then((playerStats) => {
-      // console.log('team roster', playerStats);
        return _.groupBy(playerStats, "team_id");
      });
   }
@@ -310,14 +310,15 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
+      .select("tournaments.name", "users.battlenet_id",'teams.team_name', "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .where({tournament_id: tournamentID})
+      .innerJoin('teams', 'enrollments.team_id', 'teams.id')
+      .where({'enrollments.tournament_id': tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
-        const teamRoster = _.groupBy(playerStats, "team_id");
+        const teamRoster = _.groupBy(playerStats, "team_name");
         console.log('roster ',teamRoster);
         res.send(teamRoster);
       });
@@ -376,7 +377,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           const twitchName = results[0].twitch_channel;
           if (isReady && started) {
             res.render("tournament_view", {
-              teamRoster: getTeamRoster(tournamentID),
+              // teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
@@ -454,7 +455,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         if (isReady && started) {
           console.log('if you see me i am ready and have started')
           res.render("tournament_view", {
-            teamRoster: getTeamRoster(tournamentID),
+            // teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
             email: req.session.email,
             userID: req.session.userID,

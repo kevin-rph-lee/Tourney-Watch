@@ -3,10 +3,12 @@ $(document).ready(function () {
   // EVERYBODY
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
+    console.log('hey: ', teamRoster);
     $(".tournamentheader").append(`
-    <h1>${teamRoster["1"]["0"]["name"]}</h1>
+    <h1>${teamRoster[teamNames[1]]["0"]["name"]}</h1>
     `)
     Object.keys(teamNames).forEach((t) => {
+      console.log('hi ',teamNames);
       $(".team-cards").append(`
       <div class="card mb-3" style="min-width: 17rem">
         <div class="card-header">${teamNames[t]}</div>
@@ -32,7 +34,6 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((playerRoster) => {
-      console.log(tournamentID);
       renderTeamCards(playerRoster);
     });
   }
@@ -112,7 +113,7 @@ $(document).ready(function () {
       modalHighlights.style.display = "block";
     });
   }
-  
+
 
   window.onclick = function(event) {
     console.log("spectator clicks")
