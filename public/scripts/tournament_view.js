@@ -226,15 +226,21 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((teamSummary) => {
+      console.log('Summary ',teamSummary);
       const teamIDs = Object.keys(teamSummary);
-
+      console.log('teamIds, ',teamIDs);
+      const teamNames = {};
       for (let t = 0 ; t < teamIDs.length; t++) {
         $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
+
+        teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name;
       }
+      console.log('Team name ', teamNames)
 
       for (let t = 0 ; t < teamIDs.length; t++) {
+
         $('.role-summary-container').append(`
-        <a name="Team${teamIDs[t]}"><h3>Team ${teamIDs[t]}</h3>
+        <a name="Team${teamIDs[t]}"><h3>Team ${teamNames[teamIDs[t]]}</h3>
         <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
           <thead>
             <tr>
@@ -248,7 +254,6 @@ $(document).ready(function () {
           </thead>`)
           for (let p = 0; p < 6; p++) {
             let player = teamSummary[teamIDs[t]][p]
-            console.log(player.role_summary)
             $(`[data-team-sum-id="${teamIDs[t]}"`).append(`
               <tbody class="player-table-stats player-class">
                 <tr>

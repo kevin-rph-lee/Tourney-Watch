@@ -285,11 +285,12 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("users.battlenet_id", "team_id", "level", "role_summary")
+      .select("users.battlenet_id", "team_id", "level", "role_summary", 'teams.team_name')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .where({tournament_id: tournamentID})
+      .innerJoin('teams', 'teams.id', 'enrollments.team_id')
+      .where({'enrollments.tournament_id': tournamentID})
       .orderBy("team_id", "ascd")
       .then( async (teamRoster) => {
         for (let t = 0; t < teamRoster.length; t++) {
