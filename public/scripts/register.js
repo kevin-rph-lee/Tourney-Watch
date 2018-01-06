@@ -4,10 +4,14 @@ $(document).ready(function () {
 
     const email = $('#entry-email').val();
     const password = $('#entry-password').val();
-    const battlenet = $('#entry-battlenet').val()
+    const passwordConfirm = $('#entry-password-confirm').val();
+    const battlenet = $('#entry-battlenet').val();
+    console.log(password, passwordConfirm);
+    if(password !== passwordConfirm){
+      alert('Password do not match!');
+      return;
+    }
 
-    console.log(email);
-    console.log(battlenet);
     $.ajax({
       url: '/users/new',
       data: {email: email, password: password, battlenet: battlenet },

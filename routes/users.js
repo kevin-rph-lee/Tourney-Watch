@@ -8,7 +8,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   /**
    * Checks a string for special characters. Returns false if one is found
    * @param  {string} string string to be checked
-   * @return {boolean}        returns false if invalid characters found
+   * @return {boolean}        returns true if invalid characters found
    */
   function checkInvalidCharacters(string) {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
@@ -80,9 +80,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         .where({id:req.params.id})
         .update({avatar:results.profile.avatar})
         .then(()=>{
-          const profileInfo = {avatar:results.profile.avatar}
+          const level = results.profile.tier.toString() + results.profile.level.toString()
+          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:{}};
           for(let hero in results.quickplay.heroes){
-            profileInfo[hero+'timePlayed'] = results.quickplay.heroes[hero].time_played / 1000 / 60;
+            profileInfo.playTime[hero] = results.quickplay.heroes[hero].time_played;
           }
           res.json(profileInfo);
         })
@@ -102,18 +103,20 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
     const battlenetID = req.body.battlenet.trim();
-
+    const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
+    console.log(battlenetIDLower);
     //Converting bnet ID into a format that owjs can take
 
 
     if (checkInvalidCharacters(battlenetID)) {
       return res.sendStatus(400);
     }
-
-    knex
+    //checking to prevent BNET/Email dupes
+    knex('users')
       .select("email")
       .from("users")
-      .where({ email: email })
+      .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
+      .orWhere({email:email})
       .then((results) => {
         console.log(results);
         if (results.length === 0) {
@@ -227,6 +230,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
               getUserIconAndbnetID(req.params.id)
                 .then((results) => {
+                  console.log(results);
                   //isUser is true if the user logged in is looking at their own profile
                   let isUser = false;
                   if(parseInt(req.session.userID) === parseInt(req.params.id)){
@@ -257,6 +261,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
       const password = req.body.password.trim();
       const battlenetID = req.body.battlenet.trim();
+      const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
 
       //Converting bnet ID into a format that owjs can take
 
@@ -264,22 +269,37 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         console.log('Invalid')
         return res.sendStatus(200);
       }
+      //checking to prevent BNET/Email dupes
+      knex('users')
+        .select("email", "id")
+        .from("users")
+        .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
+        .then((results) => {
+          if((results.length === 0) || (Number(req.params.id) === Number(req.session.userID))){
+            owjs.getAll('pc', 'us', convertBnetID(battlenetID))
+              .then(() => {
+                knex("users")
+                .where({id:req.session.userID})
+                .update({battlenet_id:battlenetID, password: bcrypt.hashSync(password, 10) })
+                .then(() => {
+                  console.log('this shouldve worked');
+                    req.session.battlenetID = battlenetID;
+                    res.sendStatus(200);
+                  });
+              }).catch((err) => {
+                console.log('OWJS fails')
+                res.sendStatus(400);
+              })
+          } else {
+            console.log('something else failse');
+            return res.sendStatus(400)
+          }
 
-      owjs.getAll('pc', 'us', convertBnetID(battlenetID))
-        .then(() => {
-          knex("users")
-          .where({id:req.session.userID})
-          .update({battlenet_id:battlenetID, password: bcrypt.hashSync(password, 10) })
-          .then(() => {
-            console.log('this shouldve worked');
-              req.session.battlenetID = battlenetID;
-              res.sendStatus(200);
-            });
-        })
-        .catch((err) => {
-          console.log('OWJS fails')
-          res.sendStatus(400);
-        })
+        });
+
+
+
+
 
 
     });

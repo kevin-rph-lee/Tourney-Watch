@@ -178,10 +178,10 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   /**
    * Checks a string for special characters. Returns false if one is found
    * @param  {string} string string to be checked
-   * @return {boolean}        returns false if invalid characters found
+   * @return {boolean}        returns true if invalid characters found
    */
   function checkInvalidCharacters(string){
-    return !(/^[a-zA-Z0-9-#]*$/.test(string));
+    return /^[a-zA-Z0-9-#]*$/.test(string);
   }
 
   // Goes to new tournaments page
@@ -202,15 +202,14 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     const twitchChannel = req.body.channel_name;
     console.log(req.body);
 
-    //
-    if(!name || !description || checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
-      // STRETCH: Show 'That name has been taken' error page
+   // STRETCH: Show 'That name has been taken' error page
+    if(!name || !description || !checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       console.log(`something is wrong`)
-      console.log(!name)
-      console.log(!description)
-      console.log(!checkInvalidCharacters(twitchChannel))
-      console.log(!checkInvalidCharacters(description))
-      console.log(!checkInvalidCharacters(name))
+      console.log(name)
+      console.log(description)
+      console.log(checkInvalidCharacters(twitchChannel))
+      console.log(checkInvalidCharacters(description))
+      console.log(checkInvalidCharacters(name))
       res.sendStatus(400);
       return;
     }
@@ -274,7 +273,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         for (let t = 0; t < teamRoster.length; t++) {
           teamRoster[t].role_summary = JSON.parse(teamRoster[t].role_summary)
         }
-        const teamSummary = _.groupBy(_.sortBy(teamRoster, "level").reverse(), 'team_id');    
+        const teamSummary = _.groupBy(_.sortBy(teamRoster, "level").reverse(), 'team_id');
         res.send(teamSummary);
 
       });
