@@ -136,7 +136,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
             })
           //stuff tha relies on it
         } else {
-          res.send('Hi');
+          res.status(400).send("Looks like you're already enrolled! Please check your email or Battle.net ID...");
         }
       });
   });

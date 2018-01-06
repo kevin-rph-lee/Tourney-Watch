@@ -188,8 +188,8 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   router.get('/new', (req, res) => {
     if (!req.session.email) {
       // STRETCH: "Forbidden" error page
-      res.sendStatus(403);
-    }
+      res.redirect('/users/login')
+    };
     res.render('tournament_new',{email: req.session.email, userID: req.session.userID});
   });
 
