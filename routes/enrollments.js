@@ -163,11 +163,22 @@ module.exports = (knex, owjs) => {
     });
   }
 
-
-
   router.get("/:id/enroll", (req, res) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
+    const email = req.session.email;
+
+    if (tournamentID) {
+      knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) =>{
+        if (results.length === 0){
+          res.render("404", {email: email, userID: currUserID})
+        }
+      })
+    }
 
     if (!currUserID) {
       // Figure out a better way to handle this.
@@ -282,8 +293,6 @@ module.exports = (knex, owjs) => {
       });
     res.sendStatus(200);
   });
-
-
 
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
