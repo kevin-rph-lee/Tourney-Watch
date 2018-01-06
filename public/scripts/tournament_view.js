@@ -26,7 +26,7 @@ $(document).ready(function () {
 
   //If they're the owner, creates event listener to select users to swap
   if(isOwner){
-      $('span').click(function(e){
+      $('span.player').click(function(e){
         //TO DO make selector more specific ex. select span within div with team id of #
         //TO DO fix conditionals to make looks nicer
         if(($('.selected').length == 1 && $(e.target).data().team === $('.selected').data().team) && $('.selected').text() !== $(e.target).text()){
@@ -69,8 +69,6 @@ $(document).ready(function () {
 
   loadCards();
 
-
-
   // Share button functionality
   $("[data-toggle='toggle']").click(function() {
     const selector = $(this).data("target");
@@ -102,6 +100,7 @@ $(document).ready(function () {
       data: {bnetID1: selectedPlayers[0], bnetID2: selectedPlayers[1]},
       method: 'post'
     }).done(() => {
+
       location.reload();
     });
   });
@@ -395,6 +394,59 @@ $(document).ready(function () {
       modalManageHighlights.style.display = "block";
     });
   }
+
+
+  // Avg team div sliding functionality
+  let showChart = false;
+  $(".fa-bar-chart").click(function() {
+    if (!showChart) {
+      console.log('show char');
+      showChart = true;
+      $(".avg-team-levels").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showChart =false
+      $(".avg-team-levels").css({"display": "none"});
+    }
+  });
+
+  const ctx = document.getElementById("myChart");
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: teamNames,
+      datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero:true
+              }
+          }]
+      }
+    }
+  });
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
