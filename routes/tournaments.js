@@ -386,10 +386,10 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       })
   });
 
-  router.get("/:id", (req, res) => {
+  router.get("/:id", async (req, res) => {
     const tournamentID = parseInt(req.params.id);
     const email = req.session.email
-    // TODO: FIX, WILL NOT CONSOLE LOG, BUUUT DOES NOT ERROR OUT ANYMORE WHEN A STRING IS USED
+
     if (tournamentID) {
       knex
       .select("id")
@@ -401,6 +401,15 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         }
       })
     }
+
+    // const validID = await checkID(tournamentID);
+
+    // console.log(validID)
+
+    // if (!validID) {
+    //   console.log('invalid ID')
+    //   res.render("404", {email: email, userID: req.session.userID,})
+    // }
 
     return knex
       .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
@@ -452,16 +461,21 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   });
 
   router.post("/:id/start", (req, res) => {
-  const tournamentID = req.params.id
-    // if(!tournamentID){
-    //   // STRETCH: Show 'You did not enter a tournament name' error page
-    //   res.sendStatus(400);
-    //   return;
-    // }
-    //
-    console.log(tournamentID)
-    // Lists players from highest level to lowest, then assigns a team ID #
-    // to each player via an array
+    const tournamentID = parseInt(req.params.id);
+
+    if (tournamentID) {
+      knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) =>{
+        if (results.length === 0){
+          res.render("404", {email: email, userID: req.session.userID,})
+        }
+      })
+    }
+      // Lists players from highest level to lowest, then assigns a team ID #
+      // to each player via an array
     knex
       .select("id", "name", "no_of_teams")
       .from("tournaments")
@@ -504,6 +518,20 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
   // Sends emails to team members in a tournament
   router.post("/:id/sendemail", (req, res) => {
+    const tournamentID = parseInt(req.params.id);
+
+    if (tournamentID) {
+      knex
+      .select("id")
+      .from("tournaments")
+      .where({id: tournamentID})
+      .then((results) =>{
+        if (results.length === 0){
+          res.render("404", {email: email, userID: req.session.userID,})
+        }
+      })
+    }
+
     knex
      .select("creator_user_id")
      .from("tournaments")
