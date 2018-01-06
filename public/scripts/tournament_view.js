@@ -429,12 +429,8 @@ $(document).ready(function () {
         }
         averageLevels.push(totalTeamLevel/6);
         teams.push(team);
-
       }
-
-
-      console.log(teams);
-      console.log(averageLevels);
+      console.log('teams', teams);
       const ctx = document.getElementById("myChart");
       const myChart = new Chart(ctx, {
         type: 'bar',
@@ -485,13 +481,11 @@ $(document).ready(function () {
         },
         options: {
           scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
+              yAxes: [{ticks: {beginAtZero:true}}],
+              xAxes: [{ticks: {autoSkip:false}}]
+          },
+          legend: {display: false}
           }
-        }
       });
     });
 
