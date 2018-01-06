@@ -186,12 +186,13 @@ div.avg-team-levels > .chart-wrapper{
 
 .container-fluid{
 display:none;
+margin-bottom: 10em;
 
 }
 
 hr { 
     display: block;
-    margin-top: 1em;
+    margin-top: 2em;
     margin-bottom: 1em;
     margin-left: auto;
     margin-right: auto;
@@ -200,3 +201,9 @@ hr {
     background-color: #F7931D;
 
 } 
+
+h2 {
+
+font-style: italic;
+text-decoration: underline;
+}
