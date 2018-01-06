@@ -53,17 +53,25 @@ p {
   }
 
   a.btn.btn-default{
-    float: left;
-    margin-left: 25%;
-    background-color: #474D57;
+    background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
 
+  a.btn.btn-default.index-page{
+    float: left;
+    margin-left: 25%;
+    background-color: #F7931D;
+    color:white;
+    border-color: #C0C1C2;
+  }
+
+
+
   div button.how-it-works{
     float: right;
     margin-right: 20%;
-    background-color: #474D57;
+    background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
@@ -115,6 +123,38 @@ div.card.mb-3 div.card-header {
 
 div.row{
   padding-top: 20px;
+}
+
+input.make-new{
+  color: #fff;
+  margin: auto 0;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1em;
+  width: 135px;
+  height: 45px;
+}
+
+/* Login Page */
+
+button.submit{
+  color: #fff;
+  margin: auto 0;
+  background-color: #F7931D;
+  border: 1px solid #dee4e7;
+  outline: 2px;
+  border-radius: .25em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1em;
+  width: 135px;
+  height: 45px;
+}
+
+div.submit-button{
+  text-align: center;
 }
 
 /* Bootstrap Table */
@@ -322,6 +362,7 @@ div.container.player > span {
 
 .admin-options{
   text-align: center;
+  margin-top: 20px;
 }
 
 div.admin-options > button{
@@ -366,11 +407,6 @@ img.player-class{
   margin-right: 2px;
 }
 
-/* Team Summary */
-
-tbody.player-class > tr, thead.player-class > tr{
-  text-align: center;
-}
 
 /* Email Alert Players */
 
@@ -389,8 +425,32 @@ div.image-404{
 
 /* Flash Alert */
 div.alert.alert-warning{
+  padding-top: 20px;
   color: #fff;
   background-color: #474D57;
-  border-color: #191E21;
-  border-width:3px;
+  border-color: #F7931D;
+  
+  border-width:2px;
+  width: 70%;
+  margin: 0 auto;
 }
+
+/* header for login and register */
+#ui-header > h2{
+  margin-bottom: 0;
+}
+
+#ui-header > p{
+  float: right;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  margin-right: 5%;
+  margin-top: -20px;
+}
+
+#ui-header > p > a{
+  color: #F7931D;
+}
+
+
+

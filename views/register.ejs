@@ -8,15 +8,22 @@
 <% include partials/navbar %>
 
     <body>
+
     <script src="/scripts/register.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300i" rel="stylesheet">
     <link href="/styles/register.css" rel="stylesheet" type="text/css" h/>
+    <link rel="stylesheet" type="text/css" href="/styles/loader.css"/>
+
 
         <main class="container">
 
-            <h2> Register</h2>
+            <div id="ui-header">
+                <h2>Register</h2>
+                <p>Already signed up? Log in <a href="/users/login">here</a></p>
+            </div>
 
 
-            <form id="registration-form" action="/users/new" method="POST" style="margin:150px;">
+            <form id="registration-form" action="/users/new" method="POST" style="margin:50px 150px 20px 150px;">
                 <div class="form-row">
                     <div class="form-label">
                         <label> Email</label>
@@ -41,6 +48,14 @@
                         <input id="entry-password" type="password" name="password" placeholder="Password" style="width: 300px" required>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-label">
+                        <label> Password Confirm</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-password-confirm" type="password" name="password" placeholder="Confirm password" style="width: 300px" required>
+                    </div>
+                </div>
                 <br>
                 <div class="form-row">
                     <div class="form-label">
@@ -52,7 +67,9 @@
                 </div>
 
             </form>
-        <button class="submit" type="submit" value="Submit">Submit</button>
+            <div class="submit-button">
+                <button class="submit" type="submit" value="Submit">Submit</button>
+            </div>
 
 
 
