@@ -57,14 +57,10 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       });
   }
 
-
   //Goes to registration page
   router.get('/new', (req, res) => {
     res.render('register', { email: req.session.email });
   });
-
-
-
 
   //Gives back a JSON with player info (time & avatar) from OWJS
   //Auto-updates the avatar (if the user has changed the avatar on BNET)

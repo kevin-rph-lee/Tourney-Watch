@@ -112,7 +112,7 @@ div.add-highlight{
 div.avg-team-levels{
     position: relative;
     display: none;
-    height: 300px;
+    height: 50%;
     margin: 15px;
     background-color: #dee4e7;
     border-radius: 5px;
@@ -120,5 +120,23 @@ div.avg-team-levels{
 
 div.avg-team-levels > .chart-wrapper{
     top: 20%;
-    position: relative;
+    height: 100%;
+    /*position: relative;*/
 }
+
+.container-fluid{
+display:none;
+
+}
+
+hr { 
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    background-color: #F7931D;
+
+} 
