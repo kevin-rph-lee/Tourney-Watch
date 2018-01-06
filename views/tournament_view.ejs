@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  
+
   <script>
       window.tournamentID = <%=tournamentID%>;
       window.isOwner = <%= isOwner %>;
@@ -31,6 +31,7 @@
         </div>
 
         <div class="share-button">
+          <button id="twitch-button" class="start-tournament">Twitch Stream</button>
           <button id="highlights-button" class="start-tournament">Highlights</button>
           <% include partials/share_button %>
         </div>
@@ -54,6 +55,8 @@
           </div>
         </div>
         <% } %>
+<hr>
+        
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <container>
             <center>
@@ -68,6 +71,7 @@
           </div>
           <% } %>
 
+          <hr>
 
           <div class="container">
             <% if (isOwner)  { %>
@@ -85,11 +89,6 @@
             <div class="chart-wrapper">
               <canvas id="myChart" height="100%"></canvas>
             </div>
-
-
-
-
-
 
             </div>
 
