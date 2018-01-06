@@ -188,6 +188,22 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   router.get("/:id", (req, res) => {
     const email = req.session.email
+    const userID = parseInt(req.params.id);
+
+    if (!email) {
+      res.render('index', { email: email })
+      return;
+    } else {
+      knex
+        .select("id")
+        .from("users")
+        .where({id: userID})
+        .then((results) => {
+          if (results.length === 0) {
+            res.render("404", {email: email, userID: req.session.userID,})
+          }
+        })
+    }
 
     if (!email) {
       res.render('index', { email: email })
@@ -251,9 +267,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   })
 
   router.post("/:id/edit", (req, res) => {
-    console.log('param: ', req.params.id);
-    console.log('session: ',req.session.userID);
-
     if (parseInt(req.params.id) !== parseInt(req.session.userID)) {
       console.log('invalid password');
       return res.sendStatus(400)
@@ -294,18 +307,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
             console.log('something else failse');
             return res.sendStatus(400)
           }
-
         });
-
-
-
-
-
-
     });
-
-
-
-
   return router;
 }
