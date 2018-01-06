@@ -320,18 +320,33 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   });
 
   // Updates bracket data in the DB
+  // TO DO: add security to this
   router.post("/update", (req, res) => {
     console.log(req.session.email)
     if (!req.session.email) {
       // Figure out better way to tell user that they need to sign in to save a score
       res.sendStatus(400);
     } else {
-      console.log('Updating DB brackets');
-      console.log(req.body.tournamentID + req.body.bracketData);
-      return knex("tournaments")
-        .where({"id": req.body.tournamentID})
-        .update({"brackets": req.body.bracketData})
-        .then(() => {console.log('Bracket data updated')});
+      knex
+      .select('creator_user_id')
+      .where({id: req.body.tournamentID})
+      .from('tournaments')
+      .then((results) =>{
+        if(results.length === 0){
+          return res.sendStatus(404);
+        } if (results[0].creator_user_id === req.session.userID){
+          knex("tournaments")
+          .where({"id": req.body.tournamentID})
+          .update({"brackets": req.body.bracketData})
+          .then(() => {
+            console.log("Owner has saved")
+            
+            return res.sendStatus(200);
+          });
+        } else {
+          return res.sendStatus(400);
+        }
+      });
     }
   });
 
