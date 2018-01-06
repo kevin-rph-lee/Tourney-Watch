@@ -101,7 +101,7 @@ $(document).ready(function () {
         highlightsString +=
         `<div>
           <div class = 'wrapper'>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+            <iframe class="embed-responsive embed-responsive-16by9" src="https://www.youtube.com/embed/${highlights[i].url}?autoplay=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
           </div>
         </div>`
       }
