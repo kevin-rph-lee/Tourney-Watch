@@ -511,10 +511,6 @@ $(document).ready(function () {
     }
   });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> b00a92febb24fc18cd0a595ac4ac64ac6b650fef
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     console.log('heeeey')
