@@ -3,10 +3,12 @@ $(document).ready(function () {
   // EVERYBODY
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
+    console.log('hey: ', teamRoster);
     $(".tournamentheader").append(`
-    <h1>${teamRoster["1"]["0"]["name"]}</h1>
+    <h1>${teamRoster[teamNames[1]]["0"]["name"]}</h1>
     `)
     Object.keys(teamNames).forEach((t) => {
+      console.log('hi ',teamNames);
       $(".team-cards").append(`
       <div class="card mb-3" style="min-width: 17rem">
         <div class="card-header">${teamNames[t]}</div>
@@ -32,7 +34,6 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((playerRoster) => {
-      console.log(tournamentID);
       renderTeamCards(playerRoster);
     });
   }
@@ -112,7 +113,7 @@ $(document).ready(function () {
       modalHighlights.style.display = "block";
     });
   }
-  
+
 
   window.onclick = function(event) {
     console.log("spectator clicks")
@@ -208,7 +209,7 @@ $(document).ready(function () {
       console.log(teamNames.length);
       for(let i = 0; i < teamNames.length; i ++){
         // console.log(teamNames[i].team_id);
-        $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_id}</option>`)
+        $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_name}</option>`)
       }
     });
   }
@@ -225,15 +226,21 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((teamSummary) => {
+      console.log('Summary ',teamSummary);
       const teamIDs = Object.keys(teamSummary);
-
+      console.log('teamIds, ',teamIDs);
+      const teamNames = {};
       for (let t = 0 ; t < teamIDs.length; t++) {
         $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
+
+        teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name;
       }
+      console.log('Team name ', teamNames)
 
       for (let t = 0 ; t < teamIDs.length; t++) {
+
         $('.role-summary-container').append(`
-        <a name="Team${teamIDs[t]}"><h3>Team ${teamIDs[t]}</h3>
+        <a name="Team${teamIDs[t]}"><h3>Team ${teamNames[teamIDs[t]]}</h3>
         <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
           <thead>
             <tr>
@@ -247,7 +254,6 @@ $(document).ready(function () {
           </thead>`)
           for (let p = 0; p < 6; p++) {
             let player = teamSummary[teamIDs[t]][p]
-            console.log(player.role_summary)
             $(`[data-team-sum-id="${teamIDs[t]}"`).append(`
               <tbody class="player-table-stats player-class">
                 <tr>
@@ -428,12 +434,8 @@ $(document).ready(function () {
         }
         averageLevels.push(totalTeamLevel/6);
         teams.push(team);
-
       }
-
-
-      console.log(teams);
-      console.log(averageLevels);
+      console.log('teams', teams);
       const ctx = document.getElementById("myChart");
       const myChart = new Chart(ctx, {
         type: 'bar',
@@ -484,13 +486,11 @@ $(document).ready(function () {
         },
         options: {
           scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
+              yAxes: [{ticks: {beginAtZero:true}}],
+              xAxes: [{ticks: {autoSkip:false}}]
+          },
+          legend: {display: false}
           }
-        }
       });
     });
 
