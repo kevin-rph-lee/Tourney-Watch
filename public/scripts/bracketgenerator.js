@@ -41,7 +41,7 @@ $(function () {
         })
 
         $('div#save .demo').bracket({
-          teamWidth: 81,
+          teamWidth: 150,
           scoreWidth: 27,
           matchMargin: 61,
           roundMargin: 71,

@@ -260,11 +260,12 @@ module.exports = (knex, owjs) => {
 
   router.get("/:id/teamnames.json", (req, res) => {
     knex
-      .distinct('team_id')
+      .distinct('team_id', 'teams.team_name')
       .select()
       .from("enrollments")
+      .innerJoin('teams', 'enrollments.team_id', 'teams.id')
       .orderBy('team_id', 'desc')
-      .where({tournament_id: req.params.id})
+      .where({'enrollments.tournament_id': req.params.id})
       .then((teamNames) => {
         console.log(teamNames);
         res.send(teamNames);
@@ -273,25 +274,29 @@ module.exports = (knex, owjs) => {
 
   router.post("/:id/swap", (req, res) => {
     console.log(req.body);
+
     const tournamentID = req.params.id
     const bnetID1 = req.body.bnetID1;
     const bnetID2 = req.body.bnetID2;
-    //TO DO, make sure the user is the owner
+    if(!(req.session.userID)){
+      return res.sendStatus(403);
+    }
+
     knex
-      .select("id")
+      .select("creator_user_id")
       .from("tournaments")
       .where({id: tournamentID})
-      .then(async(results) => {
-
+      .then((results) => {
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0) {
           res.sendStatus(404);
+        } if(results[0].creator_user_id === req.session.userID){
+          swapTeams(bnetID1, bnetID2,res);
+          return res.sendStatus(200);
         } else {
-          await swapTeams(bnetID1, bnetID2,res);
-
+          return res.sendStatus(403);
         }
       });
-    res.sendStatus(200);
   });
 
   // Adds a new line in to enrollments for each new player
