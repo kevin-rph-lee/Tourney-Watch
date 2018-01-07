@@ -91,7 +91,9 @@ nav.navbar.navbar-dark{
   position: fixed;
   width:100%;
   z-index: 1;
-  filter: contrast(125%) brightness(103%) sepia(25%)
+  filter: contrast(125%) brightness(103%) sepia(25%);
+  filter: drop-shadow(16px 5px 16px #000000);
+
 
 }
 
@@ -99,7 +101,7 @@ nav.navbar.navbar-dark img{
   max-height: 50px;
   max-width: 80%;
   margin: 0 auto;
-  filter: drop-shadow(16px 5px 16px rgb(92, 92, 92));
+  filter: drop-shadow(16px 5px 16px rgb(46, 46, 46));
   overflow: hidden;
 
 }
