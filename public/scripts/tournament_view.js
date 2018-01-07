@@ -21,7 +21,7 @@ $(document).ready(function () {
         $(`[data-team-id="${teamNames[t]}"`).append(`
         <div class='container player'>
           <img class="player-class" src="/images/icon-${user.first_role}.png" title="${user.first_role}">
-          <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
+          <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="up" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
         </div>
         `)
       })
