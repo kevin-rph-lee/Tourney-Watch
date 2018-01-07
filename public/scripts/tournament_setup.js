@@ -1,16 +1,16 @@
 
 $(document).ready(function () {
-
+  console.log('JS is running')
   // Will function for when a tournament has not started, or
   // if a person drops out after a tournament has started
   function renderPlayerCount(playerRoster) {
-    const playerNames = playerRoster.null;
+    console.log('Roster: ',playerRoster);
+    const playerNames = playerRoster.undefined;
     // if !playerNames, a person dropped out after
     // tournament has started
     if (!playerNames) {
       let count = 1;
       Object.keys(playerRoster).forEach((i) => {
-        console.log(playerRoster[i])
         for (let p = 0; p < playerRoster[i].length; p++) {
           $(".player-table-stats").append(`
           <tr data-player-id="${playerRoster[i][p].battlenet_id}">
@@ -40,11 +40,13 @@ $(document).ready(function () {
   //IMPORTANT <td><img src="${playerNames[i].avatar}" class="avatar"> ${playerNames[i].battlenet_id}</td>
 
   function loadTable() {
+    console.log('tournamentID')
     $.ajax({
-      url: `/tournaments/cards.json`,
+      url: `/enrollments/enrollments.json`,
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((playerRoster) => {
+      console.log(playerRoster);
       renderPlayerCount(playerRoster);
     });
   }
@@ -58,11 +60,25 @@ $(document).ready(function () {
   });
 
   $(".fa-clipboard").click(function() {
-    // const shareLink = $(this).data("link");
-    // shareLink.select()
-    // document.execCommand("Copy");
-    // alert("copied!");
-
+    const link = $(this).data("link")
+    const $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(this).data("link")).select();
+    document.execCommand("copy");
+    $temp.remove();
+    $('.copied-alert').append(`
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>DONE!</strong> Link has been copied!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    `)
+    window.setTimeout(function() {
+      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove(); 
+      });
+    }, 3000);
   })
 
 });

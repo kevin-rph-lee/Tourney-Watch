@@ -16,11 +16,32 @@ function saveFn(data) {
     $.ajax({
         type: "POST",
         url: "/tournaments/update/",
-        data: {bracketData: bracketData, tournamentID: tournamentID},
-        success: function () {
-            alert("Tournament Changes Saved!");
-        }
-    })
+        data: {bracketData: bracketData, tournamentID: tournamentID}
+     }).done(() => {
+        $('.bracket-alert').append(`
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>UPDATED!</strong> Bracket has been successfully updated!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        `)
+     }).catch((error) => {
+        $('.bracket-alert').append(`
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>OOPS!</strong> Something went wrong with your request!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        `)
+     });  
+
+    window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+    }, 5000);
 }
 
 
@@ -40,22 +61,41 @@ $(function () {
             userData: "http://myapi"
         })
 
-        $('div#save .demo').bracket({
-          teamWidth: 81,
-          scoreWidth: 27,
-          matchMargin: 61,
-          roundMargin: 71,
-          centerConnectors: true,
-          skipConsolationRound: true,
-          init: results.brackets,
-          disableToolbar: true,
-          disableTeamEdit: true,
-          save: function () { },
-          decorator: {
-              edit: edit_fn,
-              render: render_fn
-          }
-      })
+        if(isOwner){
+          $('div#save .demo').bracket({
+            teamWidth: 150,
+            scoreWidth: 27,
+            matchMargin: 61,
+            roundMargin: 71,
+            centerConnectors: true,
+            skipConsolationRound: true,
+            init: results.brackets,
+            disableToolbar: true,
+            disableTeamEdit: true,
+            save: function () { },
+            decorator: {
+                edit: edit_fn,
+                render: render_fn
+            }
+          })
+        } else {
+          $('div#save .demo').bracket({
+            teamWidth: 150,
+            scoreWidth: 27,
+            matchMargin: 61,
+            roundMargin: 71,
+            centerConnectors: true,
+            skipConsolationRound: true,
+            init: results.brackets,
+
+            decorator: {
+                edit: edit_fn,
+                render: render_fn
+            }
+          })
+        }
+
+
     }
 })
 

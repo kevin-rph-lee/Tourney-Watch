@@ -68,14 +68,14 @@ exports.seed = async function(knex, promise){
     const tournament_id = tournament.id;
     await knex('teams').del();
     return knex('teams').insert([
-      {tournament_id},
-      {tournament_id},
-      {tournament_id},
-      {tournament_id},
-      {tournament_id},
-      {tournament_id},
-      {tournament_id},
-      {tournament_id},
+      {tournament_id, team_name: 'Jolly Reapers'},
+      {tournament_id, team_name: 'Rare Rikimarus'},
+      {tournament_id, team_name: 'Tasty Ganymedes'},
+      {tournament_id, team_name: 'Ugly Hanzos'},
+      {tournament_id, team_name: 'Sweet Widowmakers'},
+      {tournament_id, team_name: 'Ancient Snowballs'},
+      {tournament_id, team_name: 'Strange Junkertowns'},
+      {tournament_id, team_name: 'Terrible Meis'},
     ]);
   })();
   const tournament_enrollmentTask = (async () => {
