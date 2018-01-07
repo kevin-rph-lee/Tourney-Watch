@@ -13,7 +13,7 @@
           <h1>My Ultimate is Still Charging...</h1>
           <p> <%=playerCount%>/<%=maxPlayers%> enrolled</p>
           <p>This tournament is not ready just yet! Check back soon...</p>
-          <% if (userID > 0) { %>
+          <% if (userID > 0 && playerCount !== maxPlayers ) { %>
           <div class="submit-button">
             <a href="/enrollments/<%=tournamentID%>/enroll" class="btn btn-default">Enroll Now</a>
           </div>

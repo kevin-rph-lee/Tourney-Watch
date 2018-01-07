@@ -24,9 +24,12 @@
           playing experience.
         </p>
 
-        <a href="/users/new" class="btn btn-default index-page">Get Started</a>
-        <a href="/faq" class="btn btn-default index-page">How Does this Work?</a>
-
+        <% if (email) { %>
+          <a href="/tournament/new" class="btn btn-default index-page">Create a Tournament</a>
+        <% } else { %>
+          <a href="/users/new" class="btn btn-default index-page">Get Started</a>
+        <% } %>
+          <a href="/faq" class="btn btn-default index-page">How Does this Work?</a>
       </div>
     </main>
   </body>

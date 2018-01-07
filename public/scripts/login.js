@@ -7,12 +7,18 @@ $(document).ready(function () {
       data: {email: $('#entry-email').val(), password:$('#entry-password').val() },
       method: 'POST'
     }).done(() => {
-      //Redirects to the index
-      window.location.replace('/');
+      // Redirects user to their profile page
+      $.ajax({
+        url: "/users/info.json",
+        data: {email: $('#entry-email').val()},
+        method: "GET"
+      }).done((userObj) => {
+        const userID = userObj.id
+        console.log('i am in client - userID', userID)
+        window.location.replace(`/users/${userID}`);
+      })
     }).catch((err) => {
-      //TO DO: make look nice
-      console.log('error!');
-      console.log(err.status);
+      // TO DO: Make look nice
       if (err.status === 400){
         $('.login-alert').append(`
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -43,7 +49,7 @@ $(document).ready(function () {
       } else {
         $('.login-alert').append(`
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>OOPS!</strong> Your E-mail and Password don't match!
+        <strong>OOPS!</strong> Something went wrong with your request!
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

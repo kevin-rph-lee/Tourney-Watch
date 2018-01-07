@@ -59,7 +59,14 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //Goes to registration page
   router.get('/new', (req, res) => {
-    res.render('register', { email: req.session.email });
+    knex("users")
+      .max("id")
+      .then((results) => {
+        console.log(results);
+        const userID = results[0].max
+        res.render('register', { email: req.session.email, userID: userID });
+      })
+    
   });
 
   //Gives back a JSON with player info (time & avatar) from OWJS
@@ -87,7 +94,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     })
   });
 
-
   //Goes to login page
   router.get('/login', (req, res) => {
     res.render('login', { email: req.session.email });
@@ -95,15 +101,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //user registers
   router.post("/new", (req, res) => {
-    console.log(req.body);
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
     const battlenetID = req.body.battlenet.trim();
     const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
-    console.log(battlenetIDLower);
     //Converting bnet ID into a format that owjs can take
-
-
     if (checkInvalidCharacters(battlenetID)) {
       return res.sendStatus(400);
     }
@@ -114,7 +116,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
       .orWhere({email:email})
       .then((results) => {
-        console.log(results);
+        console.log('just checked duplicates, none found, ready to run owjs', results);
         if (results.length === 0) {
           owjs.getAll('pc', 'us', convertBnetID(battlenetID))
             .then((results) => {
@@ -126,29 +128,35 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   req.session.userID = results[0];
                   req.session.email = email;
                   req.session.battlenetID = battlenetID;
-                  console.log('just registered, am results', results)
-                  console.log('IN /NEW', req.session)
-                  res.redirect("/");
+                  console.log('owjs has been run, on user ID #', results)
+                  res.sendStatus(200);
                 });
             })
             .catch((err) => {
-              console.log('owjs is freaking out')
-              res.sendStatus(400);
+              res.status(400).send("Our Systems are having an Error, please try back later!");
             })
           //stuff tha relies on it
         } else {
-          res.sendStatus(400);
+          res.status(400).send("Looks like you're already enrolled! Please check your email or Battle.net ID...");
         }
       });
   });
 
+  // Route to send down the successfully logged in user's ID
+  // in order to redirect them to their profile page after log in
+  router.get("/info.json", (req,res) => {
+    knex
+      .select("id")
+      .from("users")
+      .where({email: req.query.email})
+      .then((userID) => { res.json(userID[0]); })
+  })
 
   // logs a user in
   router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    // error checking
     if (!email || !password) {
       res.sendStatus(400);
       return;
@@ -165,9 +173,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         } else if (bcrypt.compareSync(password, results[0].password)) {
           req.session.email = email;
           req.session.userID = results[0].id;
-          console.log(results);
-          console.log(req.session);
-          res.redirect("/");
+          res.sendStatus(200);
         } else {
           res.sendStatus(403);
         }
@@ -297,11 +303,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   });
               }).catch((err) => {
                 console.log('OWJS fails')
-                res.sendStatus(400);
+                res.status(400).send("Our system hit an error, try again later!")
               })
           } else {
             console.log('something else failse');
-            return res.sendStatus(400)
+            return res.status(400).send("Please check your information and resubmit...")
           }
         });
     });
