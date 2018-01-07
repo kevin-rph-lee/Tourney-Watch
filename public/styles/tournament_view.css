@@ -67,7 +67,7 @@ div.add-highlight{
     left: 50%;
     width: 60%;
   }
-  
+
 div.link-to-teams{
 text-align: center;
 margin-bottom: 10px;
@@ -99,7 +99,7 @@ text-align: center
 .link-to-team{
 
 }
-  
+
 
 /* The Close Button */
 .close {
@@ -179,17 +179,17 @@ div.avg-team-levels{
 }
 
 div.avg-team-levels > .chart-wrapper{
+    padding-top: 2em;
     top: 20%;
     height: 100%;
     /*position: relative;*/
 }
 
 .container-fluid{
-display:none;
-
+  display:none;
 }
 
-hr { 
+hr {
     display: block;
     margin-top: 1em;
     margin-bottom: 1em;
@@ -199,4 +199,4 @@ hr {
     border-width: 1px;
     background-color: #F7931D;
 
-} 
+}

@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema.table('enrollments', function (table) {
+  return knex.schema.table('enrollments', function (table) {
     table.string('avatar');
   });
 };
