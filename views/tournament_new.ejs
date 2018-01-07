@@ -2,8 +2,9 @@
 <html lang="en">
 
 <head>
-
-
+    <script>
+        window.errorMsg = `<%= error %>`;
+    </script>
 </head>
 <% include partials/navbar %>
     <script src="/scripts/tournament_new.js"></script>
@@ -22,7 +23,7 @@
         <main class="container">
 
             <h2> Create A New Tournament</h2>
-
+            <div class="tournament-alert"></div>
             <form id="new-tournament-form" action="/tournaments/new" method="POST" style="margin:150px;">
                 <div class="form-row">
                     <div class="form-label">

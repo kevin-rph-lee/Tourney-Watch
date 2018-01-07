@@ -209,9 +209,9 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   router.get('/new', (req, res) => {
     if (!req.session.email) {
       // STRETCH: "Forbidden" error page
-      res.sendStatus(403);
-    }
-    res.render('tournament_new',{email: req.session.email, userID: req.session.userID});
+      res.redirect('/users/login')
+    };
+    res.render('tournament_new',{email: req.session.email, userID: req.session.userID, error: "none"});
   });
 
   // Creates new tournament
@@ -231,7 +231,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       console.log(checkInvalidCharacters(twitchChannel))
       console.log(checkInvalidCharacters(description))
       console.log(checkInvalidCharacters(name))
-      res.sendStatus(400);
+      res.render('tournament_new',{email: req.session.email, userID: req.session.userID, error: "The forms must contain only alphanumeric characters..."});
       return;
     }
     knex
@@ -343,18 +343,33 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   });
 
   // Updates bracket data in the DB
+  // TO DO: add security to this
   router.post("/update", (req, res) => {
     console.log(req.session.email)
     if (!req.session.email) {
       // Figure out better way to tell user that they need to sign in to save a score
       res.sendStatus(400);
     } else {
-      console.log('Updating DB brackets');
-      console.log(req.body.tournamentID + req.body.bracketData);
-      return knex("tournaments")
-        .where({"id": req.body.tournamentID})
-        .update({"brackets": req.body.bracketData})
-        .then(() => {console.log('Bracket data updated')});
+      knex
+      .select('creator_user_id')
+      .where({id: req.body.tournamentID})
+      .from('tournaments')
+      .then((results) =>{
+        if(results.length === 0){
+          return res.sendStatus(404);
+        } if (results[0].creator_user_id === req.session.userID){
+          knex("tournaments")
+          .where({"id": req.body.tournamentID})
+          .update({"brackets": req.body.bracketData})
+          .then(() => {
+            console.log("Owner has saved")
+            
+            return res.sendStatus(200);
+          });
+        } else {
+          return res.sendStatus(400);
+        }
+      });
     }
   });
 
@@ -508,7 +523,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0 ) {
           // STRETCH: Show 'No tournament of that name found' error page
-          res.sendStatus(404);
+          res.render("404", {email: email, userID: req.session.userID,});
         } else {
           knex
             .select("id", "level")
