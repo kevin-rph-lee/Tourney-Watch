@@ -40,22 +40,41 @@ $(function () {
             userData: "http://myapi"
         })
 
-        $('div#save .demo').bracket({
-          teamWidth: 150,
-          scoreWidth: 27,
-          matchMargin: 61,
-          roundMargin: 71,
-          centerConnectors: true,
-          skipConsolationRound: true,
-          init: results.brackets,
-          disableToolbar: true,
-          disableTeamEdit: true,
-          save: function () { },
-          decorator: {
-              edit: edit_fn,
-              render: render_fn
-          }
-      })
+        if(isOwner){
+          $('div#save .demo').bracket({
+            teamWidth: 150,
+            scoreWidth: 27,
+            matchMargin: 61,
+            roundMargin: 71,
+            centerConnectors: true,
+            skipConsolationRound: true,
+            init: results.brackets,
+            disableToolbar: true,
+            disableTeamEdit: true,
+            save: function () { },
+            decorator: {
+                edit: edit_fn,
+                render: render_fn
+            }
+          })
+        } else {
+          $('div#save .demo').bracket({
+            teamWidth: 150,
+            scoreWidth: 27,
+            matchMargin: 61,
+            roundMargin: 71,
+            centerConnectors: true,
+            skipConsolationRound: true,
+            init: results.brackets,
+
+            decorator: {
+                edit: edit_fn,
+                render: render_fn
+            }
+          })
+        }
+
+
     }
 })
 
