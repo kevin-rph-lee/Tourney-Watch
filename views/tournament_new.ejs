@@ -6,7 +6,16 @@
 
 </head>
 <% include partials/navbar %>
-<script src="/scripts/tournament_new.js"></script>
+    <script src="/scripts/tournament_new.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
 
     <body>
 
@@ -44,11 +53,20 @@
                 </div>
                 <div class="form-row">
                         <div class="form-label">
-                            <label>Twitch Channel Name (Optional)</label>
+                            <label> Date</label>
                         </div>
                         <div class="form-box">
-                            <input id="entry-channel" type="text" name="channel_name" placeholder="Example: https://www.twitch.tv/yournamehere" style="width: 300px">
-                        </div>
+                                <input id="datepicker" />
+                            </div>
+                    </div>
+
+                <div class="form-row">
+                    <div class="form-label">
+                        <label>Twitch Channel Name (Optional)</label>
+                    </div>
+                    <div class="form-box">
+                        <input id="entry-channel" type="text" name="channel_name" placeholder="Example: https://www.twitch.tv/yournamehere" style="width: 300px">
+                    </div>
                 </div>
                 <br>
                 <div class="form-row">
@@ -61,9 +79,9 @@
                     </div>-->
 
                     <form method="POST" action="/tournaments/new">
-                    <input class="make-new" type="submit" value="Submit">
+                        <input class="make-new" type="submit" value="Submit">
                 </div>
-            </form>
+                </form>
 
         </main>
 
