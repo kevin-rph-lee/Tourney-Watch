@@ -209,7 +209,7 @@ $(document).ready(function () {
       console.log(teamNames.length);
       for(let i = 0; i < teamNames.length; i ++){
         // console.log(teamNames[i].team_id);
-        $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_id}</option>`)
+        $('#team-ids').append(`<option value="${teamNames[i].team_id}">${teamNames[i].team_name}</option>`)
       }
     });
   }

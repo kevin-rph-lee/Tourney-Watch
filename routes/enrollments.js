@@ -260,11 +260,12 @@ module.exports = (knex, owjs) => {
 
   router.get("/:id/teamnames.json", (req, res) => {
     knex
-      .distinct('team_id')
+      .distinct('team_id', 'teams.team_name')
       .select()
       .from("enrollments")
+      .innerJoin('teams', 'enrollments.team_id', 'teams.id')
       .orderBy('team_id', 'desc')
-      .where({tournament_id: req.params.id})
+      .where({'enrollments.tournament_id': req.params.id})
       .then((teamNames) => {
         console.log(teamNames);
         res.send(teamNames);
