@@ -137,7 +137,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   req.session.email = email;
                   req.session.battlenetID = battlenetID;
                   console.log('owjs has been run, on user ID #', results)
-                  res.sendStatus(200);
+                  res.send(results);
                 });
             })
             .catch((err) => {

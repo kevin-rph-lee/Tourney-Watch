@@ -20,7 +20,7 @@ $(document).ready(function () {
       `)
       window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          window.location.replace('/users/new'); 
+          window.location.replace('/users/new');
         });
       }, 4000);
       return;
@@ -30,9 +30,9 @@ $(document).ready(function () {
       url: '/users/new',
       data: {email: email, password: password, battlenet: battlenet},
       method: 'POST'
-    }).done(() => {
+    }).done((id) => {
       //Redirects to the index
-      window.location.replace(`/users/${userID}`);
+      window.location.replace(`/users/` + id[0]);
     }).catch((err) => {
       $('.register-alert').append(`
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -44,7 +44,7 @@ $(document).ready(function () {
       `)
       window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          window.location.replace('/users/new'); 
+          window.location.replace('/users/new');
         });
       }, 4000);
     });
