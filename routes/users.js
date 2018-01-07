@@ -142,13 +142,21 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       });
   });
 
+  // Route to send down the successfully logged in user's ID
+  // in order to redirect them to their profile page after log in
+  router.get("/info.json", (req,res) => {
+    knex
+      .select("id")
+      .from("users")
+      .where({email: req.query.email})
+      .then((userID) => { res.json(userID[0]); })
+  })
 
   // logs a user in
   router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    // error checking
     if (!email || !password) {
       res.sendStatus(400);
       return;
@@ -165,9 +173,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         } else if (bcrypt.compareSync(password, results[0].password)) {
           req.session.email = email;
           req.session.userID = results[0].id;
-          console.log(results);
-          console.log(req.session);
-          res.redirect(`/`);
+          res.sendStatus(200);
         } else {
           res.sendStatus(403);
         }
