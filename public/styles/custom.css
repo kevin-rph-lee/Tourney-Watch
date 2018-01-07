@@ -2,6 +2,7 @@
 body,html{
   min-height: 100%;
 }
+
 body {
   background: #191E21 url("/images/overwatch-logo.jpeg") 50% 50% no-repeat;
   background-size: cover;
