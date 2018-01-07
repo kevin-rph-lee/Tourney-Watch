@@ -437,7 +437,7 @@ div.image-404{
 
 /* Flash Alert */
 div.alert.alert-warning{
-  padding-top: 20px;
+  padding: 20px;
   color: #fff;
   background-color: #474D57;
   border-color: #F7931D;
