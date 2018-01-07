@@ -2,7 +2,7 @@ exports.seed = async function(knex, promise){
   const tournamentTask = (async () => {
     await knex('tournaments').del();
     return knex('tournaments').returning('*').insert([
-      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8, creator_user_id: 53, is_started: false, twitch_channel: 'WhtMage'}
+      {name: 'Test Tournament', description: 'My tournament for testing', no_of_teams: 8, creator_user_id: 53, is_started: false, twitch_channel: 'WhtMage', date: '01/25/2018'}
     ]);
   })();
 
@@ -71,7 +71,7 @@ exports.seed = async function(knex, promise){
       {tournament_id, team_name: 'Jolly Reapers'},
       {tournament_id, team_name: 'Rare Rikimarus'},
       {tournament_id, team_name: 'Tasty Ganymedes'},
-      {tournament_id, team_name: 'Ugly Hanzos'},
+      {tournament_id, team_name: 'Toxic Hanzos'},
       {tournament_id, team_name: 'Sweet Widowmakers'},
       {tournament_id, team_name: 'Ancient Snowballs'},
       {tournament_id, team_name: 'Strange Junkertowns'},

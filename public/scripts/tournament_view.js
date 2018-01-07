@@ -24,7 +24,7 @@ $(document).ready(function () {
         $(`[data-team-id="${teamNames[t]}"`).append(`
         <div class='container player'>
           <img class="player-class" src="/images/icon-${user.first_role}.png" title="${user.first_role}">
-          <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
+          <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="up" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
         </div>
         `)
       })
@@ -150,7 +150,19 @@ $(document).ready(function () {
   btnSwap.onclick = function() {
 
     if($('.selected').length < 2){
-      alert('Please select two players to be swapped');
+      $('.swap-alert').append(`
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>OOPS!</strong> Please select two players in order to swap!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      `)
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 3000);
       return;
     }
     modalSwap.style.display = "block";

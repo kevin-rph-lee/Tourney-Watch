@@ -54,7 +54,7 @@
     font-size: 1em;
     width: 135px;
     height: 45px;
-
+    padding: 10px;
 }
 
 .modal-content form button:hover{
