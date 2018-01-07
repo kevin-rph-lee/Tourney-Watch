@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, owjs) => {
+module.exports = (knex, owjs, _) => {
   // overwatch api insists on all lowercase
   const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
   const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
@@ -244,7 +244,6 @@ module.exports = (knex, owjs) => {
 
   // Adds a new line in to enrollments for each new player
   // given that their battlenet ID exists
-  // TO DO fix this so it also looks at tournament ID
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role')
@@ -318,6 +317,28 @@ module.exports = (knex, owjs) => {
 
           res.redirect(`/tournaments/${tournamentID}`);
         }
+      });
+  });
+
+
+
+  router.get("/enrollments.json", (req, res) => {
+    const tournamentID = req.query.tournamentID;
+    // if(req.session.email !== process.env.ADMIN_EMAIL) {
+    //   // STRETCH: "Forbidden" error page
+    //   res.sendStatus(403);
+    // }
+    // Gets player stats for each team in a specific tournament
+    knex
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
+      .from("enrollments")
+      .innerJoin("users", "users.id", "enrollments.user_id")
+      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
+      .where({'tournament_id': tournamentID})
+      .orderBy("team_id", "ascd")
+      .then((playerStats) => {
+        const teamRoster = _.groupBy(playerStats, "team_name");
+        res.send(teamRoster);
       });
   });
 
