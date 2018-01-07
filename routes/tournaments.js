@@ -41,6 +41,27 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
 
 
+  function capFirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function generateName(){
+    var name1 = ["afraid","ancient","angry","average","bad","big","bitter","black","blue","brave","breezy","bright","brown","calm","chatty","chilly","clever","cold","cowardly","cuddly","curly","curvy","dangerous","dry","dull","empty","evil","fast","fat","fluffy","foolish","fresh","friendly","funny","fuzzy","gentle","giant","good","great","green","grumpy","happy","hard","heavy","helpless","honest","horrible","hot","hungry","itchy","jolly","kind","lazy","light","little","loud","lovely","lucky","massive","mean","mighty","modern","moody","nasty","neat","nervous","new","nice","odd","old","orange","ordinary","perfect","pink","plastic","polite","popular","pretty","proud","purple","quick","quiet","rare","red","rotten","rude","selfish","serious","shaggy","sharp","short","shy","silent","silly","slimy","slippery","smart","smooth","soft","sour","spicy","splendid","spotty","stale","strange","strong","stupid","sweet","swift","tall","tame","tasty","tender","terrible","thin","tidy","tiny","tough","tricky","ugly","unlucky","warm","weak","wet","white","wicked","wise","witty","wonderful","yellow","young"]
+
+    var name2 = ["doomfist","genji","mccree","pharah","reaper","soldier: 76","sombra","tracer","bastion","hanzo","junkrat","mei","torbjörn","widowmaker","d.va","orisa","reinhardt","roadhog","winston","zarya","ana","lúcio","mercy","moira","symmetra","zenyatta","mondatta","pachimari","volskaya","snowball","ganymede","athena","oasis","nepal","hanamura","lijiang","numbani","ilios","gibraltar","junkertown","kings row","anubis","eichenwalde","dorado","hollywood","castillo","66","necropolis","antarctica","talon","blackwatch","omnics","helix","shimada","rikimaru","vishkar","shambali","hyde","lucheng","kofi aromo","lumériCo","goldshire","axiom","blizzard","sigma","meteor","adawe","izumi","calaveras","orca","slipstream","kelvin","bludger","hypertrain","sandcrawler","nulltrooper","slicer","eradicator","detonator","training bot","lacroix"]
+
+    var name = capFirst(name1[getRandomInt(0, name1.length + 1)]) + ' ' + capFirst(name2[getRandomInt(0, name2.length + 1)]);
+    return name;
+
+  }
+
+
+
+
   function setTournamentStarted(tournamentID){
     knex("tournaments")
         .where({"id": tournamentID})
@@ -111,8 +132,8 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     let data = {"teams": [], "results":[]};
     for (let b = 0; b < teamArray.length; b+=2 ) {
       data.teams.push(
-        [{ name: teamArray[b].id    , flag: "in" },
-         { name: teamArray[b + 1].id, flag: "in" },]
+        [{ name: teamArray[b].team_name    , flag: "in" },
+         { name: teamArray[b + 1].team_name, flag: "in" },]
       );
       data.results.push(
         [0,0], [0, 0]
@@ -132,14 +153,14 @@ module.exports = (knex, _, env, mailGun, owjs) => {
    */
   function getTeamRoster(tournamentID){
     return knex
-     .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
+     .select("tournaments.name", "users.battlenet_id","teams.team_name", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
      .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-     .where({tournament_id: tournamentID})
+     .innerJoin("teams", "enrollments.team_id", "teams.id")
+     .where({"enrollments.tournament_id": tournamentID})
      .orderBy("team_id", "ascd")
      .then((playerStats) => {
-      // console.log('team roster', playerStats);
        return _.groupBy(playerStats, "team_id");
      });
   }
@@ -227,8 +248,9 @@ module.exports = (knex, _, env, mailGun, owjs) => {
             .returning('id')
             .then((tournamentID)=> {
               for (let i = 0; i < teamCount; i++) {
+                const teamName = generateName();
                 knex("teams")
-                  .insert({"tournament_id": tournamentID[0]})
+                  .insert({"tournament_id": tournamentID[0], "team_name": teamName})
                   .then(() => {});
               }
               res.redirect(`/tournaments/${tournamentID[0]}`)
@@ -263,11 +285,12 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("users.battlenet_id", "team_id", "level", "role_summary")
+      .select("users.battlenet_id", "team_id", "level", "role_summary", 'teams.team_name')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .where({tournament_id: tournamentID})
+      .innerJoin('teams', 'teams.id', 'enrollments.team_id')
+      .where({'enrollments.tournament_id': tournamentID})
       .orderBy("team_id", "ascd")
       .then( async (teamRoster) => {
         for (let t = 0; t < teamRoster.length; t++) {
@@ -288,14 +311,15 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
+      .select("tournaments.name", "users.battlenet_id",'teams.team_name', "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .where({tournament_id: tournamentID})
+      .innerJoin('teams', 'enrollments.team_id', 'teams.id')
+      .where({'enrollments.tournament_id': tournamentID})
       .orderBy("team_id", "ascd")
       .then((playerStats) => {
-        const teamRoster = _.groupBy(playerStats, "team_id");
+        const teamRoster = _.groupBy(playerStats, "team_name");
         console.log('roster ',teamRoster);
         res.send(teamRoster);
       });
@@ -314,7 +338,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .from("tournaments")
       .where({id: tournamentID})
       .then((results) => {
-        console.log('i am in brackets.json', results[0]);
         res.json(results[0]);
       });
   });
@@ -370,7 +393,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           const twitchName = results[0].twitch_channel;
           if (isReady && started) {
             res.render("tournament_view", {
-              teamRoster: getTeamRoster(tournamentID),
+              // teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
@@ -448,7 +471,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         if (isReady && started) {
           console.log('if you see me i am ready and have started')
           res.render("tournament_view", {
-            teamRoster: getTeamRoster(tournamentID),
+            // teamRoster: getTeamRoster(tournamentID),
             playerCount: enrolledPlayers.length,
             email: req.session.email,
             userID: req.session.userID,
@@ -511,7 +534,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
               if (playersArray.length === (results[0].no_of_teams * 6)) {
                 knex
-                .select("id")
+                .select("id","team_name")
                 .from("teams")
                 .where({tournament_id: tournamentID})
                 .then((teamArray) => {
