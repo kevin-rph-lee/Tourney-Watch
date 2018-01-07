@@ -500,7 +500,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         // console.log('Tournament ID, ' + results[0].id);
         if(results.length === 0 ) {
           // STRETCH: Show 'No tournament of that name found' error page
-          res.sendStatus(404);
+          res.render("404", {email: email, userID: req.session.userID,});
         } else {
           knex
             .select("id", "level")

@@ -21,6 +21,7 @@
 		<main class="container">
 
 			<br>
+			<div class="update-alert"></div>
 			<br>
 			<ul class="nav nav-tabs">
 				<li><a data-toggle="tab" href="#info" class="active">User Info</a></li>
@@ -155,7 +156,7 @@
 											<label> Battle.net ID</label>
 									</div>
 									<div class="form-box">
-											<input id="entry-battlenet" type="text" name="battlenet" value="<%= battlenetID %>" style="width: 300px" required>
+											<input id="entry-battlenet" type="text" name="battlenet" placeholder="<%= battlenetID %>" style="width: 300px" required>
 									</div>
 							</div>
 							<div class="form-row">
@@ -168,7 +169,7 @@
 							</div>
 							<div class="form-row">
 									<div class="form-label">
-											<label> Confirm Confirm Password</label>
+											<label> Confirm Password</label>
 									</div>
 									<div class="form-box">
 											<input id="entry-password-confirm" type="password" name="password" placeholder="Password" style="width: 300px" required>
