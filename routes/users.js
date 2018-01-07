@@ -59,7 +59,14 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //Goes to registration page
   router.get('/new', (req, res) => {
-    res.render('register', { email: req.session.email });
+    knex("users")
+      .max("id")
+      .then((results) => {
+        console.log(results);
+        const userID = results[0].max
+        res.render('register', { email: req.session.email, userID: userID });
+      })
+    
   });
 
   //Gives back a JSON with player info (time & avatar) from OWJS
@@ -87,7 +94,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     })
   });
 
-
   //Goes to login page
   router.get('/login', (req, res) => {
     res.render('login', { email: req.session.email });
@@ -95,15 +101,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
 
   //user registers
   router.post("/new", (req, res) => {
-    console.log(req.body);
     const email = req.body.email.trim().toLowerCase();
     const password = req.body.password.trim();
     const battlenetID = req.body.battlenet.trim();
     const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
-    console.log(battlenetIDLower);
     //Converting bnet ID into a format that owjs can take
-
-
     if (checkInvalidCharacters(battlenetID)) {
       return res.sendStatus(400);
     }
@@ -114,7 +116,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       .whereRaw(`LOWER(battlenet_ID) LIKE ?`, battlenetIDLower)
       .orWhere({email:email})
       .then((results) => {
-        console.log(results);
+        console.log('just checked duplicates, none found, ready to run owjs', results);
         if (results.length === 0) {
           owjs.getAll('pc', 'us', convertBnetID(battlenetID))
             .then((results) => {
@@ -126,10 +128,8 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   req.session.userID = results[0];
                   req.session.email = email;
                   req.session.battlenetID = battlenetID;
-                  console.log('just registered, am results', results)
-                  console.log('IN /NEW', req.session)
-                  console.log(req.session.userID)
-                  res.redirect(`/`);
+                  console.log('owjs has been run, on user ID #', results)
+                  res.sendStatus(200);
                 });
             })
             .catch((err) => {
