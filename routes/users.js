@@ -83,7 +83,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         .where({id:req.params.id})
         .update({avatar:results.profile.avatar})
         .then(()=>{
-          // console.log(results);
+          // Checks if the user is under level 100. If the user is, removes the leading 0 in their level
           let level = '';
           if(results.profile.tier === 0){
             console.log('1')
