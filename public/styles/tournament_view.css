@@ -54,6 +54,7 @@
     font-size: 1em;
     width: 135px;
     height: 45px;
+
 }
 
 .modal-content form button:hover{
@@ -64,10 +65,15 @@ background-color: #191E21;
 
 div.add-highlight{
     text-align: center;
-    padding-right:165px;
+    margin-left: -160px !important;
+        margin-top: 10px !important;
 }
 
-
+div.send-email{
+    text-align: center;
+    margin-top: 20px;
+    margin-right: 428px;
+}
 
 /* Team Summary */
 
@@ -215,8 +221,24 @@ hr {
 
 } 
 
+h1{
+    font-style: italic;
+    text-decoration: underline;
+
+
+
+
+}
 h2 {
 
 font-style: italic;
 text-decoration: underline;
+}
+
+h6{
+    padding: 15px;
+    border: 0.5px solid #F7931D;
+    margin-bottom: 20px;
+    text-align: center;
+
 }
