@@ -190,7 +190,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       // STRETCH: "Forbidden" error page
       res.redirect('/users/login')
     };
-    res.render('tournament_new',{email: req.session.email, userID: req.session.userID});
+    res.render('tournament_new',{email: req.session.email, userID: req.session.userID, error: "none"});
   });
 
   // Creates new tournament
@@ -210,7 +210,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       console.log(checkInvalidCharacters(twitchChannel))
       console.log(checkInvalidCharacters(description))
       console.log(checkInvalidCharacters(name))
-      res.sendStatus(400);
+      res.render('tournament_new',{email: req.session.email, userID: req.session.userID, error: "The forms must contain only alphanumeric characters..."});
       return;
     }
     knex
