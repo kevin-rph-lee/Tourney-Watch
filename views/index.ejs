@@ -24,12 +24,21 @@
           playing experience.
         </p>
 
-        <% if (email) { %>
-          <a href="/tournament/new" class="btn btn-default index-page">Create a Tournament</a>
-        <% } else { %>
-          <a href="/users/new" class="btn btn-default index-page">Get Started</a>
-        <% } %>
-          <a href="/faq" class="btn btn-default index-page">How Does this Work?</a>
+        <div class="index-buttons-line">
+
+          <div class="index-button">
+
+          <% if (email) { %>
+            <a href="/tournament/new" class="btn btn-default index-page">Create a Tournament</a>
+          <% } else { %>
+            <a href="/users/new" class="btn btn-default index-page">Get Started</a>
+          <% } %>
+          </div>
+          <div class="index-button">
+            <a href="/faq" class="btn btn-default index-page">How Does this Work?</a>
+          </div>
+          
+        </div>
       </div>
     </main>
   </body>

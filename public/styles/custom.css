@@ -53,6 +53,10 @@ p {
     padding-bottom: 20px;
   }
 
+  div.index-buttons{
+    text-align: center;
+  }
+
   a.btn.btn-default{
     background-color: #F7931D;
     color:white;
@@ -60,22 +64,31 @@ p {
   }
 
   a.btn.btn-default.index-page{
-    float: left;
-    margin-left: 25%;
+    width: 160px;
     background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
 
+  div.index-buttons-line{
+    text-align: center;
+  }
 
+  div.index-button{
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
+  }
 
-  div button.how-it-works{
+  /* div button.how-it-works{
     float: right;
     margin-right: 20%;
     background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
-  }
+  } */
 
 /* Nav Bar Buttons */
 
