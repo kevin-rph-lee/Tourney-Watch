@@ -66,7 +66,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         const userID = results[0].max
         res.render('register', { email: req.session.email, userID: userID });
       })
-    
+
   });
 
   //Gives back a JSON with player info (time & avatar) from OWJS
@@ -83,7 +83,15 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         .where({id:req.params.id})
         .update({avatar:results.profile.avatar})
         .then(()=>{
-          const level = results.profile.tier.toString() + results.profile.level.toString()
+          // Checks if the user is under level 100. If the user is, removes the leading 0 in their level
+          let level = '';
+          if(results.profile.tier === 0){
+            console.log('1')
+            level = results.profile.level.toString();
+          } else {
+            console.log('2');
+            level = results.profile.tier.toString() + results.profile.level.toString();
+          }
           const profileInfo = {avatar:results.profile.avatar, level:level, playTime:{}};
           for(let hero in results.quickplay.heroes){
             profileInfo.playTime[hero] = results.quickplay.heroes[hero].time_played;
