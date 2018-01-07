@@ -114,6 +114,10 @@ nav p{
   padding-top: 20px;
 }
 
+button.navbar-toggler{
+  margin: 10px;
+}
+
   /* Tournament Cards */
 
 div.card.mb-3{

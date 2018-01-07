@@ -3,12 +3,12 @@ $(document).ready(function () {
   // EVERYBODY
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
-    console.log('hey: ', teamRoster);
+    // console.log('hey: ', teamRoster);
     $(".tournamentheader").append(`
     <h1>${teamRoster[teamNames[1]]["0"]["name"]}</h1>
     `)
     Object.keys(teamNames).forEach((t) => {
-      console.log('hi ',teamNames);
+      // console.log('hi ',teamNames);
       $(".team-cards").append(`
       <div class="card mb-3" style="min-width: 17rem">
         <div class="card-header">${teamNames[t]}</div>
@@ -226,21 +226,16 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((teamSummary) => {
-      console.log('Summary ',teamSummary);
       const teamIDs = Object.keys(teamSummary);
-      console.log('teamIds, ',teamIDs);
       const teamNames = {};
       for (let t = 0 ; t < teamIDs.length; t++) {
-        $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
-
-        teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name;
+        $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">${teamSummary[teamIDs[t]][0].team_name} </a>`)
+        teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name
       }
-      console.log('Team name ', teamNames)
-
+        
       for (let t = 0 ; t < teamIDs.length; t++) {
-
         $('.role-summary-container').append(`
-        <a name="Team${teamIDs[t]}"><h3>Team ${teamNames[teamIDs[t]]}</h3>
+        <a name="Team${teamIDs[t]}"><h3>${teamNames[teamIDs[t]]}</h3>
         <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
           <thead>
             <tr>
