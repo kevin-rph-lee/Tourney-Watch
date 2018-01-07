@@ -427,7 +427,7 @@ $(document).ready(function () {
         for(let i = 0; i < playerRoster[team].length; i ++){
           totalTeamLevel += playerRoster[team][i].level;
         }
-        averageLevels.push(totalTeamLevel/6);
+        averageLevels.push((totalTeamLevel/6).toFixed(2));
         teams.push(team);
       }
       console.log('teams', teams);
