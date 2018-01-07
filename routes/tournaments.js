@@ -221,19 +221,23 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
     const twitchChannel = req.body.channel_name;
+    const date = req.body.date;
     console.log(req.body);
 
    // STRETCH: Show 'That name has been taken' error page
-    if(!name || !description || !checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
-      console.log(`something is wrong`)
-      console.log(name)
-      console.log(description)
+    if(!checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       console.log(checkInvalidCharacters(twitchChannel))
       console.log(checkInvalidCharacters(description))
       console.log(checkInvalidCharacters(name))
-      res.render('tournament_new',{email: req.session.email, userID: req.session.userID, error: "The forms must contain only alphanumeric characters..."});
-      return;
+      return res.status(400).send('Invalid characters');
     }
+    if(!date){
+      return res.status(400).send('No date');
+    }
+    if(!name || !description){
+      return res.status(400).send('Name and description must not be empty')
+    }
+
     knex
       .select("name")
       .from("tournaments")
@@ -243,7 +247,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         // and creates new lines in teams (based on # of teams needed)
         if(results.length === 0) {
           knex
-            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false, twitch_channel: twitchChannel})
+            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false, twitch_channel: twitchChannel, date: date})
             .into('tournaments')
             .returning('id')
             .then((tournamentID)=> {
@@ -253,11 +257,11 @@ module.exports = (knex, _, env, mailGun, owjs) => {
                   .insert({"tournament_id": tournamentID[0], "team_name": teamName})
                   .then(() => {});
               }
-              res.redirect(`/tournaments/${tournamentID[0]}`)
+              return res.send(tournamentID);
             });
         } else {
-          // STRETCH: Show 'Tournament name taken' error page
-          res.sendStatus(400);
+          console.log("erroring here")
+          return res.status(400).send('Team already exists');;
         }
       });
   });
@@ -363,7 +367,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           .update({"brackets": req.body.bracketData})
           .then(() => {
             console.log("Owner has saved")
-            
+
             return res.sendStatus(200);
           });
         } else {
