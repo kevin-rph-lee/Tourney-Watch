@@ -128,16 +128,16 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   req.session.battlenetID = battlenetID;
                   console.log('just registered, am results', results)
                   console.log('IN /NEW', req.session)
-                  res.redirect("/");
+                  console.log(req.session.userID)
+                  res.redirect(`/`);
                 });
             })
             .catch((err) => {
-              console.log('owjs is freaking out')
-              res.sendStatus(400);
+              res.status(400).send("Our Systems are having an Error, please try back later!");
             })
           //stuff tha relies on it
         } else {
-          res.sendStatus(400);
+          res.status(400).send("Looks like you're already enrolled! Please check your email or Battle.net ID...");
         }
       });
   });
@@ -167,7 +167,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
           req.session.userID = results[0].id;
           console.log(results);
           console.log(req.session);
-          res.redirect("/");
+          res.redirect(`/`);
         } else {
           res.sendStatus(403);
         }
@@ -297,11 +297,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   });
               }).catch((err) => {
                 console.log('OWJS fails')
-                res.sendStatus(400);
+                res.status(400).send("Our system hit an error, try again later!")
               })
           } else {
             console.log('something else failse');
-            return res.sendStatus(400)
+            return res.status(400).send("Please check your information and resubmit...")
           }
         });
     });
