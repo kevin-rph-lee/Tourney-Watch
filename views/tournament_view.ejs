@@ -31,12 +31,12 @@
       <div class="tournamentheader">
         <!-- Tournament Name gets appended here from App.js -->
       </div>
-
       <div class="share-button">
         <button id="twitch-button" class="start-tournament">Twitch Stream</button>
         <button id="highlights-button" class="start-tournament">Highlights</button>
         <% include partials/share_button %>
       </div>
+      <div class="copy-alert"></div>
       <% if (twitchName !== null) { %>
 
         <div class="container-fluid">
