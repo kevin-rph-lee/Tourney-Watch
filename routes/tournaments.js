@@ -424,11 +424,15 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       })
   });
 
+
   router.get("/:id", async (req, res) => {
     const tournamentID = parseInt(req.params.id);
     const email = req.session.email
 
-    if (tournamentID) {
+    if (!Number.isInteger(tournamentID)) {
+      res.render("404", {email: email, userID: req.session.userID,})
+      return
+    } else {
       knex
       .select("id")
       .from("tournaments")
@@ -436,66 +440,58 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .then((results) =>{
         if (results.length === 0){
           res.render("404", {email: email, userID: req.session.userID,})
+          return;
+        } else {
+          knex
+            .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
+            .from("tournaments")
+            .where({id: tournamentID})
+            .then( async (results) => {
+              const enrolledPlayers = await playersEnrolled(tournamentID);
+              const teamCount = results[0].no_of_teams;
+              const started = results[0].is_started;
+              const creatorUserID = results[0].creator_user_id;
+              const isReady = (enrolledPlayers.length === teamCount * 6);
+              const isOwner = (req.session.userID === creatorUserID);
+              const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
+              const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
+              const twitchName = results[0].twitch_channel;
+              console.log('This should be the results: ', results)
+              if(isOwner) {
+                res.redirect(`/tournaments/${tournamentID}/admin`);
+              }
+
+              if (isReady && started) {
+                console.log('if you see me i am ready and have started')
+                res.render("tournament_view", {
+                  // teamRoster: getTeamRoster(tournamentID),
+                  playerCount: enrolledPlayers.length,
+                  email: req.session.email,
+                  userID: req.session.userID,
+                  started: started,
+                  tournamentName: results[0].name,
+                  tournamentID: tournamentID,
+                  isOwner: isOwner,
+                  twitchChannel: twitchChannel,
+                  twitchChat: twitchChat,
+                  twitchName: twitchName
+                })
+              } else {
+                console.log("if you see me i am not started and am not ready, or both")
+                res.render("tournament_notready", {
+                  tournamentName: results[0].name,
+                  playerCount: enrolledPlayers.length,
+                  maxPlayers: teamCount * 6,
+                  teamCount: results[0].no_of_teams,
+                  email: req.session.email,
+                  userID: req.session.userID,
+                  tournamentID: tournamentID
+                })
+              }
+            });
         }
       })
     }
-
-    // const validID = await checkID(tournamentID);
-
-    // console.log(validID)
-
-    // if (!validID) {
-    //   console.log('invalid ID')
-    //   res.render("404", {email: email, userID: req.session.userID,})
-    // }
-
-    return knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
-      .from("tournaments")
-      .where({id: tournamentID})
-      .then( async (results) => {
-        const enrolledPlayers = await playersEnrolled(tournamentID);
-        const teamCount = results[0].no_of_teams;
-        const started = results[0].is_started;
-        const creatorUserID = results[0].creator_user_id;
-        const isReady = (enrolledPlayers.length === teamCount * 6);
-        const isOwner = (req.session.userID === creatorUserID);
-        const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
-        const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
-        const twitchName = results[0].twitch_channel;
-        console.log('This should be the results: ', results)
-        if(isOwner) {
-          res.redirect(`/tournaments/${tournamentID}/admin`);
-        }
-
-        if (isReady && started) {
-          console.log('if you see me i am ready and have started')
-          res.render("tournament_view", {
-            // teamRoster: getTeamRoster(tournamentID),
-            playerCount: enrolledPlayers.length,
-            email: req.session.email,
-            userID: req.session.userID,
-            started: started,
-            tournamentName: results[0].name,
-            tournamentID: tournamentID,
-            isOwner: isOwner,
-            twitchChannel: twitchChannel,
-            twitchChat: twitchChat,
-            twitchName: twitchName
-          })
-        } else {
-          console.log("if you see me i am not started and am not ready, or both")
-          res.render("tournament_notready", {
-            tournamentName: results[0].name,
-            playerCount: enrolledPlayers.length,
-            maxPlayers: teamCount * 6,
-            teamCount: results[0].no_of_teams,
-            email: req.session.email,
-            userID: req.session.userID,
-            tournamentID: tournamentID
-          })
-        }
-      });
   });
 
   router.post("/:id/start", (req, res) => {
