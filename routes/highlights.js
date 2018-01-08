@@ -58,6 +58,7 @@ module.exports = (knex) => {
             .returning('id')
             .then((id)=>{
               res.json({id:id[0], youtubeID:youtubeID});
+              return;
             });
         }
       });
