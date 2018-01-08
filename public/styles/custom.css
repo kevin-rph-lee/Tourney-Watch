@@ -124,25 +124,6 @@ button.navbar-toggler{
   margin: 10px;
 }
 
-  /* Tournament Cards */
-
-div.card.mb-3{
-  background-color: #474D57;
-  margin: auto;
-}
-
-div.card.mb-3 div.battlenetid{
-  padding-bottom: 10px;
-}
-
-div.card.mb-3 div.card-header {
-  background-color: #F7931D;
-}
-
-div.row{
-  padding-top: 20px;
-}
-
 input.make-new{
   color: #fff;
   margin: auto 0;
@@ -201,32 +182,6 @@ div.enroll-now button:active {
   color: #F7931D;
   cursor: pointer;
 
-}
-
-/* Twitch Video Player & Chat Embeds */
-
-.container-fluid, .embeds {
-  height: 100% !important;
-}
-
-.container-fluid > h2{
-  margin-top: 25px;
-}
-
-iframe{
-  padding: 0 !important;
-  height: 100% !important;
-  width: 100%;
-}
-
-iframe#video{
-  margin: 0 auto;
-}
-
-@media (max-width: 992px){
-  #chat{
-    display: none;
-  }
 }
 
 /* Tournament Listing for Individual Users */
