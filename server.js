@@ -37,7 +37,7 @@ app.use(knexLogger(knex));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount all resource routes
-app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs));
+app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs, _));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs, _));
 app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun, owjs));
 app.use('/highlights', highlightsRoutes(knex));
