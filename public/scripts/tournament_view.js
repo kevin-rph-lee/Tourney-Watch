@@ -53,12 +53,6 @@ $(document).ready(function () {
 
   loadCards();
 
-  // Share button functionality
-  $("[data-toggle='toggle']").click(function() {
-    const selector = $(this).data("target");
-    $(selector).toggleClass('in');
-  });
-
   // Copy to clipboard function under Share
   $(".fa-clipboard").click(function() {
     const link = $(this).data("link")
@@ -67,7 +61,33 @@ $(document).ready(function () {
     $temp.val($(this).data("link")).select();
     document.execCommand("copy");
     $temp.remove();
-    alert(`${link} has been copied!`)
+    $('.copied-alert').append(`
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>DONE!</strong> Link has been copied!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    `)
+    window.setTimeout(function() {
+      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove(); 
+      });
+    }, 3000);
+  })
+
+  // share btn  div sliding functionality
+  let showShare = false;
+  $("#share-button").click(function() {
+    if (!showShare) {
+      console.log('show twitch');
+      showShare = true;
+      $("#share").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showShare =false
+      $("#share").css({"display": "none"});
+    }
   });
 
   // twitch  div sliding functionality
