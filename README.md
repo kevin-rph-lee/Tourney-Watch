@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ## TourneyWatch
+=======
+# TourneyWatch
+>>>>>>> 8f17288baa72dc623fbe4da528a0a900bd36abe0
 
 Tournament manager for Overwatch that seeds individual players in to evenly matched teams. TourneyWatch also allows all users, including spectators, to follow along through tournament brackets,  and team roster listings. Users can also view live games via Twitch integrations, and watch highlights uploaded by the manager.
 
