@@ -242,11 +242,12 @@ module.exports = (knex, owjs, _) => {
   // given that their battlenet ID exists
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id")
+      .select("users.battlenet_id", "level", "role_summary", 'teams.team_name')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-      .where({'users.battlenet_id': req.query.bnetID, tournament_id : req.params.id})
+      .innerJoin('teams', 'teams.id', 'enrollments.team_id')
+      .where({'users.battlenet_id': req.query.bnetID, 'enrollments.tournament_id' : req.params.id})
       .then((playerStats) => {
         // console.log(playerStats[0]);
         res.send(playerStats[0]);

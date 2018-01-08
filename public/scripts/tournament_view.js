@@ -194,6 +194,10 @@ $(document).ready(function () {
     Promise.all([player1, player2]).then(results => {
       const player1 = results[0];
       const player2 = results[1];
+      const player1Roles = JSON.parse(results[0].role_summary);
+      const player2Roles = JSON.parse(results[1].role_summary);
+      console.log('player 1: ', player1);
+      console.log('player 2: ', player2);
       //Appending user data to the modal window
       $('.swap-players-container').append(`
         <h3> Swap ${player1.battlenet_id} and ${player2.battlenet_id}?</h3>
@@ -201,6 +205,7 @@ $(document).ready(function () {
           <table id="swap-players-table" class="table table-striped table-dark">
             <thead>
               <tr>
+                <th scope="col">Team</th>
                 <th scope="col">Battlenet ID</th>
                 <th scope="col">Primary Class</th>
                 <th scope="col">Secondary Class</th>
@@ -209,15 +214,17 @@ $(document).ready(function () {
             </thead>
             <tbody class="player-table-stats">
               <tr>
+                <td>${player1.team_name}</td>
                 <td>${player1.battlenet_id}</td>
-                <td>${player1.first_role}</td>
-                <td>${player1.second_role}</td>
+                <td>${player1Roles[0].role}</td>
+                <td>${player1Roles[1].role}</td>
                 <td>${player1.level}</td>
               </tr>
               <tr>
+                <td>${player2.team_name}</td>
                 <td>${player2.battlenet_id}</td>
-                <td>${player2.first_role}</td>
-                <td>${player2.second_role}</td>
+                <td>${player2Roles[0].role}</td>
+                <td>${player2Roles[1].role}</td>
                 <td>${player2.level}</td>
               </tr>
             </tbody>
