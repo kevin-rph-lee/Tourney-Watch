@@ -96,7 +96,7 @@ $(document).ready(function () {
       $(".container-fluid").css({"display": "block"});
     } else {
       console.log('hide char');
-      showTwitch =false
+      showTwitch = false
       $(".container-fluid").css({"display": "none"});
     }
   });
