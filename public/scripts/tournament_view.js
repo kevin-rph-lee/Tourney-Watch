@@ -4,12 +4,10 @@ $(document).ready(function () {
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
     // console.log('hey: ', teamRoster);
-    $(".tournamentheader").append(`
-    <h1>${teamRoster[teamNames[1]]["0"]["name"]}</h1>
-    `)
-    $(".tournamentdescription").append(`
-    <h6>${teamRoster[teamNames[1]]["0"]["name"]}</h6>
-    `)
+    // $(".tournamentheader").append(`
+    // <h1><%-tournamentName%></h1>
+    // `)
+    
     Object.keys(teamNames).forEach((t) => {
       // console.log('hi ',teamNames);
       $(".team-cards").append(`

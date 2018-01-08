@@ -381,7 +381,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     const tournamentID = parseInt(req.params.id);
 
     knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel", "description")
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel", "description", "date")
       .from("tournaments")
       .where({id: tournamentID})
       .then(async (results) => {
@@ -401,6 +401,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               playerCount: enrolledPlayers.length,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
+              tournamentDate: results[0].date,
               tournamentID: tournamentID,
               email: req.session.email,
               userID: req.session.userID,
@@ -416,6 +417,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               teamCount: results[0].no_of_teams,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
+              tournamentDate: results[0].date,
               tournamentID: tournamentID,
               email: req.session.email,
               userID: req.session.userID,
@@ -447,7 +449,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           return;
         } else {
           knex
-            .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel", "description")
+            .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel", "description", "date")
             .from("tournaments")
             .where({id: tournamentID})
             .then( async (results) => {
@@ -475,6 +477,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
                   started: started,
                   tournamentName: results[0].name,
                   tournamentDescr: results[0].description,
+                  tournamentDate: results[0].date,
                   tournamentID: tournamentID,
                   isOwner: isOwner,
                   twitchChannel: twitchChannel,
@@ -486,6 +489,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
                 res.render("tournament_notready", {
                   tournamentName: results[0].name,
                   playerCount: enrolledPlayers.length,
+                  tournamentDate: results[0].date,
                   maxPlayers: teamCount * 6,
                   teamCount: results[0].no_of_teams,
                   email: req.session.email,

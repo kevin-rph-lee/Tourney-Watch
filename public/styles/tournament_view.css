@@ -73,6 +73,22 @@ div.send-email{
     text-align: center;
     margin-top: 20px;
     margin-right: 428px;
+    
+}
+input.send-email{
+    color: #fff;
+    background-color: #F7931D;
+    border: 1px solid #dee4e7;
+    outline: 2px;
+    border-radius: .25em;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1em;
+    width: 135px !important;
+    height: 45px !important;
+    padding: 10px;
+    margin-top: 5px !important;
+    margin-left: 0px !important;
+
 }
 
 /* Team Summary */
@@ -235,10 +251,19 @@ font-style: italic;
 text-decoration: underline;
 }
 
-h6{
+.tournamentinfo{
     padding: 15px;
-    border: 0.5px solid #F7931D;
-    margin-bottom: 20px;
-    text-align: center;
+    border: 3px solid #F7931D;
+    background-color:#666;
+    text-align: left;
+    width: 900px;
+    height:auto;
+    margin: 0 auto 30px;
 
+
+}
+
+h6{
+color:#F7931D;
+font-size: 19px;
 }
