@@ -113,3 +113,7 @@ h6 {
     border-radius: 4px;
 }
 
+a:hover{
+    color:#F7931D;
+    text-decoration: none;
+}

@@ -68,7 +68,21 @@ $(document).ready(function () {
     $temp.val($(this).data("link")).select();
     document.execCommand("copy");
     $temp.remove();
-    alert(`${link} has been copied!`)
+    $('.copy-alert').append(`
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>DONE!</strong> ${link} was copied!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <br>
+    `)
+
+    window.setTimeout(function() {
+      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove(); 
+      });
+    }, 4000);
   });
 
   // twitch  div sliding functionality

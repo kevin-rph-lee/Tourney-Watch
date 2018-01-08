@@ -202,7 +202,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
    * @return {boolean}        returns true if invalid characters found
    */
   function checkInvalidCharacters(string){
-    return /^[a-zA-Z0-9-#]*$/.test(string);
+    return /^[a-zA-Z0-9-#-\s]*$/.test(string);
   }
 
   // Goes to new tournaments page
