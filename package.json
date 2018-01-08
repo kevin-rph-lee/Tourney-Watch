@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "local": "./node_modules/.bin/nodemon --ignore public/",
-    "knex": "./node_modules/.bin/knex"
+    "knex": "./node_modules/.bin/knex",
+    "eslint": "./node_modules/.bin/eslint"
   },
   "author": "Lighthouse Labs",
   "license": "ISC",
@@ -19,6 +20,11 @@
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-react": "^7.5.1",
     "express": "^4.16.2",
     "https": "^1.0.0",
     "knex": "^0.14.2",
@@ -31,11 +37,10 @@
     "overwatch-js": "^1.6.0",
     "overwatch.js": "^1.0.0",
     "pg": "^7.4.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-tournament-bracket": "^0.1.0"
+    "save": "^2.3.2"
   },
   "devDependencies": {
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "nodemon": "^1.12.1"
   }
 }

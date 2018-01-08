@@ -27,7 +27,7 @@
 
 
 
-    <main class="container">
+    <main class="container tournament-view">
       <div class="tournamentheader">
         <!-- Tournament Name gets appended here from App.js -->
         <h1><%= tournamentName %></h1>
@@ -38,42 +38,43 @@
         <h6>Tournament Date:</h6> <%= tournamentDate %>
       </div>
 
-  
 
-      <div class="share-button">
+      <div class="tournament-view-button">
         <button id="twitch-button" class="start-tournament">Twitch Stream</button>
         <button id="highlights-button" class="start-tournament">Highlights</button>
-        <% include partials/share_button %>
+        <button id="share-button" class="start-tournament">Share</button>
       </div>
-      <div class="copy-alert"></div>
-      <% if (twitchName !== null) { %>
 
-        <div class="container-fluid">
+      <% include partials/share_button %>
+
+      <div class="copy-alert"></div>
+
+      <% if (twitchName !== null) { %>
+        <div class="container-fluid tournament-view">
           <h2>Twitch Stream</h2>
           <div class="row embeds">
             <iframe class="col-md-8 embed-responsive embed-responsive-16by9" src="<%- twitchChannel %>" frameborder="0" allowfullscreen
               id="video">
             </iframe>
-            <iframe frameborder="0" scrolling="no" src="<%- twitchChat %>" // class="col-md-4" id="chat">
+            <iframe frameborder="0" scrolling="no" src="<%- twitchChat %>" class="col-md-4" id="chat">
             </iframe>
           </div>
           <hr>
-
         </div>
+      <% } %>
 
-        <% } %>
-          <h2>Tournament Bracket</h2>
+          <h2 class="section-header">Tournament Bracket</h2>
 
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <div class="bracket-alert"></div>
+
           <container>
             <center>
-              <div id="save" style="display: inline-block;">
-              </div>
+              <div id="save" style="display: inline-block;"></div>
             </center>
           </container>
 
-          <% if (isOwner)  {%>
+          <% if (isOwner)  { %>
             <div style="text-align: center">
               <button id="target" class="save button">Save</button>
             </div>
@@ -81,9 +82,9 @@
 
               <hr>
 
-              <div class="container">
+              <div class="container tournament-view">
                 
-                    <h2>Team Rosters</h2>
+                    <h2 class="section-header">Team Rosters</h2>
 
                     <div class="row team-cards">
                       <!-- Bootstrap Cards will go Here (Users and Admins can see) -->
@@ -159,7 +160,7 @@
                             <label for="url" class="form-label"> Highlight Youtube URL </label>
                             <input class="highlight-url" type="text" name="url" required="">
                             <br>
-                            <div class="add-highlight">
+                            <div class="add-highlights-div">
                               <button type="button" class="btn btn-primary btn-md add-highlight">Add highlight!</button>
                             </div>
                           </form>
@@ -190,6 +191,7 @@
                         </div>
               </div>
               <br>
+
               <div class="swap-alert"></div>
 
     </main>
