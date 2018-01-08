@@ -54,9 +54,18 @@ $(document).ready(function () {
   loadTable();
 
 
-  $("[data-toggle='toggle']").click(function() {
-    const selector = $(this).data("target");
-    $(selector).toggleClass('in');
+  // share btn  div sliding functionality
+  let showShare = false;
+  $("#share-button").click(function() {
+    if (!showShare) {
+      console.log('show twitch');
+      showShare = true;
+      $("#share").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showShare =false
+      $("#share").css({"display": "none"});
+    }
   });
 
   $(".fa-clipboard").click(function() {
