@@ -147,10 +147,6 @@ module.exports = (knex, owjs, _) => {
             'tournament_id': tournamentID,
             'level': Number(data.profile.tier.toString() + data.profile.level.toString()),
             'role_summary': JSON.stringify(roleRanks),
-            'first_role': roleRanks[0].role,
-            'first_role_time_played': roleRanks[0].time,
-            'second_role': roleRanks[1].role,
-            'second_role_time_played': roleRanks[1].time,
             'medal_gold': data.quickplay.global.medals_gold,
             'medal_silver': data.quickplay.global.medals_silver,
             'medal_bronze': data.quickplay.global.medals_bronze,
@@ -246,7 +242,7 @@ module.exports = (knex, owjs, _) => {
   // given that their battlenet ID exists
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role')
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -330,7 +326,7 @@ module.exports = (knex, owjs, _) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "users.avatar")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")

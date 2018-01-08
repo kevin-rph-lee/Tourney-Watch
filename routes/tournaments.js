@@ -145,27 +145,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .then(() => {});
   }
 
-  /**
-   * Gets each team's roster
-   *
-   * @param {integer} tournamentID from req params
-   * @returns {array}
-   */
-  function getTeamRoster(tournamentID){
-    return knex
-     .select("tournaments.name", "users.battlenet_id","teams.team_name", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "first_role", "second_role")
-     .from("enrollments")
-     .innerJoin("users", "users.id", "enrollments.user_id")
-     .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
-     .innerJoin("teams", "enrollments.team_id", "teams.id")
-     .where({"enrollments.tournament_id": tournamentID})
-     .orderBy("team_id", "ascd")
-     .then((playerStats) => {
-       return _.groupBy(playerStats, "team_id");
-     });
-  }
-
-
   function getTeamEmails(tournamentID, teamID){
     return knex
      .select("tournaments.name", "users.email", 'users.battlenet_id')
@@ -315,7 +294,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     // }
     // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id",'teams.team_name', "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar", 'role_summary')
+      .select("tournaments.name", "users.battlenet_id",'teams.team_name', "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "users.id", "users.avatar", 'role_summary')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -397,7 +376,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           const twitchName = results[0].twitch_channel;
           if (isReady && started) {
             res.render("tournament_view", {
-              // teamRoster: getTeamRoster(tournamentID),
               playerCount: enrolledPlayers.length,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
@@ -470,7 +448,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               if (isReady && started) {
                 console.log('if you see me i am ready and have started')
                 res.render("tournament_view", {
-                  // teamRoster: getTeamRoster(tournamentID),
                   playerCount: enrolledPlayers.length,
                   email: req.session.email,
                   userID: req.session.userID,
