@@ -70,11 +70,9 @@ div.add-highlight{
 }
 
 div.send-email{
-    text-align: center;
-    margin-top: 20px;
-    margin-right: 428px;
-    
+    text-align: center; 
 }
+
 input.send-email{
     color: #fff;
     background-color: #F7931D;
@@ -250,11 +248,11 @@ h1{
 }
 
 .tournamentinfo{
-    padding: 15px;
-    border: 3px solid #F7931D;
-    background-color:#666;
-    text-align: left;
-    width: 900px;
+    /* padding: 15px; */
+    /* border: 3px solid #F7931D; */
+    background-color:rgb(25, 30, 33, 0.9);
+    text-align: center;
+    width: 90%;
     height:auto;
     margin: 0 auto 30px;
 }
