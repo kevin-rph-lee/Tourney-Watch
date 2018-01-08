@@ -14,6 +14,14 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
   }
 
+
+  function validateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return (true)
+    }
+      return (false)
+  }
+
   function getUserIconAndbnetID(userID) {
     return knex
       .select("battlenet_id")
@@ -66,7 +74,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         const userID = results[0].max
         res.render('register', { email: req.session.email, userID: userID });
       })
-    
+
   });
 
   //Gives back a JSON with player info (time & avatar) from OWJS
@@ -83,7 +91,15 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
         .where({id:req.params.id})
         .update({avatar:results.profile.avatar})
         .then(()=>{
-          const level = results.profile.tier.toString() + results.profile.level.toString()
+          // Checks if the user is under level 100. If the user is, removes the leading 0 in their level
+          let level = '';
+          if(results.profile.tier === 0){
+            console.log('1')
+            level = results.profile.level.toString();
+          } else {
+            console.log('2');
+            level = results.profile.tier.toString() + results.profile.level.toString();
+          }
           const profileInfo = {avatar:results.profile.avatar, level:level, playTime:{}};
           for(let hero in results.quickplay.heroes){
             profileInfo.playTime[hero] = results.quickplay.heroes[hero].time_played;
@@ -106,8 +122,14 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
     const battlenetID = req.body.battlenet.trim();
     const battlenetIDLower = req.body.battlenet.trim().toLowerCase();
     //Converting bnet ID into a format that owjs can take
+    if(!email || !password || !battlenetID){
+      return res.status(400).send("All fields must be filled!")
+    }
     if (checkInvalidCharacters(battlenetID)) {
-      return res.sendStatus(400);
+      return res.status(400).send("Invalid battlenet ID format!");
+    }
+    if (!(validateEmail(email))){
+      return res.status(400).send('Invalid email format!');
     }
     //checking to prevent BNET/Email dupes
     knex('users')
@@ -129,11 +151,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
                   req.session.email = email;
                   req.session.battlenetID = battlenetID;
                   console.log('owjs has been run, on user ID #', results)
-                  res.sendStatus(200);
+                  res.send(results);
                 });
             })
             .catch((err) => {
-              res.status(400).send("Our Systems are having an Error, please try back later!");
+              res.status(400).send("Invalid Battlet Net ID!");
             })
           //stuff tha relies on it
         } else {

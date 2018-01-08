@@ -82,14 +82,6 @@ p {
     text-align: center;
   }
 
-  /* div button.how-it-works{
-    float: right;
-    margin-right: 20%;
-    background-color: #F7931D;
-    color:white;
-    border-color: #C0C1C2;
-  } */
-
 /* Nav Bar Buttons */
 
 #nav-bar {
@@ -216,6 +208,14 @@ div.enroll-now button:active {
   height: 100% !important;
 }
 
+.container-fluid > h2{
+  margin-top: 25px;
+}
+
+/* .container-fluid.tournament-view{
+  margin-bottom: 20px;
+} */
+
 iframe{
   padding: 0 !important;
   height: 100% !important;
@@ -261,6 +261,7 @@ a.active {
 }
 
 .fa-arrow-circle-right{
+  color: #F7931D;
   font-size: 25px;
   padding-left: 2px;
 }
@@ -436,7 +437,7 @@ div.image-404{
 
 /* Flash Alert */
 div.alert.alert-warning{
-  padding-top: 20px;
+  padding: 20px;
   color: #fff;
   background-color: #474D57;
   border-color: #F7931D;

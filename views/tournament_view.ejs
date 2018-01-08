@@ -27,10 +27,17 @@
 
 
 
-    <main class="container">
+    <main class="container tournament-view">
       <div class="tournamentheader">
         <!-- Tournament Name gets appended here from App.js -->
+        <h1><%= tournamentName %></h1>
       </div>
+
+      <div class="tournamentinfo">
+        <h6>Tournament Description:</h6> <%= tournamentDescr %><br><br>
+        <h6>Tournament Date:</h6> <%= tournamentDate %>
+      </div>
+
 
       <div class="tournament-view-button">
         <button id="twitch-button" class="start-tournament">Twitch Stream</button>
@@ -40,9 +47,10 @@
 
       <% include partials/share_button %>
 
-      <% if (twitchName !== null) { %>
+      <div class="copy-alert"></div>
 
-        <div class="container-fluid">
+      <% if (twitchName !== null) { %>
+        <div class="container-fluid tournament-view">
           <h2>Twitch Stream</h2>
           <div class="row embeds">
             <iframe class="col-md-8 embed-responsive embed-responsive-16by9" src="<%- twitchChannel %>" frameborder="0" allowfullscreen
@@ -52,22 +60,21 @@
             </iframe>
           </div>
           <hr>
-
         </div>
+      <% } %>
 
-        <% } %>
           <h2 class="section-header">Tournament Bracket</h2>
 
           <!-- BRACKET CODE WILL GO HERE (If user is Tournament Runner - Allow Edits . If not - Remove edit ability) -->
           <div class="bracket-alert"></div>
+
           <container>
             <center>
-              <div id="save" style="display: inline-block;">
-              </div>
+              <div id="save" style="display: inline-block;"></div>
             </center>
           </container>
 
-          <% if (isOwner)  {%>
+          <% if (isOwner)  { %>
             <div style="text-align: center">
               <button id="target" class="save button">Save</button>
             </div>
@@ -75,7 +82,7 @@
 
               <hr>
 
-              <div class="container">
+              <div class="container tournament-view">
                 
                     <h2 class="section-header">Team Rosters</h2>
 
@@ -133,8 +140,11 @@
                             <div class="form-row">
                               <label class="form-label" for="eamilBody">Message:</label>
                               <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
-                              <input type="submit">
                             </div>
+                              
+                              <div class="send-email">
+                                  <input type="submit" class="send-email">
+                                </div>                            
                           </form>
                         </div>
                       </div>
@@ -180,7 +190,9 @@
                           </div>
                         </div>
               </div>
+              <br>
 
+              <div class="swap-alert"></div>
 
     </main>
 </body>
