@@ -39,20 +39,19 @@ $(document).ready(function () {
             <th scope="col">Time Played (mins)</th>
           </tr>
         </thead>
-        <tbody class="tournament-details">
+        <tbody class="hero-details">
         </tbody>
       </table>`);
       for (let h = 0; h < results.playTime.length; h++) {
         let hero = results.playTime[h].heroName;
-        let time = results.playTime[h].timePlayed;
-        console.log('each hero is', hero, time)
-        $('.tournament-details').append(`
+        let time = moment.duration(results.playTime[h].timePlayed);
+        $('.hero-details').append(`
         <tr>
           <td scope="row">
             <img class="character-icon" src="/images/heroicons/${hero}.png">${nameTransform(hero)}
           </td>
           <td scope="row">
-            ${time}
+            ${time.asMinutes()}
           </td>
         </tr>
         `)
