@@ -30,7 +30,16 @@
     <main class="container">
       <div class="tournamentheader">
         <!-- Tournament Name gets appended here from App.js -->
+        <h1><%= tournamentName %></h1>
       </div>
+
+      <div class="tournamentinfo">
+        <h6>Tournament Description:</h6> <%= tournamentDescr %><br><br>
+        <h6>Tournament Date:</h6> <%= tournamentDate %>
+      </div>
+
+  
+
       <div class="share-button">
         <button id="twitch-button" class="start-tournament">Twitch Stream</button>
         <button id="highlights-button" class="start-tournament">Highlights</button>
@@ -130,8 +139,11 @@
                             <div class="form-row">
                               <label class="form-label" for="eamilBody">Message:</label>
                               <textarea rows="4" cols="50" name="emailBody" form="email-form"></textarea>
-                              <input type="submit">
                             </div>
+                              
+                              <div class="send-email">
+                                  <input type="submit" class="send-email">
+                                </div>                            
                           </form>
                         </div>
                       </div>
