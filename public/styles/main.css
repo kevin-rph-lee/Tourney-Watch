@@ -184,45 +184,7 @@ div.enroll-now button:active {
 
 }
 
-/* Tournament Listing for Individual Users */
-
-.tourney-list{
-  margin: 0 auto;
-}
-
-.sub-header{
-  text-align: left;
-  padding-bottom: 10px
-}
-
-.nav-tabs li{
-  margin: 5px;
-  font-size: 20px;
-}
-
-.nav-tabs a{
-  color: #DDDDDD;
-  padding: 5px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-a.active {
-  background-color: #DDDDDD;
-  color: black;
-}
-
-.fa-arrow-circle-right{
-  color: #F7931D;
-  font-size: 25px;
-  padding-left: 2px;
-}
-
-thead.list{
-  font-size:20px
-}
-
-/* tournament_view buttons */
+/* Tournament Staging Buttons */
 
 .staging-buttons{
   text-align: center;
@@ -307,81 +269,6 @@ div.tournament-view-button {
   text-align: center;
 }
 
-/* swap players */
-
-div.container.player > span.selected {
-  background-color:#F7931D;
-  border-radius: 2px
-}
-
-div.container.player > span {
-  padding-left:  2px;
-  padding-right:  2px;
-}
-
-.swap-table{
-  margin: 0 auto;
-}
-/* Admin Options */
-
-.admin-options{
-  text-align: center;
-  margin-top: 20px;
-}
-
-div.admin-options > button{
-  color: #fff;
-  background-color: #F7931D;
-  border: 1px solid #dee4e7;
-  outline: 2px;
-  border-radius: .25em;
-  font-family: 'Oswald', sans-serif;
-  margin: 0 5px;
-}
-
-div.admin-options > button > i{
-  font-size: 45px;
-  padding: 2px;
-}
-
-div.admin-options > button:hover{
-  background-color: #191E21;
-  color: #F7931D;
-}
-
-/* Avatar image on Tournaments_view */
-img.avatar {
-  height: 30px;
-  width: 30px;
-  margin-right: 6px;
-  border-radius: 3px;
-}
-
-/* Class Icons */
-
-div.container.player > span{
-  top: 3px;
-  font-size: 18px;
-}
-
-img.player-class{
-  border: none;
-  height: 25px;
-  width: 25px;
-  margin-right: 2px;
-}
-
-
-/* Email Alert Players */
-
-form#email-form{
-  margin: 0 auto;
-}
-
-#highlight-form > *{
-  margin: 5px;
-}
-
 /* 404 Page */
 div.image-404{
   text-align:center;
@@ -419,6 +306,3 @@ div.alert.alert-warning{
 .section-header{
   margin-top: 30px;
 }
-
-
-
