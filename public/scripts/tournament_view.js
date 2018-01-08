@@ -1,15 +1,13 @@
 $(document).ready(function () {
 
-  // EVERYBODY
+  /**
+   * Renders the team cards showing the users along with their role icon
+   * @param  {[obj]} teamRoster current roster of teams for the tournament
+   */
   function renderTeamCards(teamRoster) {
-    const teamNames = Object.keys(teamRoster)
-    // console.log('hey: ', teamRoster);
-    // $(".tournamentheader").append(`
-    // <h1><%-tournamentName%></h1>
-    // `)
-    
+    const teamNames = Object.keys(teamRoster);
+    console.log(teamRoster);
     Object.keys(teamNames).forEach((t) => {
-      // console.log('hi ',teamNames);
       $(".team-cards").append(`
       <div class="card mb-3" style="min-width: 17rem">
         <div class="card-header">${teamNames[t]}</div>
@@ -19,9 +17,10 @@ $(document).ready(function () {
       `)
       //space after battlenet_id is required or function will break, do not remove.
       teamRoster[teamNames[t]].forEach((user) => {
+        const primaryRole = JSON.parse(user.role_summary)[0].role;
         $(`[data-team-id="${teamNames[t]}"`).append(`
         <div class='container player'>
-          <img class="player-class" src="/images/icon-${user.first_role}.png" title="${user.first_role}">
+          <img class="player-class" src="/images/icon-${primaryRole}.png" title="${primaryRole}">
           <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="up" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
         </div>
         `)
@@ -74,7 +73,7 @@ $(document).ready(function () {
 
     window.setTimeout(function() {
       $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          $(this).remove(); 
+          $(this).remove();
       });
     }, 3000);
   })
@@ -180,7 +179,7 @@ $(document).ready(function () {
       `)
       window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-            $(this).remove(); 
+            $(this).remove();
         });
     }, 3000);
       return;
@@ -267,7 +266,7 @@ $(document).ready(function () {
         $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">${teamSummary[teamIDs[t]][0].team_name} </a>`)
         teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name
       }
-        
+
       for (let t = 0 ; t < teamIDs.length; t++) {
         $('.role-summary-container').append(`
         <a name="Team${teamIDs[t]}"><h3 class="summary-modal-text">${teamNames[teamIDs[t]]}</h3>
