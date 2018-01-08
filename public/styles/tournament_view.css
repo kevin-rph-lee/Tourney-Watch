@@ -54,6 +54,7 @@
     font-size: 1em;
     width: 135px;
     height: 45px;
+    padding: 10px;
 }
 
 .modal-content form button:hover{
@@ -64,10 +65,31 @@ background-color: #191E21;
 
 div.add-highlight{
     text-align: center;
-    padding-right:165px;
+    margin-left: -160px !important;
+        margin-top: 10px !important;
 }
 
+div.send-email{
+    text-align: center;
+    margin-top: 20px;
+    margin-right: 428px;
+    
+}
+input.send-email{
+    color: #fff;
+    background-color: #F7931D;
+    border: 1px solid #dee4e7;
+    outline: 2px;
+    border-radius: .25em;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1em;
+    width: 135px !important;
+    height: 45px !important;
+    padding: 10px;
+    margin-top: 5px !important;
+    margin-left: 0px !important;
 
+}
 
 /* Team Summary */
 
@@ -81,37 +103,37 @@ div.add-highlight{
   }
 
 div.link-to-teams{
-text-align: center;
-margin-bottom: 10px;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 div.link-to-teams > a{
-font-size: 15px;
-color:white;
-margin-left: 5px;
+    font-size: 15px;
+    color:white;
+    margin-left: 10px;
+}
+
+div.link-to-teams > a:hover{
+    font-size: 15px;
+    color:#F7931D;
 }
 
 div.role-summary-container{
-margin: 0 auto;
-overflow: auto;
-height: 80%;
-background-color: #191E21;
-padding: 10px;
-border: 1px #dee4e7 solid;
+    margin: 0 auto;
+    overflow: auto;
+    height: 75%;
+    background-color: #191E21;
+    padding: 10px;
+    border: 1px #dee4e7 solid;
 }
 
 #team-summary {
-table-layout: fixed;
+    table-layout: fixed;
 }
 
 .center{
-text-align: center
+    text-align: center
 }
-
-.link-to-team{
-
-}
-
 
 /* The Close Button */
 .close {
@@ -215,8 +237,33 @@ hr {
 
 } 
 
+h1{
+    font-style: italic;
+    text-decoration: underline;
+
+
+
+
+}
 h2 {
 
 font-style: italic;
 text-decoration: underline;
+}
+
+.tournamentinfo{
+    padding: 15px;
+    border: 3px solid #F7931D;
+    background-color:#666;
+    text-align: left;
+    width: 900px;
+    height:auto;
+    margin: 0 auto 30px;
+
+
+}
+
+h6{
+color:#F7931D;
+font-size: 19px;
 }

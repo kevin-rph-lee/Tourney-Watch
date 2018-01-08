@@ -3,12 +3,13 @@ $(document).ready(function () {
   // EVERYBODY
   function renderTeamCards(teamRoster) {
     const teamNames = Object.keys(teamRoster)
-    console.log('hey: ', teamRoster);
-    $(".tournamentheader").append(`
-    <h1>${teamRoster[teamNames[1]]["0"]["name"]}</h1>
-    `)
+    // console.log('hey: ', teamRoster);
+    // $(".tournamentheader").append(`
+    // <h1><%-tournamentName%></h1>
+    // `)
+    
     Object.keys(teamNames).forEach((t) => {
-      console.log('hi ',teamNames);
+      // console.log('hi ',teamNames);
       $(".team-cards").append(`
       <div class="card mb-3" style="min-width: 17rem">
         <div class="card-header">${teamNames[t]}</div>
@@ -21,7 +22,7 @@ $(document).ready(function () {
         $(`[data-team-id="${teamNames[t]}"`).append(`
         <div class='container player'>
           <img class="player-class" src="/images/icon-${user.first_role}.png" title="${user.first_role}">
-          <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="right" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
+          <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="up" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
         </div>
         `)
       })
@@ -67,7 +68,21 @@ $(document).ready(function () {
     $temp.val($(this).data("link")).select();
     document.execCommand("copy");
     $temp.remove();
-    alert(`${link} has been copied!`)
+    $('.copy-alert').append(`
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>DONE!</strong> ${link} was copied!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <br>
+    `)
+
+    window.setTimeout(function() {
+      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove(); 
+      });
+    }, 4000);
   });
 
   // twitch  div sliding functionality
@@ -147,7 +162,19 @@ $(document).ready(function () {
   btnSwap.onclick = function() {
 
     if($('.selected').length < 2){
-      alert('Please select two players to be swapped');
+      $('.swap-alert').append(`
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>OOPS!</strong> Please select two players in order to swap!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      `)
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 3000);
       return;
     }
     modalSwap.style.display = "block";
@@ -226,21 +253,16 @@ $(document).ready(function () {
       data: {tournamentID: tournamentID},
       method: 'GET'
     }).done((teamSummary) => {
-      console.log('Summary ',teamSummary);
       const teamIDs = Object.keys(teamSummary);
-      console.log('teamIds, ',teamIDs);
       const teamNames = {};
       for (let t = 0 ; t < teamIDs.length; t++) {
-        $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">Team ${teamIDs[t]} </a>`)
-
-        teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name;
+        $('.link-to-teams').append(`<a href="#Team${teamIDs[t]}">${teamSummary[teamIDs[t]][0].team_name} </a>`)
+        teamNames[teamIDs[t]] = teamSummary[teamIDs[t]][0].team_name
       }
-      console.log('Team name ', teamNames)
-
+        
       for (let t = 0 ; t < teamIDs.length; t++) {
-
         $('.role-summary-container').append(`
-        <a name="Team${teamIDs[t]}"><h3>Team ${teamNames[teamIDs[t]]}</h3>
+        <a name="Team${teamIDs[t]}"><h3>${teamNames[teamIDs[t]]}</h3>
         <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
           <thead>
             <tr>
@@ -432,7 +454,7 @@ $(document).ready(function () {
         for(let i = 0; i < playerRoster[team].length; i ++){
           totalTeamLevel += playerRoster[team][i].level;
         }
-        averageLevels.push(totalTeamLevel/6);
+        averageLevels.push((totalTeamLevel/6).toFixed(2));
         teams.push(team);
       }
       console.log('teams', teams);

@@ -3,7 +3,6 @@
 
 <head>
     <script>
-        window.errorMsg = `<%= error %>`;
     </script>
 </head>
 <% include partials/navbar %>
@@ -24,6 +23,7 @@
 
             <h2> Create A New Tournament</h2>
             <div class="tournament-alert"></div>
+            <div class="register-alert"></div>
             <form id="new-tournament-form" action="/tournaments/new" method="POST" style="margin:150px;">
                 <div class="form-row">
                     <div class="form-label">
@@ -49,7 +49,7 @@
                         <label> Tournament Description</label>
                     </div>
                     <div class="form-box">
-                        <input id="entry-description" type="text" name="description" placeholder="Tournament Description" style="width: 300px">
+                        <input id="entry-description" type="text" name="description" placeholder="Tournament Description" style="width: 300px" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -69,20 +69,9 @@
                         <input id="entry-channel" type="text" name="channel_name" placeholder="Example: https://www.twitch.tv/yournamehere" style="width: 300px">
                     </div>
                 </div>
-                <br>
-                <div class="form-row">
-                    <div class="form-label">
-                        <label></label>
-                    </div>
-                    <!-- This won't redirect after button is clicked
-                    <div class="form-box">
-                        <button class="submit butt0n" type="submit" value="Submit">Submit</button>
-                    </div>-->
-
-                    <form method="POST" action="/tournaments/new">
-                        <input class="make-new" type="submit" value="Submit">
-                </div>
                 </form>
+
+                <button class="submit">Submit</button>
 
         </main>
 

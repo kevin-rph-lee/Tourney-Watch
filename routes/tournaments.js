@@ -50,11 +50,11 @@ module.exports = (knex, _, env, mailGun, owjs) => {
   }
 
   function generateName(){
-    var name1 = ["afraid","ancient","angry","average","bad","big","bitter","black","blue","brave","breezy","bright","brown","calm","chatty","chilly","clever","cold","cowardly","cuddly","curly","curvy","dangerous","dry","dull","empty","evil","fast","fat","fluffy","foolish","fresh","friendly","funny","fuzzy","gentle","giant","good","great","green","grumpy","happy","hard","heavy","helpless","honest","horrible","hot","hungry","itchy","jolly","kind","lazy","light","little","loud","lovely","lucky","massive","mean","mighty","modern","moody","nasty","neat","nervous","new","nice","odd","old","orange","ordinary","perfect","pink","plastic","polite","popular","pretty","proud","purple","quick","quiet","rare","red","rotten","rude","selfish","serious","shaggy","sharp","short","shy","silent","silly","slimy","slippery","smart","smooth","soft","sour","spicy","splendid","spotty","stale","strange","strong","stupid","sweet","swift","tall","tame","tasty","tender","terrible","thin","tidy","tiny","tough","tricky","ugly","unlucky","warm","weak","wet","white","wicked","wise","witty","wonderful","yellow","young"]
+    var name1 = ["afraid","ancient","angry","average","bad","big","bitter","blue","bold","brave","breezy","bright","brown","calm","chatty","chilly","clever","cold","cowardly","cuddly","curly","curvy","dangerous","dry","dull","empty","evil","fast","fat","fluffy","foolish","fresh","friendly","funny","fuzzy","gentle","giant","good","great","green","grumpy","happy","hard","heavy","helpless","honest","horrible","hot","hungry","itchy","jolly","kind","lazy","light","little","loud","lovely","lucky","massive","mean","mighty","modern","moody","nasty","neat","nervous","new","nice","odd","old","orange","ordinary","perfect","pink","plastic","polite","popular","pretty","proud","purple","quick","quiet","rare","red","rotten","rude","selfish","serious","shaggy","sharp","short","shy","silent","silly","slimy","slippery","smart","smooth","soft","sour","spicy","splendid","spotty","stale","strange","strong","stupid","sweet","swift","tall","tame","tasty","tender","terrible","thin","tidy","tiny","toxic","tricky","ugly","unlucky","warm","weak","wet","white","wicked","wise","witty","wonderful","yellow","young"]
 
-    var name2 = ["doomfist","genji","mccree","pharah","reaper","soldier: 76","sombra","tracer","bastion","hanzo","junkrat","mei","torbjörn","widowmaker","d.va","orisa","reinhardt","roadhog","winston","zarya","ana","lúcio","mercy","moira","symmetra","zenyatta","mondatta","pachimari","volskaya","snowball","ganymede","athena","oasis","nepal","hanamura","lijiang","numbani","ilios","gibraltar","junkertown","kings row","anubis","eichenwalde","dorado","hollywood","castillo","66","necropolis","antarctica","talon","blackwatch","omnics","helix","shimada","rikimaru","vishkar","shambali","hyde","lucheng","kofi aromo","lumériCo","goldshire","axiom","blizzard","sigma","meteor","adawe","izumi","calaveras","orca","slipstream","kelvin","bludger","hypertrain","sandcrawler","nulltrooper","slicer","eradicator","detonator","training bot","lacroix"]
+    var name2 = ["doomfist","genji","mccree","pharah","reaper","soldier 76","sombra","tracer","bastion","hanzo","junkrat","mei","torbjorn","widowmaker","dva","orisa","reinhardt","roadhog","winston","zarya","ana","lucio","mercy","moira","symmetra","zenyatta","mondatta","pachimari","volskaya","snowball","ganymede","athena","oasis","nepal","hanamura","lijiang","numbani","ilios","gibraltar","junkertown","kings Row","anubis","eichenwalde","dorado","hollywood","castillo","66","necropolis","antarctica","talon","blackwatch","omnics","helix","shimada","rikimaru","vishkar","shambali","hyde","lucheng","kofi aromo","lumeriCo","goldshire","axiom","blizzard","sigma","meteor","adawe","izumi","calaveras","orca","slipstream","kelvin","bludger","hypertrain","sandcrawler","nulltrooper","slicer","eradicator","detonator","training bot","lacroix"]
 
-    var name = capFirst(name1[getRandomInt(0, name1.length + 1)]) + ' ' + capFirst(name2[getRandomInt(0, name2.length + 1)]);
+    var name = capFirst(name1[getRandomInt(0, name1.length + 1)]) + ' ' + capFirst(name2[getRandomInt(0, name2.length + 1)]) + 's';
     return name;
 
   }
@@ -202,7 +202,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
    * @return {boolean}        returns true if invalid characters found
    */
   function checkInvalidCharacters(string){
-    return /^[a-zA-Z0-9-#]*$/.test(string);
+    return /^[a-zA-Z0-9-#-\s]*$/.test(string);
   }
 
   // Goes to new tournaments page
@@ -221,19 +221,23 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     const teamCount = req.body.no_of_teams;
     const description = req.body.description;
     const twitchChannel = req.body.channel_name;
+    const date = req.body.date;
     console.log(req.body);
 
    // STRETCH: Show 'That name has been taken' error page
-    if(!name || !description || !checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
-      console.log(`something is wrong`)
-      console.log(name)
-      console.log(description)
+    if(!checkInvalidCharacters(twitchChannel) || !checkInvalidCharacters(description) || !checkInvalidCharacters(name)){
       console.log(checkInvalidCharacters(twitchChannel))
       console.log(checkInvalidCharacters(description))
       console.log(checkInvalidCharacters(name))
-      res.render('tournament_new',{email: req.session.email, userID: req.session.userID, error: "The forms must contain only alphanumeric characters..."});
-      return;
+      return res.status(400).send('Invalid characters');
     }
+    if(!date){
+      return res.status(400).send('No date');
+    }
+    if(!name || !description){
+      return res.status(400).send('Name and description must not be empty')
+    }
+
     knex
       .select("name")
       .from("tournaments")
@@ -243,7 +247,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
         // and creates new lines in teams (based on # of teams needed)
         if(results.length === 0) {
           knex
-            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false, twitch_channel: twitchChannel})
+            .insert({name: name, no_of_teams: teamCount, description: description, creator_user_id: req.session.userID, is_started: false, twitch_channel: twitchChannel, date: date})
             .into('tournaments')
             .returning('id')
             .then((tournamentID)=> {
@@ -253,11 +257,11 @@ module.exports = (knex, _, env, mailGun, owjs) => {
                   .insert({"tournament_id": tournamentID[0], "team_name": teamName})
                   .then(() => {});
               }
-              res.redirect(`/tournaments/${tournamentID[0]}`)
+              return res.send(tournamentID);
             });
         } else {
-          // STRETCH: Show 'Tournament name taken' error page
-          res.sendStatus(400);
+          console.log("erroring here")
+          return res.status(400).send('Team already exists');;
         }
       });
   });
@@ -363,7 +367,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
           .update({"brackets": req.body.bracketData})
           .then(() => {
             console.log("Owner has saved")
-            
+
             return res.sendStatus(200);
           });
         } else {
@@ -377,7 +381,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
     const tournamentID = parseInt(req.params.id);
 
     knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
+      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel", "description", "date")
       .from("tournaments")
       .where({id: tournamentID})
       .then(async (results) => {
@@ -397,6 +401,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               playerCount: enrolledPlayers.length,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
+              tournamentDate: results[0].date,
               tournamentID: tournamentID,
               email: req.session.email,
               userID: req.session.userID,
@@ -412,6 +417,7 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               teamCount: results[0].no_of_teams,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
+              tournamentDate: results[0].date,
               tournamentID: tournamentID,
               email: req.session.email,
               userID: req.session.userID,
@@ -424,11 +430,15 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       })
   });
 
+
   router.get("/:id", async (req, res) => {
     const tournamentID = parseInt(req.params.id);
     const email = req.session.email
 
-    if (tournamentID) {
+    if (!Number.isInteger(tournamentID)) {
+      res.render("404", {email: email, userID: req.session.userID,})
+      return
+    } else {
       knex
       .select("id")
       .from("tournaments")
@@ -436,66 +446,61 @@ module.exports = (knex, _, env, mailGun, owjs) => {
       .then((results) =>{
         if (results.length === 0){
           res.render("404", {email: email, userID: req.session.userID,})
+          return;
+        } else {
+          knex
+            .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel", "description", "date")
+            .from("tournaments")
+            .where({id: tournamentID})
+            .then( async (results) => {
+              const enrolledPlayers = await playersEnrolled(tournamentID);
+              const teamCount = results[0].no_of_teams;
+              const started = results[0].is_started;
+              const creatorUserID = results[0].creator_user_id;
+              const isReady = (enrolledPlayers.length === teamCount * 6);
+              const isOwner = (req.session.userID === creatorUserID);
+              const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
+              const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
+              const twitchName = results[0].twitch_channel;
+              console.log('This should be the results: ', results)
+              if(isOwner) {
+                res.redirect(`/tournaments/${tournamentID}/admin`);
+              }
+
+              if (isReady && started) {
+                console.log('if you see me i am ready and have started')
+                res.render("tournament_view", {
+                  // teamRoster: getTeamRoster(tournamentID),
+                  playerCount: enrolledPlayers.length,
+                  email: req.session.email,
+                  userID: req.session.userID,
+                  started: started,
+                  tournamentName: results[0].name,
+                  tournamentDescr: results[0].description,
+                  tournamentDate: results[0].date,
+                  tournamentID: tournamentID,
+                  isOwner: isOwner,
+                  twitchChannel: twitchChannel,
+                  twitchChat: twitchChat,
+                  twitchName: twitchName
+                })
+              } else {
+                console.log("if you see me i am not started and am not ready, or both")
+                res.render("tournament_notready", {
+                  tournamentName: results[0].name,
+                  playerCount: enrolledPlayers.length,
+                  tournamentDate: results[0].date,
+                  maxPlayers: teamCount * 6,
+                  teamCount: results[0].no_of_teams,
+                  email: req.session.email,
+                  userID: req.session.userID,
+                  tournamentID: tournamentID
+                })
+              }
+            });
         }
       })
     }
-
-    // const validID = await checkID(tournamentID);
-
-    // console.log(validID)
-
-    // if (!validID) {
-    //   console.log('invalid ID')
-    //   res.render("404", {email: email, userID: req.session.userID,})
-    // }
-
-    return knex
-      .select("id", "is_started", "creator_user_id", "no_of_teams", "name", "twitch_channel")
-      .from("tournaments")
-      .where({id: tournamentID})
-      .then( async (results) => {
-        const enrolledPlayers = await playersEnrolled(tournamentID);
-        const teamCount = results[0].no_of_teams;
-        const started = results[0].is_started;
-        const creatorUserID = results[0].creator_user_id;
-        const isReady = (enrolledPlayers.length === teamCount * 6);
-        const isOwner = (req.session.userID === creatorUserID);
-        const twitchChannel = `https://player.twitch.tv/?channel=${results[0].twitch_channel}`;
-        const twitchChat = `http://www.twitch.tv/${results[0].twitch_channel}/chat?darkpopout`;
-        const twitchName = results[0].twitch_channel;
-        console.log('This should be the results: ', results)
-        if(isOwner) {
-          res.redirect(`/tournaments/${tournamentID}/admin`);
-        }
-
-        if (isReady && started) {
-          console.log('if you see me i am ready and have started')
-          res.render("tournament_view", {
-            // teamRoster: getTeamRoster(tournamentID),
-            playerCount: enrolledPlayers.length,
-            email: req.session.email,
-            userID: req.session.userID,
-            started: started,
-            tournamentName: results[0].name,
-            tournamentID: tournamentID,
-            isOwner: isOwner,
-            twitchChannel: twitchChannel,
-            twitchChat: twitchChat,
-            twitchName: twitchName
-          })
-        } else {
-          console.log("if you see me i am not started and am not ready, or both")
-          res.render("tournament_notready", {
-            tournamentName: results[0].name,
-            playerCount: enrolledPlayers.length,
-            maxPlayers: teamCount * 6,
-            teamCount: results[0].no_of_teams,
-            email: req.session.email,
-            userID: req.session.userID,
-            tournamentID: tournamentID
-          })
-        }
-      });
   });
 
   router.post("/:id/start", (req, res) => {
