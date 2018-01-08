@@ -54,12 +54,6 @@ $(document).ready(function () {
 
   loadCards();
 
-  // Share button functionality
-  $("[data-toggle='toggle']").click(function() {
-    const selector = $(this).data("target");
-    $(selector).toggleClass('in');
-  });
-
   // Copy to clipboard function under Share
   $(".fa-clipboard").click(function() {
     const link = $(this).data("link")
@@ -82,7 +76,21 @@ $(document).ready(function () {
       $(".alert").fadeTo(500, 0).slideUp(500, function(){
           $(this).remove(); 
       });
-    }, 4000);
+    }, 3000);
+  })
+
+  // share btn  div sliding functionality
+  let showShare = false;
+  $("#share-button").click(function() {
+    if (!showShare) {
+      console.log('show twitch');
+      showShare = true;
+      $("#share").css({"display": "block"});
+    } else {
+      console.log('hide char');
+      showShare =false
+      $("#share").css({"display": "none"});
+    }
   });
 
   // twitch  div sliding functionality
@@ -262,7 +270,7 @@ $(document).ready(function () {
         
       for (let t = 0 ; t < teamIDs.length; t++) {
         $('.role-summary-container').append(`
-        <a name="Team${teamIDs[t]}"><h3>${teamNames[teamIDs[t]]}</h3>
+        <a name="Team${teamIDs[t]}"><h3 class="summary-modal-text">${teamNames[teamIDs[t]]}</h3>
         <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
           <thead>
             <tr>
