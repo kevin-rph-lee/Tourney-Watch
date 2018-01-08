@@ -270,7 +270,7 @@ $(document).ready(function () {
         
       for (let t = 0 ; t < teamIDs.length; t++) {
         $('.role-summary-container').append(`
-        <a name="Team${teamIDs[t]}"><h3>${teamNames[teamIDs[t]]}</h3>
+        <a name="Team${teamIDs[t]}"><h3 class="summary-modal-text">${teamNames[teamIDs[t]]}</h3>
         <table id="team-summary" class="table table-striped table-dark" data-team-sum-id="${teamIDs[t]}">
           <thead>
             <tr>

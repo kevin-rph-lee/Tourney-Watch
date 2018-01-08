@@ -131,6 +131,10 @@ div.role-summary-container{
     table-layout: fixed;
 }
 
+.summary-modal-text{
+    padding: 5px
+}
+
 .center{
     text-align: center
 }
