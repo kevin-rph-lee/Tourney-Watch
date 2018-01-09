@@ -1,11 +1,35 @@
 $(document).ready(function () {
 
+  $("#datepicker").change((e) => {
+    console.log('date checking')
+    const dateString = $('#datepicker').val();
+    const selectedDate = moment(dateString, "MM/DD/YYYY");
+    const nowDate = new Date();
+    console.log(selectedDate < nowDate);
+    if (selectedDate < nowDate) {
+      $('.invalid-date-alert').append(`
+        </br>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>OOPS!</strong> The date you chose was in the past. Try again!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <br>
+        `)
+      window.setTimeout(function() {
+        $(".invalid-date-alert").fadeTo(500, 0).slideUp(500, function(){
+          $('#datepicker').val('');
+        });
+      }, 4000);
+    }
+  });
+
   $('.submit').click(function(e){
     const name = $('#entry-name').val();
     const description = $('#entry-description').val();
     const date = $('#datepicker').val();
     const noOfTeams = $('#entry-team').val();
-
 
     $.ajax({
       url: '/tournaments/new',
