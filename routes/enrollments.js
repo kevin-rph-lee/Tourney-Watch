@@ -127,14 +127,6 @@ module.exports = (knex, owjs, _, moment) => {
     }, 0);
   }
 
-  // function healsPerSecond(data) {
-  //   return data.quickplay.global.healing_done / totalTimeHealing(data) * 100;
-  // }
-
-  // function dmgPerSecond(data) {
-  //   return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing(data)) * 100;
-  // }
-
   function elimsPerMins(data) {
     const time = moment.duration(data.quickplay.global.time_played)
     return data.quickplay.global.eliminations / time.asMinutes();
