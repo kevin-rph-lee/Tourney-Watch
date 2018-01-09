@@ -48,9 +48,13 @@ $(document).ready(function () {
         $('.hero-details').append(`
         <tr>
           <td scope="row">
+<<<<<<< HEAD
             <div class="profile-hero">
               <img class="character-icon" src="/images/heroicons/${hero}.png">  ${nameTransform(hero)}
             </div>
+=======
+            <img class="character-icon" src="/images/heroicons/${hero}.png">${nameTransform(hero)}
+>>>>>>> 0767fb04afa3a1b4b8a84fa9f4aad04dd44a462d
           </td>
           <td scope="row">
             ${time.asMinutes()}
