@@ -36,8 +36,11 @@
         <% if(isReady) { %>
         <h3> This tournament is full. Check it out <a href="/tournaments/<%= tournamentID %>">here</a> </h3>
         <% } else { %>
-          <form method="POST" action="/enrollments/<%=tournamentID%>/enroll">
-          <input type="submit" value="Enroll in this Tournament">
+          <div class="enroll-button">
+            <form method="POST" action="/enrollments/<%=tournamentID%>/enroll">
+            <input type="submit" value="Enroll in this Tournament">
+            </form>
+          </div>
         <% } %>
       </div>
     </main>
