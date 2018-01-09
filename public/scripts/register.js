@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  console.log('i should be the userID', userID);
   // console.log('I am ready');
   $('.submit').click(function(e){
     const email = $('#entry-email').val();
