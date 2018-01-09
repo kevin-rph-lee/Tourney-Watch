@@ -18,6 +18,7 @@ $(document).ready(function () {
             <td><img src="${playerNames[i].avatar}" class="avatar"> ${playerNames[i].battlenet_id}</td>
             <td>${playerRoster[i][p].level}</td>
             <td>${playerRoster[i][p].games_won}</td>
+            <td>${playerRoster[i][p].games_won}</td>
           </tr>
         </tr>`)
         }

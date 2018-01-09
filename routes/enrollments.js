@@ -132,7 +132,7 @@ module.exports = (knex, owjs, _) => {
   }
 
   function dmgPerSecond(data) {
-    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
+    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing) * 100;
   }
 
   function getPlayersInfo(battlenetID, tournamentID, userID) {
@@ -154,7 +154,9 @@ module.exports = (knex, owjs, _) => {
             'medal_gold': data.quickplay.global.medals_gold,
             'medal_silver': data.quickplay.global.medals_silver,
             'medal_bronze': data.quickplay.global.medals_bronze,
-            'games_won': data.quickplay.global.games_won
+            'games_won': data.quickplay.global.games_won,
+            'DPS': dmgPerSecond(data),
+            'HPS': healsPerSecond(data),
           })
           .into("enrollments")
           .then(() => {
@@ -246,7 +248,7 @@ module.exports = (knex, owjs, _) => {
   // given that their battlenet ID exists
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role')
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role', 'DPS', 'HPS')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -320,15 +322,8 @@ module.exports = (knex, owjs, _) => {
       });
   });
 
-
-
   router.get("/enrollments.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
-    // if(req.session.email !== process.env.ADMIN_EMAIL) {
-    //   // STRETCH: "Forbidden" error page
-    //   res.sendStatus(403);
-    // }
-    // Gets player stats for each team in a specific tournament
     knex
       .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
       .from("enrollments")
@@ -341,8 +336,6 @@ module.exports = (knex, owjs, _) => {
         res.send(teamRoster);
       });
   });
-
-
 
   return router;
 };
