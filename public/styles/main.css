@@ -307,9 +307,34 @@ div.tournament-view-button {
 }
 
 /* Avatar image on Tournaments Staging */
-img.avatar {
+img.avatar{
   height: 30px;
   width: 30px;
   margin-right: 6px;
   border-radius: 3px;
+}
+
+/* New Tournament Form */
+form#new-tournament-form{
+  margin-top: 150px;
+  margin-left: 150px;
+  margin-right: 150px;
+}
+
+div.submit-new-tournament{
+  text-align: center;
+}
+
+/* Tournament Enroll Button */
+
+div.enroll-button{
+  text-align: center;
+}
+
+div.enroll-button input{
+  text-align: center;
+  width:185px;
+  background-color: #F7931D;
+  color:white;
+  border-color: #C0C1C2;
 }
