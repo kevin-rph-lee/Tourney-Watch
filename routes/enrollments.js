@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, owjs, _) => {
+module.exports = (knex, owjs, _, moment) => {
   // overwatch api insists on all lowercase
   const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
   const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
@@ -127,18 +127,30 @@ module.exports = (knex, owjs, _) => {
     }, 0);
   }
 
-  function healsPerSecond(data) {
-    return data.quickplay.global.healing_done / totalTimeHealing * 100;
+  // function healsPerSecond(data) {
+  //   return data.quickplay.global.healing_done / totalTimeHealing(data) * 100;
+  // }
+
+  // function dmgPerSecond(data) {
+  //   return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing(data)) * 100;
+  // }
+
+  function elimsPerMins(data) {
+    const time = moment.duration(data.quickplay.global.time_played)
+    return data.quickplay.global.eliminations / time.asMinutes();
   }
 
-  function dmgPerSecond(data) {
-    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing) * 100;
+  function killsDeathRatio(data) {
+    if(!data.quickplay.global.eliminations) {
+      return 0 / data.quickplay.global.deaths;
+    } else {
+      return data.quickplay.global.eliminations / data.quickplay.global.deaths
+    }
   }
 
   function getPlayersInfo(battlenetID, tournamentID, userID) {
     return owjs.getAll('pc', 'us', convertBnetID(battlenetID))
       .then((data) => {
-        console.log('heey')
         const roleRanks = sortTimePlayed(data);
         knex
           .insert({
@@ -155,8 +167,8 @@ module.exports = (knex, owjs, _) => {
             'medal_silver': data.quickplay.global.medals_silver,
             'medal_bronze': data.quickplay.global.medals_bronze,
             'games_won': data.quickplay.global.games_won,
-            'DPS': dmgPerSecond(data),
-            'HPS': healsPerSecond(data),
+            'elims_per_min': elimsPerMins(data),
+            'k_d_ratio': killsDeathRatio(data),
           })
           .into("enrollments")
           .then(() => {
@@ -169,6 +181,8 @@ module.exports = (knex, owjs, _) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
     const email = req.session.email;
+
+    console.log('i am in the get route', req.session);
 
     if (tournamentID) {
       knex
@@ -325,7 +339,7 @@ module.exports = (knex, owjs, _) => {
   router.get("/enrollments.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar", "elims_per_min", "k_d_ratio")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
