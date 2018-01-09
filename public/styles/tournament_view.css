@@ -62,13 +62,13 @@ background-color: #191E21;
   cursor: pointer;
 }
 
-div.add-highlight{
-    text-align: center;
-    margin-left: -160px !important;
-        margin-top: 10px !important;
+.add-highlight{
+ text-align: center;
+  margin-left: -160px !important;
+  margin-top: 10px !important;
 }
 
-div.send-email{
+.send-email{
     text-align: center; 
 }
 
@@ -84,8 +84,7 @@ input.send-email{
     height: 45px !important;
     padding: 10px;
     margin-top: 5px !important;
-    margin-left: 0px !important;
-
+    margin-right: 450px !important;
 }
 
 /* Team Summary */
