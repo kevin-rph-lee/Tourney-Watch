@@ -49,6 +49,10 @@ p {
     border: solid 1px #F7931D;
   }
 
+  .bannerimg{
+    text-align:center
+  }
+
   div.container.index p{
     padding-top: 20px;
     padding-bottom: 20px;
