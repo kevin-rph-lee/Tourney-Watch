@@ -356,6 +356,10 @@ img.player-class{
     margin-right: 2px;
 }
 
+img.player-class:hover{
+  filter: sepia() saturate(100000) hue-rotate(320deg)
+}
+
 /* Email Alert Players */
 
 form#email-form{
