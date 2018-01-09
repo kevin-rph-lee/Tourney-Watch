@@ -162,7 +162,6 @@ div.profile-hero{
     text-align: left;
 }
 
-<<<<<<< HEAD
 .profile-hero-stats{
     margin: 0 auto;
     width: 97%;
@@ -174,7 +173,6 @@ div.profile-hero{
     height: 30px;
 }
 
-=======
 form#registration-form{
     margin-top: 150px;
     margin-left: 150px;
@@ -184,4 +182,3 @@ form#registration-form{
 div.save{
     text-align: center;
 }
->>>>>>> master
