@@ -117,3 +117,48 @@ a:hover{
     color:#F7931D;
     text-decoration: none;
 }
+
+/* Tournament Listing for Individual Users */
+
+.tourney-list{
+    margin: 0 auto;
+  }
+  
+  .sub-header{
+    text-align: left;
+    padding-bottom: 10px
+  }
+  
+  .nav-tabs li{
+    margin: 5px;
+    font-size: 20px;
+  }
+  
+  .nav-tabs a{
+    color: #DDDDDD;
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  
+  a.active {
+    background-color: #DDDDDD;
+    color: black;
+  }
+  
+  .fa-arrow-circle-right{
+    color: #F7931D;
+    font-size: 25px;
+    padding-left: 2px;
+  }
+  
+  thead.list{
+    font-size:20px
+  }
+
+
+/* Hero Data for Player Stats */
+div.profile-hero{
+    text-align: left;
+}
+

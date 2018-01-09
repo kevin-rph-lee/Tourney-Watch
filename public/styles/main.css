@@ -25,6 +25,7 @@ main {
   }
 
 p {
+  font-family: 'Roboto', sans-serif;
   text-align: center;
 }
 
@@ -53,6 +54,10 @@ p {
     padding-bottom: 20px;
   }
 
+  div.index-buttons{
+    text-align: center;
+  }
+
   a.btn.btn-default{
     background-color: #F7931D;
     color:white;
@@ -60,21 +65,22 @@ p {
   }
 
   a.btn.btn-default.index-page{
-    float: left;
-    margin-left: 25%;
+    width: 160px;
     background-color: #F7931D;
     color:white;
     border-color: #C0C1C2;
   }
 
+  div.index-buttons-line{
+    text-align: center;
+  }
 
-
-  div button.how-it-works{
-    float: right;
-    margin-right: 20%;
-    background-color: #F7931D;
-    color:white;
-    border-color: #C0C1C2;
+  div.index-button{
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
   }
 
 /* Nav Bar Buttons */
@@ -116,25 +122,6 @@ nav p{
 
 button.navbar-toggler{
   margin: 10px;
-}
-
-  /* Tournament Cards */
-
-div.card.mb-3{
-  background-color: #474D57;
-  margin: auto;
-}
-
-div.card.mb-3 div.battlenetid{
-  padding-bottom: 10px;
-}
-
-div.card.mb-3 div.card-header {
-  background-color: #F7931D;
-}
-
-div.row{
-  padding-top: 20px;
 }
 
 input.make-new{
@@ -197,67 +184,7 @@ div.enroll-now button:active {
 
 }
 
-/* Twitch Video Player & Chat Embeds */
-
-.container-fluid, .embeds {
-  height: 100% !important;
-}
-
-iframe{
-  padding: 0 !important;
-  height: 100% !important;
-  width: 100%;
-}
-
-iframe#video{
-  margin: 0 auto;
-}
-
-@media (max-width: 992px){
-  #chat{
-    display: none;
-  }
-}
-
-/* Tournament Listing for Individual Users */
-
-.tourney-list{
-  margin: 0 auto;
-}
-
-.sub-header{
-  text-align: left;
-  padding-bottom: 10px
-}
-
-.nav-tabs li{
-  margin: 5px;
-  font-size: 20px;
-}
-
-.nav-tabs a{
-  color: #DDDDDD;
-  padding: 5px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-a.active {
-  background-color: #DDDDDD;
-  color: black;
-}
-
-.fa-arrow-circle-right{
-  color: #F7931D;
-  font-size: 25px;
-  padding-left: 2px;
-}
-
-thead.list{
-  font-size:20px
-}
-
-/* tournament_view buttons */
+/* Tournament Staging Buttons */
 
 .staging-buttons{
   text-align: center;
@@ -304,133 +231,6 @@ button.start-tournament:hover {
   cursor: pointer;
 }
 
-/* share button on tournament_view */
-
-#share {
-  -webkit-transition: width 0.65s ease;
-  -moz-transition: width 0.65s ease;
-  -o-transition: width 0.65s ease;
-  transition: width 0.65s ease;
-  
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  vertical-align: middle;
-  line-height: 30px;
-  height: 45px;
-
-  width: 0px;
-  
-}
-
-#share.in {
-  width: 298px;
-}
-
-#share > * {
-  position: relative;
-  margin-left: 3px;
-}
-
-#share > i,  #share > a{
-  font-size: 30px;
-  color: #F7931D;
-  top: calc(50% - 17px);
-}
-
-#share > a {
-  text-decoration: none;
-}
-
-#share input{
-  width: 150px;
-  height: 35px;
-  text-align: center;
-}
-
-#share i:hover{
-  color: #dee4e7;
-}
-
-div.share-button {
-  text-align: center;
-}
-
-/* swap players */
-
-div.container.player > span.selected {
-  background-color:#F7931D;
-  border-radius: 2px
-}
-
-div.container.player > span {
-  padding-left:  2px;
-  padding-right:  2px;
-}
-
-.swap-table{
-  margin: 0 auto;
-}
-/* Admin Options */
-
-.admin-options{
-  text-align: center;
-  margin-top: 20px;
-}
-
-div.admin-options > button{
-  color: #fff;
-  background-color: #F7931D;
-  border: 1px solid #dee4e7;
-  outline: 2px;
-  border-radius: .25em;
-  font-family: 'Oswald', sans-serif;
-  margin: 0 5px;
-}
-
-div.admin-options > button > i{
-  font-size: 45px;
-  padding: 2px;
-}
-
-div.admin-options > button:hover{
-  background-color: #191E21;
-  color: #F7931D;
-}
-
-/* Avatar image on Tournaments_view */
-img.avatar {
-  height: 30px;
-  width: 30px;
-  margin-right: 6px;
-  border-radius: 3px;
-}
-
-/* Class Icons */
-
-div.container.player > span{
-  top: 3px;
-  font-size: 18px;
-}
-
-img.player-class{
-  border: none;
-  height: 25px;
-  width: 25px;
-  margin-right: 2px;
-}
-
-
-/* Email Alert Players */
-
-form#email-form{
-  margin: 0 auto;
-}
-
-#highlight-form > *{
-  margin: 5px;
-}
-
 /* 404 Page */
 div.image-404{
   text-align:center;
@@ -465,5 +265,51 @@ div.alert.alert-warning{
   color: #F7931D;
 }
 
+.section-header{
+  margin-top: 30px;
+}
 
+/* Share Button on Tournament Staging */
+#share {
+  display: none;
+  white-space: nowrap;
+  height: 45px;
+  text-align: center;
+}
 
+#share > * {
+  position: relative;
+  margin-left: 3px;
+}
+
+#share > i,  #share > a{
+  font-size: 30px;
+  color: #F7931D;
+  top: calc(50% - 17px);
+}
+
+#share > a {
+  text-decoration: none;
+}
+
+#share input{
+  width: 150px;
+  height: 35px;
+  text-align: center;
+}
+
+#share i:hover{
+  color: #dee4e7;
+}
+
+div.tournament-view-button {
+  text-align: center;
+}
+
+/* Avatar image on Tournaments Staging */
+img.avatar {
+  height: 30px;
+  width: 30px;
+  margin-right: 6px;
+  border-radius: 3px;
+}
