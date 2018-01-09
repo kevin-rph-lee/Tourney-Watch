@@ -28,7 +28,6 @@ $(document).ready(function () {
       <div class="profile-info">
           <h1>Level: ${results.level}</h1>
           <div class="info-area">
-            Bananas are the potatoes of fruit
           </div>
       </div>`);
       $('.stats-container').append(`
