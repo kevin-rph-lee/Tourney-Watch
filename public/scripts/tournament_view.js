@@ -15,7 +15,7 @@ $(document).ready(function () {
       teamRoster[teamNames[t]].forEach((user) => {
         $(`[data-team-id="${teamNames[t]}"`).append(`
         <div class='container player'>
-          <img class="player-class" src="/images/icon-${user.first_role}.png" title="${user.first_role}">
+          <a href="/users/${user.id}"><img class="player-class" src="/images/icon-${user.first_role}.png" title="${user.first_role}"></a>
           <span data-balloon=" Level: ${user.level} &#10; Games Won: ${user.games_won} &#10; Gold Medals: ${user.medal_gold} &#10; Silver Medals: ${user.medal_silver} &#10; Bronze Medals: ${user.medal_bronze}" data-balloon-pos="up" data-balloon-break data-team = ${user.team_id} class="player">${user.battlenet_id} </span>
         </div>
         `)
@@ -69,7 +69,7 @@ $(document).ready(function () {
 
     window.setTimeout(function() {
       $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          $(this).remove(); 
+          $(this).remove();
       });
     }, 4000);
   })
@@ -162,7 +162,7 @@ $(document).ready(function () {
         `)
         window.setTimeout(function() {
           $(".alert").fadeTo(500, 0).slideUp(500, function(){
-              $(this).remove(); 
+              $(this).remove();
           });
       }, 4000);
         return;
@@ -318,7 +318,7 @@ $(document).ready(function () {
           placement: 'right',
           html: true
         })
-      
+
       $( '.delete-highlight' ).click(function(e) {
         const highlightID = $(e.target).data().id
         $.ajax({
@@ -484,7 +484,7 @@ $(document).ready(function () {
       }
     });
 
-    // When the user clicks anywhere outside of the modal, 
+    // When the user clicks anywhere outside of the modal,
     // modal will close, and information inside will be cleared
     window.onclick = function(event) {
       console.log("is owner clicks");
