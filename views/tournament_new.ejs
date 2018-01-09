@@ -23,7 +23,7 @@
             <h2> Create A New Tournament</h2>
             <div class="tournament-alert"></div>
             <div class="register-alert"></div>
-            <form id="new-tournament-form" action="/tournaments/new" method="POST" style="margin:150px;">
+            <form id="new-tournament-form" action="/tournaments/new" method="POST">
                 <div class="form-row">
                     <div class="form-label">
                         <label> Number of Teams</label>
@@ -70,8 +70,9 @@
                     </div>
                 </div>
                 </form>
-
-                <button class="submit">Submit</button>
+                <div class="submit-new-tournament">
+                    <button class="submit">Submit</button>
+                </div>
 
         </main>
 

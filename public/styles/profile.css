@@ -162,3 +162,12 @@ div.profile-hero{
     text-align: left;
 }
 
+form#registration-form{
+    margin-top: 150px;
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+div.save{
+    text-align: center;
+}
