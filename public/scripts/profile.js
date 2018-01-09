@@ -1,23 +1,19 @@
 
 $(document).ready(function () {
-  // console.log('I am ready');
-  //
-
     /**
-     * Removes underscores & replaces with space, along with capitalizes the first letter of each name
-     * @param  {[name]} string Name of hero
-     * @return {[String]}        Hero name with capitalized first letter along with underscore replaced with space
+     * Removes underscores & replaces with space, 
+     * along with capitalizing first letter of each name
+     * @param  {string} Name of hero
+     * @return {string}
      */
-    function jsUcfirst(string) {
+    function nameTransform(string) {
       return string.charAt(0).toUpperCase() + string.slice(1).replace("_", " ");
     }
 
-    console.log('trying ajx')
     $.ajax({
       url: '/users/' + userID + '/profileinfo.json',
       method: 'GET'
     }).done((results) => {
-      console.log(results);
       $('.profile-card').empty();
       $('.stats-container').empty();
       $('.profile-card').append(`
@@ -34,52 +30,45 @@ $(document).ready(function () {
           <div class="info-area">
             Bananas are the potatoes of fruit
           </div>
-      </div>`)
-
-
-      let statsTable = `
-
+      </div>`);
+      $('.stats-container').append(`
       <table class="table table-striped table-dark">
-      <thead>
+        <thead>
           <tr>
             <th scope="col">Hero</th>
             <th scope="col">Time Played (mins)</th>
           </tr>
         </thead>
-      `;
-
-      for(let hero in results.playTime){
-        const timePlayed = moment.duration(results.playTime[hero]);
-        console.log('time: ', timePlayed);
-        statsTable += `
-
-        <tbody class="tournament-details">
-          <tr>
-            <td scope="row">
-                <img class="character-icon" src="/images/heroicons/${hero}.png">
-              ${jsUcfirst(hero)}
-            </td>
-            <td scope="row">${Math.floor(Number(timePlayed.asMinutes()))}</td>
-          </tr>
+        <tbody class="hero-details">
         </tbody>
-        `
-      }
-      statsTable += `</table>`
-
-
-      $('.stats-container').append(statsTable)
-
-
-
+      </table>`);
+      for (let h = 0; h < results.playTime.length; h++) {
+        let hero = results.playTime[h].heroName;
+        let time = moment.duration(results.playTime[h].timePlayed);
+        $('.hero-details').append(`
+        <tr>
+          <td scope="row">
+<<<<<<< HEAD
+            <div class="profile-hero">
+              <img class="character-icon" src="/images/heroicons/${hero}.png">  ${nameTransform(hero)}
+            </div>
+=======
+            <img class="character-icon" src="/images/heroicons/${hero}.png">${nameTransform(hero)}
+>>>>>>> 0767fb04afa3a1b4b8a84fa9f4aad04dd44a462d
+          </td>
+          <td scope="row">
+            ${time.asMinutes()}
+          </td>
+        </tr>
+        `)
+      };
     }).catch((err) => {
       //TO DO: make look nice with a flash message or something
       alert('error!');
       console.log(err.status);
     });
 
-
   $('.submit').click(function(e){
-
     const password = $('#entry-password').val();
     const passwordConfirm = $('#entry-password-confirm').val();
     const battlenet = $('#entry-battlenet').val()
@@ -98,17 +87,13 @@ $(document).ready(function () {
       return;
     }
 
-    console.log(password + battlenet);
-    console.log(userID);
     $.ajax({
       url: '/users/' + userID + '/edit/',
       data: {password: password, battlenet: battlenet },
       method: 'POST'
     }).done(() => {
-      //Redirects to the index
       window.location.reload();
     }).catch((err) => {
-      //TO DO: make look nice with a flash message or something
       $('.update-alert').append(`
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
       <strong>OOPS!</strong> ${err.responseText}
@@ -124,8 +109,5 @@ $(document).ready(function () {
       }, 4000);
       console.log(err);
     });
-    //empty the DOM and insert a loader
-
   });
-
 });
