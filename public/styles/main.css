@@ -231,44 +231,6 @@ button.start-tournament:hover {
   cursor: pointer;
 }
 
-/* share button on tournament_view */
-
-#share {
-  display: none;
-  white-space: nowrap;
-  height: 45px;
-  text-align: center;
-}
-
-#share > * {
-  position: relative;
-  margin-left: 3px;
-}
-
-#share > i,  #share > a{
-  font-size: 30px;
-  color: #F7931D;
-  top: calc(50% - 17px);
-}
-
-#share > a {
-  text-decoration: none;
-}
-
-#share input{
-  width: 150px;
-  height: 35px;
-  text-align: center;
-}
-
-#share i:hover{
-  color: #dee4e7;
-}
-
-div.tournament-view-button {
-  text-align: center;
-}
-
 /* 404 Page */
 div.image-404{
   text-align:center;
