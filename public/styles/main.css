@@ -342,3 +342,7 @@ div.enroll-button input{
   color:white;
   border-color: #C0C1C2;
 }
+
+div input#datepicker{
+  width:300px;
+}
