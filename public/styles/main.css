@@ -268,3 +268,48 @@ div.alert.alert-warning{
 .section-header{
   margin-top: 30px;
 }
+
+/* Share Button on Tournament Staging */
+#share {
+  display: none;
+  white-space: nowrap;
+  height: 45px;
+  text-align: center;
+}
+
+#share > * {
+  position: relative;
+  margin-left: 3px;
+}
+
+#share > i,  #share > a{
+  font-size: 30px;
+  color: #F7931D;
+  top: calc(50% - 17px);
+}
+
+#share > a {
+  text-decoration: none;
+}
+
+#share input{
+  width: 150px;
+  height: 35px;
+  text-align: center;
+}
+
+#share i:hover{
+  color: #dee4e7;
+}
+
+div.tournament-view-button {
+  text-align: center;
+}
+
+/* Avatar image on Tournaments Staging */
+img.avatar {
+  height: 30px;
+  width: 30px;
+  margin-right: 6px;
+  border-radius: 3px;
+}
