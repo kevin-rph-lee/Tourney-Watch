@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 
-module.exports = (knex, bcrypt, cookieSession, owjs) => {
+module.exports = (knex, bcrypt, cookieSession, owjs, _) => {
 
   /**
    * Checks a string for special characters. Returns false if one is found
@@ -13,7 +13,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
   function checkInvalidCharacters(string) {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
   }
-
 
   function validateEmail(mail) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
@@ -88,8 +87,8 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
       getPlayerInfo(results[0].battlenet_id)
       .then((results) => {
         knex('users')
-        .where({id:req.params.id})
-        .update({avatar:results.profile.avatar})
+        .where({ id:req.params.id })
+        .update({ avatar:results.profile.avatar })
         .then(()=>{
           // Checks if the user is under level 100. If the user is, removes the leading 0 in their level
           let level = '';
@@ -100,10 +99,15 @@ module.exports = (knex, bcrypt, cookieSession, owjs) => {
             console.log('2');
             level = results.profile.tier.toString() + results.profile.level.toString();
           }
-          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:{}};
+          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:[]};
           for(let hero in results.quickplay.heroes){
-            profileInfo.playTime[hero] = results.quickplay.heroes[hero].time_played;
+            profileInfo.playTime.push({
+              heroName: hero,
+              timePlayed: results.quickplay.heroes[hero].time_played
+            })
           }
+          const sortedTimePlayed = _.sortBy(profileInfo.playTime, "timePlayed").reverse();
+          profileInfo.playTime = sortedTimePlayed;
           res.json(profileInfo);
         })
       })
