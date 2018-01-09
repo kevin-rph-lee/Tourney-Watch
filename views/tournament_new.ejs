@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-    <script>
-    </script>
 </head>
 <% include partials/navbar %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js"></script>
     <script src="/scripts/tournament_new.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -24,7 +23,7 @@
             <h2> Create A New Tournament</h2>
             <div class="tournament-alert"></div>
             <div class="register-alert"></div>
-            <form id="new-tournament-form" action="/tournaments/new" method="POST" style="margin:150px;">
+            <form id="new-tournament-form" action="/tournaments/new" method="POST">
                 <div class="form-row">
                     <div class="form-label">
                         <label> Number of Teams</label>
@@ -52,13 +51,14 @@
                         <input id="entry-description" type="text" name="description" placeholder="Tournament Description" style="width: 300px" required>
                     </div>
                 </div>
+                <div class="invalid-date-alert"></div>
                 <div class="form-row">
                         <div class="form-label">
                             <label> Date</label>
                         </div>
                         <div class="form-box">
                                 <input id="datepicker" />
-                            </div>
+                        </div>
                     </div>
 
                 <div class="form-row">
@@ -70,8 +70,9 @@
                     </div>
                 </div>
                 </form>
-
-                <button class="submit">Submit</button>
+                <div class="submit-new-tournament">
+                    <button class="submit">Submit</button>
+                </div>
 
         </main>
 

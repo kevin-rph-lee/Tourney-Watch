@@ -162,3 +162,23 @@ div.profile-hero{
     text-align: left;
 }
 
+.profile-hero-stats{
+    margin: 0 auto;
+    width: 97%;
+}
+
+.profile-hero-name {
+    display: inline-block;
+    margin-left: 5px;
+    height: 30px;
+}
+
+form#registration-form{
+    margin-top: 150px;
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+div.save{
+    text-align: center;
+}
