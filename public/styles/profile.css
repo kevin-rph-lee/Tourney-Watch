@@ -2,8 +2,8 @@
 
 h6 { 
     font-size: 16px; 
-    font-family: Helvetica,sans-serif;
-
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
 }
 
 .profile-card {
@@ -181,4 +181,8 @@ form#registration-form{
 
 div.save{
     text-align: center;
+}
+
+div.profile-info > h1{
+    font-family: 'Oswald', sans-serif;
 }
