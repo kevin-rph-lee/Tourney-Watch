@@ -56,7 +56,7 @@ module.exports = (knex, owjs, _, moment) => {
    * @param  {int} userID    userID of user
    * @param  {int} newTeamID [description]
    */
-  function swapTeams(bnetID1, bnetID2,res){
+  function swapTeams(bnetID1, bnetID2, tournamentID, res){
     //TODO, REFACTOR THIS SHIT!
     if(bnetID1 === bnetID2){
       res.sendStatus(400);
@@ -67,8 +67,8 @@ module.exports = (knex, owjs, _, moment) => {
      .select("users.id",'users.battlenet_id', "team_id")
      .from("enrollments")
      .innerJoin("users", "users.id", "enrollments.user_id")
-     .where({battlenet_id: bnetID1})
-     .orWhere({battlenet_id: bnetID2})
+     .where({battlenet_id: bnetID1, tournament_id: tournamentID})
+     .orWhere({battlenet_id: bnetID2, tournament_id: tournamentID})
      .then((results) => {
       const team1 = results[0].team_id;
       const team2 = results[1].team_id;
@@ -254,7 +254,7 @@ module.exports = (knex, owjs, _, moment) => {
   // given that their battlenet ID exists
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role', 'DPS', 'HPS')
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -298,7 +298,7 @@ module.exports = (knex, owjs, _, moment) => {
         if(results.length === 0) {
           res.sendStatus(404);
         } if(results[0].creator_user_id === req.session.userID){
-          swapTeams(bnetID1, bnetID2,res);
+          swapTeams(bnetID1, bnetID2, tournamentID, res);
           return res.sendStatus(200);
         } else {
           return res.sendStatus(403);
