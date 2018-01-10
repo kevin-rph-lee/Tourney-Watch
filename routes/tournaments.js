@@ -412,8 +412,8 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               isOwner: isOwner})
           } else {
             res.render("tournament_staging", {
-              playerCount: enrolledPlayers,
-              players: enrolledPlayers.length,
+              playerRoster: enrolledPlayers,
+              playersCount: enrolledPlayers.length,
               teamCount: results[0].no_of_teams,
               tournamentDescr: results[0].description,
               tournamentName: results[0].name,
@@ -470,7 +470,6 @@ module.exports = (knex, _, env, mailGun, owjs) => {
               if (isReady && started) {
                 console.log('if you see me i am ready and have started')
                 res.render("tournament_view", {
-                  // teamRoster: getTeamRoster(tournamentID),
                   playerCount: enrolledPlayers.length,
                   email: req.session.email,
                   userID: req.session.userID,

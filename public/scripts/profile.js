@@ -28,15 +28,16 @@ $(document).ready(function () {
       <div class="profile-info">
           <h1>Level: ${results.level}</h1>
           <div class="info-area">
-            Bananas are the potatoes of fruit
           </div>
       </div>`);
       $('.stats-container').append(`
-      <table class="table table-striped table-dark">
+      <table class="table table-striped table-dark profile-hero-stats">
         <thead>
           <tr>
             <th scope="col">Hero</th>
-            <th scope="col">Time Played (mins)</th>
+            <th scope="col" style="text-align: center;">Time Played (mins)</th>
+            <th scope="col" style="text-align: center;">Multi-Kills Best</th>
+            <th scope="col" style="text-align: center;">Weapon Accuracy (%)</th>
           </tr>
         </thead>
         <tbody class="hero-details">
@@ -52,9 +53,9 @@ $(document).ready(function () {
               <img class="character-icon" src="/images/heroicons/${hero}.png">  ${nameTransform(hero)}
             </div>
           </td>
-          <td scope="row">
-            ${time.asMinutes()}
-          </td>
+          <td scope="row" align="center">${Math.floor(time.asMinutes())}</td>
+          <td scope="row" align="center">${results.playTime[h].multikill_best}</td>
+          <td scope="row" align="center">${results.playTime[h].weapon_accuracy}</td>
         </tr>
         `)
       };

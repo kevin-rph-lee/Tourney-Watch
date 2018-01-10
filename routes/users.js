@@ -105,7 +105,9 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _) => {
           for(let hero in results.quickplay.heroes){
             profileInfo.playTime.push({
               heroName: hero,
-              timePlayed: results.quickplay.heroes[hero].time_played
+              timePlayed: results.quickplay.heroes[hero].time_played,
+              multikill_best: (!results.quickplay.heroes[hero].multikill_best) ? 0 : results.quickplay.heroes[hero].multikill_best,
+              weapon_accuracy: (!results.quickplay.heroes[hero].weapon_accuracy) ? 0 : results.quickplay.heroes[hero].weapon_accuracy,
             })
           }
           const sortedTimePlayed = _.sortBy(profileInfo.playTime, "timePlayed").reverse();

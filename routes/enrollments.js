@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
-module.exports = (knex, owjs, _) => {
+module.exports = (knex, owjs, _, moment) => {
   // overwatch api insists on all lowercase
   const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
   const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
@@ -127,18 +127,22 @@ module.exports = (knex, owjs, _) => {
     }, 0);
   }
 
-  function healsPerSecond(data) {
-    return data.quickplay.global.healing_done / totalTimeHealing * 100;
+  function elimsPerMins(data) {
+    const time = moment.duration(data.quickplay.global.time_played)
+    return data.quickplay.global.eliminations / time.asMinutes();
   }
 
-  function dmgPerSecond(data) {
-    return data.quickplay.global.all_damage_done / (data.quickplay.global.time_played - totalTimeHealing);
+  function killsDeathRatio(data) {
+    if(!data.quickplay.global.eliminations) {
+      return 0 / data.quickplay.global.deaths;
+    } else {
+      return data.quickplay.global.eliminations / data.quickplay.global.deaths
+    }
   }
 
   function getPlayersInfo(battlenetID, tournamentID, userID) {
     return owjs.getAll('pc', 'us', convertBnetID(battlenetID))
       .then((data) => {
-        console.log('heey')
         const roleRanks = sortTimePlayed(data);
         knex
           .insert({
@@ -154,7 +158,9 @@ module.exports = (knex, owjs, _) => {
             'medal_gold': data.quickplay.global.medals_gold,
             'medal_silver': data.quickplay.global.medals_silver,
             'medal_bronze': data.quickplay.global.medals_bronze,
-            'games_won': data.quickplay.global.games_won
+            'games_won': data.quickplay.global.games_won,
+            'elims_per_min': elimsPerMins(data),
+            'k_d_ratio': killsDeathRatio(data),
           })
           .into("enrollments")
           .then(() => {
@@ -167,6 +173,8 @@ module.exports = (knex, owjs, _) => {
     const tournamentID = req.params.id;
     const currUserID = req.session.userID;
     const email = req.session.email;
+
+    console.log('i am in the get route', req.session);
 
     if (tournamentID) {
       knex
@@ -246,7 +254,7 @@ module.exports = (knex, owjs, _) => {
   // given that their battlenet ID exists
   router.get("/:id/enrollmentinfo.json", (req, res) => {
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role')
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", 'second_role', 'DPS', 'HPS')
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -320,17 +328,10 @@ module.exports = (knex, owjs, _) => {
       });
   });
 
-
-
   router.get("/enrollments.json", (req, res) => {
     const tournamentID = req.query.tournamentID;
-    // if(req.session.email !== process.env.ADMIN_EMAIL) {
-    //   // STRETCH: "Forbidden" error page
-    //   res.sendStatus(403);
-    // }
-    // Gets player stats for each team in a specific tournament
     knex
-      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar")
+      .select("tournaments.name", "users.battlenet_id", "team_id", "level", "games_won", "medal_gold", "medal_silver", "medal_bronze", "first_role", "users.id", "users.avatar", "elims_per_min", "k_d_ratio")
       .from("enrollments")
       .innerJoin("users", "users.id", "enrollments.user_id")
       .innerJoin("tournaments", "tournaments.id", "enrollments.tournament_id")
@@ -341,8 +342,6 @@ module.exports = (knex, owjs, _) => {
         res.send(teamRoster);
       });
   });
-
-
 
   return router;
 };
