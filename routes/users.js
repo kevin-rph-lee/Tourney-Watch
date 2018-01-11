@@ -92,11 +92,13 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _) => {
         .then(()=>{
           // Checks if the user is under level 100. If the user is, removes the leading 0 in their level
           let level = '';
+          console.log('tier: ',results.profile.tier)
+          console.log('level: ',results.profile.level)
           if(results.profile.tier === 0){
             console.log('1');
             level = results.profile.level.toString();
-          } else if(results.profile.level >= 100){
-            level = results.profile.tier.toString() + (results.profile.level / 10).toString();
+          } else if(results.profile.tier > 0 && results.profile.level < 10){
+            level = results.profile.tier.toString() + '0' + results.profile.level.toString();
           } else {
             console.log('2');
             level = results.profile.tier.toString() + results.profile.level.toString();
