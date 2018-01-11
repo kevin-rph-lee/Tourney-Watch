@@ -10,13 +10,22 @@ Tournament manager for Overwatch that seeds individual players in to evenly matc
 
 ```
 npm install
-npm run knex migrate:latest
-npm run knex seed:run
 npm run local
 open http://localhost:8080
-
 ```
 
+If you'd like to try out our app with some pre-loaded data, please follow the following steps to run the seed file.
+
+```
+npm run knex migrate:latesst
+npm run knex seed:run
+```
+
+Please note that the first user you register, after seeding the database, will own the first tournament. The first tournament can be started by navigating to your profile (under the navbar's User Options) and clicking the "as Manager" tab, or you can enter http://localhost:8080/t/1 in to your adress bar.
+
+<p align="center">
+<img src="https://media.giphy.com/media/l0HUf8kHuq39iBbSE/giphy.gif" width="75%" height="75%" align="middle" />
+</p>
 
 ## Stack
 
@@ -27,3 +36,10 @@ open http://localhost:8080
 * jQuery
 * PostgreSQL
 * Bootstrap4
+
+## Contributors
+
+* <a href="https://github.com/kevin-rph-lee">Kevin Lee</a>
+* <a href="https://github.com/WhtMage">Chris Northwood</a>
+* <a href="https://github.com/l-shih">Lilian Shih</a>
+* <a href="https://github.com/Mochirii">Mel Smith</a>
