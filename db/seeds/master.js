@@ -50,13 +50,13 @@ exports.seed = async function(knex, promise){
       ,{email:'Vesta_Will54@yahoo.com',password:'password',battlenet_id:'Aeakos#1495',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000304.png'}
       ,{email:'Thisonedoesnt_work@yahoo.com',password:'password',battlenet_id:'Kissbullet#2395',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000012D4.png'}
       ,{email:'Susanna_Heidenreich95@yahoo.com',password:'password',battlenet_id:'Coldara#2565',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000009DB.png'}
-      ,{email:'Keven.Zemlak37@hotmail.com',password:'password',battlenet_id:'Jelzo#1492',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000001407.png'}
+      ,{email:'Keven.Zemlak37@hotmail.com',password:'password',battlenet_id:'Jelzo#1492',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000D62.png'}
       ,{email:'Reinhold_Ondricka@hotmail.com',password:'password',battlenet_id:'Bluxen#2502',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000008EF.png'}
       ,{email:'Franco.Dare@yahoo.com',password:'password',battlenet_id:'Azune#2877',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000A90.png'}
       ,{email:'Vidal.Grant47@gmail.com',password:'password',battlenet_id:'Verrow#2598',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000009D9.png'}
       ,{email:'Annabelle.Lebsack97@gmail.com',password:'password',battlenet_id:'Nesmie#1572',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000007A2.png'}
       ,{email:'Fernando_Murazik@yahoo.com',password:'password',battlenet_id:'Pityek#2299',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x025000000000139E.png'}
-      ,{email:'Abdiel.Ratke30@hotmail.com',password:'password',battlenet_id:'Awhz#2571',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000001402.png'}
+      ,{email:'Abdiel.Ratke30@hotmail.com',password:'password',battlenet_id:'Awhz#2571',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000D62.png'}
       ,{email:'Daphnee79@hotmail.com',password:'password',battlenet_id:'Ydarb#1700',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000C78.png'}
       ,{email:'Gilberto_Reynolds48@gmail.com',password:'password',battlenet_id:'Zarwag#2206',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000005F9.png'}
       ,{email:'Margaretta.Zemlak@gmail.com',password:'password',battlenet_id:'Yauld#2296',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000577.png'}
@@ -76,7 +76,7 @@ exports.seed = async function(knex, promise){
       ,{email:'Juliet22@gmail.com',password:'password',battlenet_id:'Zorphy#2615',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000009EB.png'}
       ,{email:'Elsie_Pacocha56@yahoo.com',password:'password',battlenet_id:'Snacks#1549',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000008E8.png'}
       ,{email:'Keon.Nitzsche@hotmail.com',password:'password',battlenet_id:'Incinirator#2709',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000C7A.png'}
-      ,{email:'Cristina.Thiel35@yahoo.com',password:'password',battlenet_id:'Domer#1861',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000001406.png'}
+      ,{email:'Cristina.Thiel35@yahoo.com',password:'password',battlenet_id:'Domer#1861',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000D62.png'}
       ,{email:'Martina.Schroeder73@gmail.com',password:'password',battlenet_id:'Strakt#1429',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x025000000000114B.png'}
       ,{email:'Coralie_McDermott@hotmail.com',password:'password',battlenet_id:'Belzac#2748',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x0250000000000C22.png'}
       ,{email:'Catharine_Blanda36@yahoo.com',password:'password',battlenet_id:'Priscilla#2836',avatar:'https://d1u1mce87gyfbn.cloudfront.net/game/unlocks/0x02500000000008C1.png'}
