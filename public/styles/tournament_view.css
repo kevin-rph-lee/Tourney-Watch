@@ -230,14 +230,7 @@ hr {
   background-color: #F7931D;
 } 
 
-h1 {
-  font-style: italic;
-  text-decoration: underline;
-}
-
-h2 {
-  font-style: italic;
-  text-decoration: underline;
+div.tournament-view > h2 {
   margin-top: 30px;
 }
 
