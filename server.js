@@ -15,6 +15,11 @@ const _ = require('lodash');
 const mailGun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API, domain: process.env.MAILGUN_DOMAIN });
 const moment = require('moment');
 
+const multer = require('multer');
+const upload = multer({
+  dest: 'uploads/' // this saves your file into a directory called "uploads"
+});
+
 const app = express();
 
 // // Seperated Routes for each Resource
@@ -103,6 +108,10 @@ app.get('/', async (req, res) => {
           });
       });
   }
+});
+
+app.post('/', upload.single('file-to-upload'), (req, res) => {
+  res.redirect('/');
 });
 
 // shortened link to redirect to tournaments pages
