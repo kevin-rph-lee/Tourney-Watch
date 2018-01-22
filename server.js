@@ -23,15 +23,6 @@ const upload = multer({
 var path = require('path')
 
 
-var storage = multer.diskStorage({
-  destination: function(req, file, callback) {
-    callback(null, './uploads')
-  },
-  filename: function(req, file, callback) {
-    console.log(file)
-    callback(null, req.session.userID + path.extname(file.originalname))
-  }
-})
 
 const app = express();
 
@@ -56,7 +47,7 @@ app.use(knexLogger(knex));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount all resource routes
-app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs, _));
+app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs, _, upload, path, multer));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs, _, moment));
 app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun, owjs));
 app.use('/highlights', highlightsRoutes(knex));
@@ -123,22 +114,6 @@ app.get('/', async (req, res) => {
   }
 });
 
-
-app.post('/api/file', function(req, res) {
-  var upload = multer({
-    storage: storage,
-    fileFilter: function(req, file, callback) {
-      var ext = path.extname(file.originalname)
-      if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-        return callback(res.end('Only images are allowed'), null)
-      }
-      callback(null, true)
-    }
-  }).single('userFile');
-  upload(req, res, function(err) {
-    res.end('File is uploaded')
-  })
-})
 
 // shortened link to redirect to tournaments pages
 app.get('/t/:id', (req, res) => {

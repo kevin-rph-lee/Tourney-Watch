@@ -3,7 +3,18 @@
 const express = require('express');
 const router = express.Router();
 
-module.exports = (knex, bcrypt, cookieSession, owjs, _) => {
+module.exports = (knex, bcrypt, cookieSession, owjs, _, upload, path, multer) => {
+
+
+  const storage = multer.diskStorage({
+    destination: function(req, file, callback) {
+      callback(null, './uploads')
+    },
+    filename: function(req, file, callback) {
+      console.log(file)
+      callback(null, req.session.userID + path.extname(file.originalname))
+    }
+  })
 
   /**
    * Checks a string for special characters. Returns false if one is found
@@ -63,6 +74,26 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _) => {
         return result
       });
   }
+
+
+
+  router.post('/avatar', function(req, res) {
+    var upload = multer({
+      storage: storage,
+      fileFilter: function(req, file, callback) {
+        var ext = path.extname(file.originalname)
+        if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+          return callback(res.end('Only images are allowed'), null)
+        }
+        callback(null, true)
+      }
+    }).single('userFile');
+    upload(req, res, function(err) {
+      res.end('File is uploaded')
+    })
+  })
+
+
 
   //Goes to registration page
   router.get('/new', (req, res) => {
