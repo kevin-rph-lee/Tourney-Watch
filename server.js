@@ -20,6 +20,19 @@ const upload = multer({
   dest: 'uploads/' // this saves your file into a directory called "uploads"
 });
 
+var path = require('path')
+
+
+var storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, './uploads')
+  },
+  filename: function(req, file, callback) {
+    console.log(file)
+    callback(null, file.fieldname + path.extname(file.originalname))
+  }
+})
+
 const app = express();
 
 // // Seperated Routes for each Resource
@@ -110,9 +123,22 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.post('/', upload.single('file-to-upload'), (req, res) => {
-  res.redirect('/');
-});
+
+app.post('/api/file', function(req, res) {
+  var upload = multer({
+    storage: storage,
+    fileFilter: function(req, file, callback) {
+      var ext = path.extname(file.originalname)
+      if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+        return callback(res.end('Only images are allowed'), null)
+      }
+      callback(null, true)
+    }
+  }).single('userFile');
+  upload(req, res, function(err) {
+    res.end('File is uploaded')
+  })
+})
 
 // shortened link to redirect to tournaments pages
 app.get('/t/:id', (req, res) => {

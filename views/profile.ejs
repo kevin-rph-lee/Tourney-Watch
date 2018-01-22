@@ -32,6 +32,7 @@
 				<li><a data-toggle="tab" href="#playing">as Player</a></li>
 				<% if (isUser)  {%>
 				<li><a data-toggle="tab" href="#update">Update</a></li>
+        <li><a data-toggle="tab" href="#upload-avatar">Upload Avatar</a></li>
 				<% } %>
 
 			</ul>
@@ -42,7 +43,7 @@
 				<div id="info" class="tab-pane active">
 					<br>
 					<div class="profile-card">
-						
+
 							<% include partials/loader %>
 						</div>
 				</div>
@@ -189,6 +190,19 @@
 					</div>
 
 				</div>
+
+        <div id="upload-avatar" class="tab-pane fade">
+            <h3 class="sub-header"> Create a custom avatar: </h3>
+
+            <form action="/api/file" id="uploadForm" enctype="multipart/form-data" method="post">
+              <input type="file" name="userFile" />
+              <input type="submit" value="Upload File" name="submit">
+            </form>
+
+        </div>
+
+
+
 				<% } %>
 				<!-- @end #content -->
 			</div>
