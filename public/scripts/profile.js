@@ -19,7 +19,7 @@ $(document).ready(function () {
       $('.profile-card').append(`
       <div class="profile-cover">
           <div class="profile-avatar">
-              <a href="#"><img src="${results.avatar}" ></a>
+              <a href="#"><img id="avatar" src="${results.avatar}" ></a>
           </div>
           <div class="profile-details">
               <h6> ${battlenetID} </h6>
