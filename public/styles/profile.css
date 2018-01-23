@@ -191,3 +191,10 @@ div.profile-info > h1{
   width: 125px;
   height: 125px;
 }
+
+
+form#uploadForm{
+    margin-top: 150px;
+    margin-left: 150px;
+    margin-right: 150px;
+}

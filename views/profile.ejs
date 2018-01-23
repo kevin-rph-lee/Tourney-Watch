@@ -146,65 +146,56 @@
 
 				<% if (isUser)  {%>
 
-				<div id="update" class="tab-pane fade">
-						<h3 class="sub-header"> Edit your user settings: </h3>
-						<form id="registration-form">
+  				<div id="update" class="tab-pane fade">
+  						<h3 class="sub-header"> Edit your user settings: </h3>
+  						<form id="registration-form">
 
-							<div class="form-row">
-									<div class="form-label">
-											<label> Battle.net ID</label>
-									</div>
-									<div class="form-box">
-											<input id="entry-battlenet" type="text" name="battlenet" placeholder="<%= battlenetID %>" style="width: 300px" required>
-									</div>
-							</div>
-							<div class="form-row">
-									<div class="form-label">
-											<label> New Password</label>
-									</div>
-									<div class="form-box">
-											<input id="entry-password" type="password" name="password" placeholder="Password" style="width: 300px" required>
-									</div>
-							</div>
-							<div class="form-row">
-									<div class="form-label">
-											<label> Confirm Password</label>
-									</div>
-									<div class="form-box">
-											<input id="entry-password-confirm" type="password" name="password" placeholder="Password" style="width: 300px" required>
-									</div>
-							</div>
-							<br>
-							<div class="form-row">
-									<div class="form-label">
-											<label></label>
-									</div>
-									<div class="form-box">
-									</div>
-							</div>
+  							<div class="form-row">
+  									<div class="form-label">
+  											<label> Battle.net ID</label>
+  									</div>
+  									<div class="form-box">
+  											<input id="entry-battlenet" type="text" name="battlenet" placeholder="<%= battlenetID %>" style="width: 300px" required>
+  									</div>
+  							</div>
+  							<div class="form-row">
+  									<div class="form-label">
+  											<label> New Password</label>
+  									</div>
+  									<div class="form-box">
+  											<input id="entry-password" type="password" name="password" placeholder="Password" style="width: 300px" required>
+  									</div>
+  							</div>
+  							<div class="form-row">
+  									<div class="form-label">
+  											<label> Confirm Password</label>
+  									</div>
+  									<div class="form-box">
+  											<input id="entry-password-confirm" type="password" name="password" placeholder="Password" style="width: 300px" required>
+  									</div>
+  							</div>
+  							<br>
+  							<div class="form-row">
+  									<div class="form-label">
+  											<label></label>
+  									</div>
+  									<div class="form-box">
+  									</div>
+  							</div>
 
-					</form>
+  					</form>
 
-					<div class="save">
-						<button class="submit changes">Save Changes</button>
-					</div>
+  					<div class="save">
+  						<button class="submit changes">Save Changes</button>
+  					</div>
 
-				</div>
+  				</div>
 
-        <div id="upload-avatar" class="tab-pane fade">
-            <h3 class="sub-header"> Create a custom avatar: </h3>
+          <div id="upload-avatar" class="tab-pane fade">
 
-<!--             <form action="/users/avatar" id="uploadForm" enctype="multipart/form-data" method="post">
-              <input type="file" name="userFile" />
-              <input type="submit" value="Upload File" name="submit">
-            </form>
- -->
-            <form id="uploadForm">
-              <input type="file" name="userFile" />
-              <button type="submit">Send</button>
-            </form>
+              <% include partials/loader %>
 
-        </div>
+          </div>
 
 
 

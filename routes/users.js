@@ -89,7 +89,8 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
         //Only allowing png, jpg, gif, jpeg
         const ext = path.extname(file.originalname)
         if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-          return callback(res.sendStatus(400), null)
+          res.sendStatus(400);
+          return;
         }
         callback(null, true)
       }
