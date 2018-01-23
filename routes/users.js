@@ -69,6 +69,14 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
 
   //Uploads the avatar
   router.post('/avatar', function(req, res) {
+
+    if(!req.session.userID){
+      res.sendStatus(403);
+    }
+
+
+
+
     const storage = multer.diskStorage({
       destination: function(req, file, callback) {
         callback(null, './public/images/avatars')
@@ -84,7 +92,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
         //Only allowing png, jpg, gif, jpeg
         const ext = path.extname(file.originalname)
         if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-          return callback(res.end('Only images are allowed'), null)
+          return callback(res.sendStatus(400), null)
         }
         callback(null, true)
       }

@@ -119,13 +119,35 @@ $(document).ready(function () {
           url: "/users/avatar",
           data: formData,
           processData: false,
-          contentType: false,
-          success: function(r){
-              console.log("result",r)
-          },
-          error: function (e) {
-              console.log("some error", e);
-          }
+          contentType: false
+      }).done(() => {
+        $('.update-alert').append(`
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Success!</strong> New avatar uploaded!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          `)
+        window.setTimeout(function() {
+          $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            window.location.replace(`/users/${userID}`);
+          });
+        }, 4000);
+      }).catch((err) => {
+        $('.update-alert').append(`
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>OOPS!</strong> Invalid Filetype!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          `)
+        window.setTimeout(function() {
+          $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            window.location.replace(`/users/${userID}`);
+          });
+        }, 4000);
       });
 
   });
