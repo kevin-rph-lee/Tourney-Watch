@@ -75,64 +75,94 @@ $(document).ready(function () {
       `);
 
       if(results.customAvatar === true){
+        $('#upload-avatar').append(`
+          <button id="remove-avatar">Remove custom avatar</button>
+        `);
 
-      }
 
-      $('form').submit(function (e) {
+        $('#remove-avatar').click(function(e){
           e.preventDefault();
-          var formData = new FormData(this);
-          if(document.getElementById("avatar-upload").files.length === 0){
-            $('.update-alert').append(`
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <strong>OOPS!</strong> No file selected!
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              </div>
-              `)
-            window.setTimeout(function() {
-              $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                // window.location.replace(`/users/${userID}`);
-              });
-            }, 4000);
-            return;
-          }
-
           $.ajax({
-              type: "POST",
-              url: "/users/avatar",
-              data: formData,
-              processData: false,
-              contentType: false
+            type: "POST",
+            url: "/users/avatarremove"
           }).done(() => {
             $('.update-alert').append(`
               <div class="alert alert-success alert-dismissible fade show" role="alert">
-              <strong>Success!</strong> New avatar uploaded!
+              <strong>Success!</strong> Avatar removed!
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
               </div>
               `)
             window.setTimeout(function() {
-              $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                window.location.replace(`/users/${userID}`);
-              });
-            }, 4000);
-          }).catch((err) => {
-            $('.update-alert').append(`
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <strong>OOPS!</strong> Invalid Filetype!
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              </div>
-              `)
-            window.setTimeout(function() {
-              $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                window.location.replace(`/users/${userID}`);
-              });
-            }, 4000);
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                  window.location.replace(`/users/${userID}`);
+                });
+              }, 4000);
+            })
           });
+      }
+
+      $('form').submit(function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        if(document.getElementById("avatar-upload").files.length === 0){
+          $('.update-alert').append(`
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>OOPS!</strong> No file selected!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            `)
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              // window.location.replace(`/users/${userID}`);
+            });
+          }, 4000);
+          return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/users/avatar",
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(() => {
+          $('.update-alert').append(`
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> New avatar uploaded!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            `)
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              window.location.replace(`/users/${userID}`);
+            });
+          }, 4000);
+        }).catch((err) => {
+          $('.update-alert').append(`
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>OOPS!</strong> Invalid Filetype!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            `)
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              window.location.replace(`/users/${userID}`);
+            });
+          }, 4000);
+        });
+
+
+
+
+
       });
 
     }).catch((err) => {

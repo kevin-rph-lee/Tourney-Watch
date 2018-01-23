@@ -105,6 +105,21 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
     })
   })
 
+    //Uploads the avatar
+  router.post('/avatarremove', function(req, res) {
+
+    if(!req.session.userID){
+      res.sendStatus(403);
+    }
+    knex('users')
+    .where({ id:req.session.userID })
+    .update({ 'custom-avatar':false })
+    .then(()=>{
+      res.sendStatus(200);
+    });
+
+  })
+
 
   //Goes to registration page
   router.get('/new', (req, res) => {
