@@ -74,9 +74,6 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
       res.sendStatus(403);
     }
 
-
-
-
     const storage = multer.diskStorage({
       destination: function(req, file, callback) {
         callback(null, './public/images/avatars')
@@ -98,7 +95,12 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
       }
     }).single('userFile');
     upload(req, res, function(err) {
-      res.end('File is uploaded')
+      knex('users')
+      .where({ id:req.session.userID })
+      .update({ 'custom-avatar':true })
+      .then(()=>{
+        res.sendStatus(200);
+      });
     })
   })
 
@@ -119,11 +121,11 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
   //Auto-updates the avatar (if the user has changed the avatar on BNET)
   router.get('/:id/profileinfo.json', (req, res) => {
     knex
-    .select('battlenet_id')
+    .select('battlenet_id', 'custom-avatar')
     .from('users')
     .where({id:req.params.id})
-    .then((results) => {
-      getPlayerInfo(results[0].battlenet_id)
+    .then((userResults) => {
+      getPlayerInfo(userResults[0].battlenet_id)
       .then((results) => {
         knex('users')
         .where({ id:req.params.id })
@@ -142,7 +144,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
             console.log('2');
             level = results.profile.tier.toString() + results.profile.level.toString();
           }
-          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:[]};
+          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:[], customAvatar: userResults[0]['custom-avatar']}
           for(let hero in results.quickplay.heroes){
             profileInfo.playTime.push({
               heroName: hero,

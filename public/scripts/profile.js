@@ -14,12 +14,18 @@ $(document).ready(function () {
       url: '/users/' + userID + '/profileinfo.json',
       method: 'GET'
     }).done((results) => {
+      let avatar = '';
+      if(results.customAvatar === true){
+        avatar = `./../images/avatars/${userID}.jpg`
+      } else{
+        avatar = `${results.avatar}`
+      }
       $('.profile-card').empty();
       $('.stats-container').empty();
       $('.profile-card').append(`
       <div class="profile-cover">
           <div class="profile-avatar">
-              <a href="#"><img id="avatar" src="${results.avatar}" ></a>
+              <a href="#"><img id="avatar" src="${avatar}" ></a>
           </div>
           <div class="profile-details">
               <h6> ${battlenetID} </h6>
