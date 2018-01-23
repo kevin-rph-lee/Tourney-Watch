@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     /**
-     * Removes underscores & replaces with space, 
+     * Removes underscores & replaces with space,
      * along with capitalizing first letter of each name
      * @param  {string} Name of hero
      * @return {string}
@@ -101,10 +101,34 @@ $(document).ready(function () {
       `)
       window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          window.location.replace(`/users/${userID}`); 
+          window.location.replace(`/users/${userID}`);
         });
       }, 4000);
       console.log(err);
     });
   });
+
+
+  $('form').submit(function (e) {
+      e.preventDefault();
+      console.log('submit?');
+      var formData = new FormData(this);
+      console.log(formData)
+      $.ajax({
+          type: "POST",
+          url: "/users/avatar",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(r){
+              console.log("result",r)
+          },
+          error: function (e) {
+              console.log("some error", e);
+          }
+      });
+
+  });
+
+
 });

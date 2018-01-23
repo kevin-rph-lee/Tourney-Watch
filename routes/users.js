@@ -81,7 +81,8 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
     const upload = multer({
       storage: storage,
       fileFilter: function(req, file, callback) {
-        var ext = path.extname(file.originalname)
+        //Only allowing png, jpg, gif, jpeg
+        const ext = path.extname(file.originalname)
         if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
           return callback(res.end('Only images are allowed'), null)
         }
