@@ -1,7 +1,7 @@
 
 
-h6 { 
-    font-size: 16px; 
+h6 {
+    font-size: 16px;
     font-family: 'Oswald', sans-serif;
     text-align: center;
 }
@@ -42,7 +42,7 @@ h6 {
 .profile-card .profile-cover .profile-avatar {
     background: #ffffff;
     border: 1px solid #eeeeee;
-    box-sizing: content-box;    
+    box-sizing: content-box;
     width: 125px;
     height: 125px;
     position: absolute;
@@ -123,35 +123,35 @@ a:hover{
 .tourney-list{
     margin: 0 auto;
   }
-  
+
   .sub-header{
     text-align: left;
     padding-bottom: 10px
   }
-  
+
   .nav-tabs li{
     margin: 5px;
     font-size: 20px;
   }
-  
+
   .nav-tabs a{
     color: #DDDDDD;
     padding: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
-  
+
   a.active {
     background-color: #DDDDDD;
     color: black;
   }
-  
+
   .fa-arrow-circle-right{
     color: #F7931D;
     font-size: 25px;
     padding-left: 2px;
   }
-  
+
   thead.list{
     font-size:20px
   }
@@ -185,4 +185,16 @@ div.save{
 
 div.profile-info > h1{
     font-family: 'Oswald', sans-serif;
+}
+
+#avatar{
+  width: 125px;
+  height: 125px;
+}
+
+
+form#uploadForm{
+    margin-top: 150px;
+    margin-left: 150px;
+    margin-right: 150px;
 }

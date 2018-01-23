@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     /**
-     * Removes underscores & replaces with space, 
+     * Removes underscores & replaces with space,
      * along with capitalizing first letter of each name
      * @param  {string} Name of hero
      * @return {string}
@@ -14,35 +14,41 @@ $(document).ready(function () {
       url: '/users/' + userID + '/profileinfo.json',
       method: 'GET'
     }).done((results) => {
+      let avatar = '';
+      if(results.customAvatar === true){
+        avatar = `./../images/avatars/${userID}.jpg`
+      } else{
+        avatar = `${results.avatar}`
+      }
       $('.profile-card').empty();
       $('.stats-container').empty();
       $('.profile-card').append(`
-      <div class="profile-cover">
-          <div class="profile-avatar">
-              <a href="#"><img src="${results.avatar}" ></a>
-          </div>
-          <div class="profile-details">
-              <h6> ${battlenetID} </h6>
-          </div>
-      </div>
-      <div class="profile-info">
-          <h1>Level: ${results.level}</h1>
-          <div class="info-area">
-          </div>
-      </div>`);
-      $('.stats-container').append(`
-      <table class="table table-striped table-dark profile-hero-stats">
-        <thead>
-          <tr>
-            <th scope="col">Hero</th>
-            <th scope="col" style="text-align: center;">Time Played (mins)</th>
-            <th scope="col" style="text-align: center;">Multi-Kills Best</th>
-            <th scope="col" style="text-align: center;">Weapon Accuracy (%)</th>
-          </tr>
-        </thead>
-        <tbody class="hero-details">
-        </tbody>
-      </table>`);
+        <div class="profile-cover">
+            <div class="profile-avatar">
+                <a href="#"><img id="avatar" src="${avatar}" ></a>
+            </div>
+            <div class="profile-details">
+                <h6> ${battlenetID} </h6>
+            </div>
+        </div>
+        <div class="profile-info">
+            <h1>Level: ${results.level}</h1>
+            <div class="info-area">
+            </div>
+        </div>`);
+        $('.stats-container').append(`
+        <table class="table table-striped table-dark profile-hero-stats">
+          <thead>
+            <tr>
+              <th scope="col">Hero</th>
+              <th scope="col" style="text-align: center;">Time Played (mins)</th>
+              <th scope="col" style="text-align: center;">Multi-Kills Best</th>
+              <th scope="col" style="text-align: center;">Weapon Accuracy (%)</th>
+            </tr>
+          </thead>
+          <tbody class="hero-details">
+          </tbody>
+        </table>`);
       for (let h = 0; h < results.playTime.length; h++) {
         let hero = results.playTime[h].heroName;
         let time = moment.duration(results.playTime[h].timePlayed);
@@ -59,6 +65,108 @@ $(document).ready(function () {
         </tr>
         `)
       };
+      $('#upload-avatar').empty();
+      $('#upload-avatar').append(`
+          <h3 class="sub-header"> Upoad a custom avatar: </h3>
+          <form id="uploadForm">
+            <input id='avatar-upload' type="file" name="userFile" />
+            <button type="submit">Send</button>
+          </form>
+      `);
+
+      if(results.customAvatar === true){
+        $('#upload-avatar').append(`
+          <div class="save">
+            <button class="submit" id="remove-avatar">Remove avatar</button>
+          </div>
+        `);
+
+
+        $('#remove-avatar').click(function(e){
+          e.preventDefault();
+          $.ajax({
+            type: "POST",
+            url: "/users/avatarremove"
+          }).done(() => {
+            $('.update-alert').append(`
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Success!</strong> Avatar removed!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+              `)
+            window.setTimeout(function() {
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                  window.location.replace(`/users/${userID}`);
+                });
+              }, 4000);
+            })
+          });
+      }
+
+      $('form').submit(function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        if(document.getElementById("avatar-upload").files.length === 0){
+          $('.update-alert').append(`
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>OOPS!</strong> No file selected!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            `)
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              // window.location.replace(`/users/${userID}`);
+            });
+          }, 4000);
+          return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/users/avatar",
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(() => {
+          $('.update-alert').append(`
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> New avatar uploaded!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            `)
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              window.location.replace(`/users/${userID}`);
+            });
+          }, 4000);
+        }).catch((err) => {
+          $('.update-alert').append(`
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>OOPS!</strong> Invalid Filetype!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            `)
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              window.location.replace(`/users/${userID}`);
+            });
+          }, 4000);
+        });
+
+
+
+
+
+      });
+
     }).catch((err) => {
       //TO DO: make look nice with a flash message or something
       alert('error!');
@@ -101,10 +209,15 @@ $(document).ready(function () {
       `)
       window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          window.location.replace(`/users/${userID}`); 
+          window.location.replace(`/users/${userID}`);
         });
       }, 4000);
       console.log(err);
     });
   });
+
+
+
+
+
 });

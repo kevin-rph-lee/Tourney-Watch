@@ -15,6 +15,20 @@ const _ = require('lodash');
 const mailGun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API, domain: process.env.MAILGUN_DOMAIN });
 const moment = require('moment');
 
+const multer = require('multer');
+
+var path = require('path')
+
+var storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, './uploads')
+  },
+  filename: function(req, file, callback) {
+    console.log(file)
+    callback(null, req.session.userID + path.extname(file.originalname))
+  }
+})
+
 const app = express();
 
 // // Seperated Routes for each Resource
@@ -37,8 +51,10 @@ app.use(morgan('dev'));
 app.use(knexLogger(knex));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+
 // Mount all resource routes
-app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs, _));
+app.use('/users', usersRoutes(knex, bcrypt, cookieSession, owjs, _, path, multer));
 app.use('/enrollments', enrollmentsRoutes(knex, owjs, _, moment));
 app.use('/tournaments', tournamentsRoutes(knex, _, env, mailGun, owjs));
 app.use('/highlights', highlightsRoutes(knex));
@@ -53,6 +69,9 @@ function playersEnrolled(tournamentID) {
       return result;
     });
 }
+
+
+
 
 // Home page, passes along whis logged in as the 'login' variable
 app.get('/', async (req, res) => {
@@ -104,6 +123,7 @@ app.get('/', async (req, res) => {
       });
   }
 });
+
 
 // shortened link to redirect to tournaments pages
 app.get('/t/:id', (req, res) => {
