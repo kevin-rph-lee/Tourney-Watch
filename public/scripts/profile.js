@@ -67,7 +67,7 @@ $(document).ready(function () {
       };
       $('#upload-avatar').empty();
       $('#upload-avatar').append(`
-          <h3 class="sub-header"> Create a custom avatar: </h3>
+          <h3 class="sub-header"> Upoad a custom avatar: </h3>
           <form id="uploadForm">
             <input id='avatar-upload' type="file" name="userFile" />
             <button type="submit">Send</button>
@@ -76,7 +76,9 @@ $(document).ready(function () {
 
       if(results.customAvatar === true){
         $('#upload-avatar').append(`
-          <button id="remove-avatar">Remove custom avatar</button>
+          <div class="save">
+            <button class="submit" id="remove-avatar">Remove avatar</button>
+          </div>
         `);
 
 
