@@ -5,6 +5,9 @@ const router = express.Router();
 
 module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
 
+
+
+
   /**
    * Checks a string for special characters. Returns false if one is found
    * @param  {string} string string to be checked
@@ -12,6 +15,17 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
    */
   function checkInvalidCharacters(string) {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
+  }
+
+
+  /**
+   * Checks a string for special characters. Returns false if one is found
+   * @param  {string} string string to be checked
+   * @return {boolean}        returns true if invalid characters found
+   */
+  function clearSpecialCharacters(profileInfo) {
+
+    return profileInfo
   }
 
   function validateEmail(mail) {
@@ -171,6 +185,9 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
           }
           const sortedTimePlayed = _.sortBy(profileInfo.playTime, "timePlayed").reverse();
           profileInfo.playTime = sortedTimePlayed;
+
+          profileInfo = clearSpecialCharacters(profileInfo);
+
           res.json(profileInfo);
         })
       })
