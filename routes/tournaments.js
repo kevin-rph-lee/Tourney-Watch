@@ -7,9 +7,9 @@ module.exports = (knex, _, env, mailGun, owjs) => {
 
   // overwatch api insists on all lowercase
   const offenseHeroes = ['doomfist', 'genji', 'mccree', 'pharah', 'soldier:_76', 'sombra', 'tracer'];
-  const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjörn', 'widowmaker'];
+  const defenseHeroes = ['bastion', 'hanzo', 'junkrat', 'mei', 'torbjorn', 'widowmaker'];
   const tankHeroes = ['d.va', 'orisa', 'reinhardt', 'roadhog', 'winston', 'zarya'];
-  const supportHeroes = ['ana', 'lúcio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
+  const supportHeroes = ['ana', 'lucio', 'mercy', 'moira', 'symmetra', 'zanyatta'];
 
   /**
    * This assigns each player to a team based off their skill level

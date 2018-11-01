@@ -5,6 +5,9 @@ const router = express.Router();
 
 module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
 
+
+
+
   /**
    * Checks a string for special characters. Returns false if one is found
    * @param  {string} string string to be checked
@@ -12,6 +15,29 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
    */
   function checkInvalidCharacters(string) {
     return !(/^[a-zA-Z0-9-#]*$/.test(string));
+  }
+
+
+  /**
+   * Checks a string for special characters. Returns false if one is found
+   * @param  {string} string string to be checked
+   * @return {boolean}        returns true if invalid characters found
+   */
+  function clearSpecialCharacters(profileInfo) {
+    console.log(profileInfo.playTime)
+
+    for(let i = 0; i < profileInfo.playTime.length; i ++){
+
+      if(profileInfo.playTime[i].heroName === 'lúcio'){
+        profileInfo.playTime[i].heroName = 'lucio';
+      }
+      if(profileInfo.playTime[i].heroName === 'torbjörn'){
+        profileInfo.playTime[i].heroName = 'torbjorn';
+      }
+
+    };
+
+    return profileInfo
   }
 
   function validateEmail(mail) {
@@ -160,7 +186,7 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
             console.log('2');
             level = results.profile.tier.toString() + results.profile.level.toString();
           }
-          const profileInfo = {avatar:results.profile.avatar, level:level, playTime:[], customAvatar: userResults[0]['custom-avatar']}
+          let profileInfo = {avatar:results.profile.avatar, level:level, playTime:[], customAvatar: userResults[0]['custom-avatar']}
           for(let hero in results.quickplay.heroes){
             profileInfo.playTime.push({
               heroName: hero,
@@ -171,6 +197,9 @@ module.exports = (knex, bcrypt, cookieSession, owjs, _, path, multer) => {
           }
           const sortedTimePlayed = _.sortBy(profileInfo.playTime, "timePlayed").reverse();
           profileInfo.playTime = sortedTimePlayed;
+
+          profileInfo = clearSpecialCharacters(profileInfo);
+
           res.json(profileInfo);
         })
       })
