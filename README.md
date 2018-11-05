@@ -31,17 +31,41 @@ Please note that the first user you register, after seeding the database, will o
 
 ### Bracket Management
 
+<img src="https://i.imgur.com/i5dzGgE.jpg" width="75%" height="75%" align="middle" />
+
+### Team/Player Info
+
+<img src="https://i.imgur.com/5ArgLfZ.jpg" width="75%" height="75%" align="middle" />
+
+<img src="https://i.imgur.com/6ix7oyU.jpg" width="75%" height="75%" align="middle" />
+
+
 ### Team Balancing 
 
-### Team Management
+<img src="https://i.imgur.com/gkoh56s.jpg" width="75%" height="75%" align="middle" />
 
-### Team Communication
 
-### Team Info
+<img src="https://i.imgur.com/pwRrHfH.jpg" width="75%" height="75%" align="middle" />
+
+
+### Team Management & Communication
+
+<img src="https://i.imgur.com/FwJ3wAc.jpg" width="75%" height="75%" align="middle" />
+
 
 ### Highlight Management
 
+<img src="https://i.imgur.com/7gZElvL.gif" width="75%" height="75%" align="middle" />
+
+<img src="https://i.imgur.com/HRJKkj2.jpg" width="75%" height="75%" align="middle" />
+
+
 ### User Profiles 
+
+<img src="https://i.imgur.com/E115urO.jpg" width="75%" height="75%" align="middle" />
+
+<img src="https://i.imgur.com/7RIozbC.jpg" width="75%" height="75%" align="middle" />
+
 
 ## Stack
 
