@@ -33,6 +33,11 @@ Please note that the first user you register, after seeding the database, will o
 
 <img src="https://i.imgur.com/i5dzGgE.jpg" width="75%" height="75%" align="middle" />
 
+### Team Balancing 
+
+<img src="https://i.imgur.com/gkoh56s.jpg" width="75%" height="75%" align="middle" />
+
+
 ### Team/Player Info
 
 <img src="https://i.imgur.com/5ArgLfZ.jpg" width="75%" height="75%" align="middle" />
@@ -40,15 +45,10 @@ Please note that the first user you register, after seeding the database, will o
 <img src="https://i.imgur.com/6ix7oyU.jpg" width="75%" height="75%" align="middle" />
 
 
-### Team Balancing 
-
-<img src="https://i.imgur.com/gkoh56s.jpg" width="75%" height="75%" align="middle" />
-
+### Team Management & Communication
 
 <img src="https://i.imgur.com/pwRrHfH.jpg" width="75%" height="75%" align="middle" />
 
-
-### Team Management & Communication
 
 <img src="https://i.imgur.com/FwJ3wAc.jpg" width="75%" height="75%" align="middle" />
 
