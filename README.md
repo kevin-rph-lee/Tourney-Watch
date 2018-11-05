@@ -27,6 +27,22 @@ Please note that the first user you register, after seeding the database, will o
 <img src="https://media.giphy.com/media/l0HUf8kHuq39iBbSE/giphy.gif" width="75%" height="75%" align="middle" />
 </p>
 
+## Features
+
+### Bracket Management
+
+### Team Balancing 
+
+### Team Management
+
+### Team Communication
+
+### Team Info
+
+### Highlight Management
+
+### User Profiles 
+
 ## Stack
 
 * Javascript
