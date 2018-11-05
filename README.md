@@ -66,6 +66,8 @@ Please note that the first user you register, after seeding the database, will o
 
 <img src="https://i.imgur.com/7RIozbC.jpg" width="75%" height="75%" align="middle" />
 
+<img src="https://i.imgur.com/ssRaEnL.jpg" width="75%" height="75%" align="middle" />
+
 
 ## Stack
 
